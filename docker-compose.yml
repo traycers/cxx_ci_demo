@@ -1,0 +1,90 @@
+networks:
+  cxxci:
+    name: cxxci
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  gitlab_config:
+  gitlab_logs:
+  gitlab_data:
+  teamcity_server_datadir:
+  teamcity_server_logs:
+  teamcity_agent_conf:
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    # TODO(ticket 04 follow-up): pin to a specific verified tag once the stack has been
+    # brought up successfully once — see .scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md
+    hostname: ${GITLAB_HOSTNAME:-gitlab.local}
+    restart: unless-stopped
+    shm_size: '256m'
+    networks:
+      cxxci:
+        aliases:
+          - ${GITLAB_HOSTNAME:-gitlab.local}
+    ports:
+      # 1:1 host:container mapping is required — NGINX listens on the port from external_url,
+      # not on 80. See .scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md §2.
+      - "${GITLAB_HTTP_PORT:-8929}:${GITLAB_HTTP_PORT:-8929}"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${GITLAB_HOSTNAME:-gitlab.local}:${GITLAB_HTTP_PORT:-8929}'
+        gitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'
+        # Lets teamcity-server/teamcity-agent (on the cxxci network) poll /-/readiness and call
+        # the API; default whitelist is 127.0.0.0/8 only. See research §5.
+        gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '172.28.0.0/16']
+    volumes:
+      - gitlab_config:/etc/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_data:/var/opt/gitlab
+
+  teamcity-server:
+    image: jetbrains/teamcity-server:2026.1.3
+    restart: unless-stopped
+    networks:
+      - cxxci
+    ports:
+      - "${TEAMCITY_HTTP_PORT:-8111}:8111"
+    environment:
+      TEAMCITY_SERVER_MEM_OPTS: "-Xmx2g -XX:ReservedCodeCacheSize=640m"
+    volumes:
+      - teamcity_server_datadir:/data/teamcity_server/datadir
+      - teamcity_server_logs:/opt/teamcity/logs
+    # NOTE: first start requires one manual browser step (data dir confirm, DB choice, accept
+    # EULA, create admin account) — no headless equivalent exists in the current image. See
+    # .scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md §1. After that, grab the
+    # Super User token via: docker compose logs teamcity-server | grep "Super user authentication token:"
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2026.1.3
+    restart: unless-stopped
+    # Root is required so the mounted docker.sock is usable without host/container GID juggling
+    # — this is JetBrains' own documented pattern, not a shortcut. See research §3.
+    user: "0"
+    networks:
+      - cxxci
+    environment:
+      SERVER_URL: "http://teamcity-server:8111"
+    volumes:
+      - teamcity_agent_conf:/data/teamcity_agent/conf
+      - /var/run/docker.sock:/var/run/docker.sock
+      # MUST be host bind mounts, not named volumes: build steps run `docker run -v
+      # %teamcity.build.checkoutDir%:/src ...` against the HOST's docker daemon (via the
+      # socket above), so any path the agent passes as a mount source is resolved on the HOST
+      # filesystem, not inside this container's namespace. A named volume here means the
+      # /opt/buildagent/work path the agent thinks it's using doesn't exist on the host, so
+      # TeamCity's Docker Wrapper feature would silently bind-mount an empty directory instead.
+      # Confirmed empirically: `docker compose exec teamcity-agent touch
+      # /opt/buildagent/work/probe/marker` did not appear on the host until this was switched
+      # to bind mounts. Host-side paths must stay identical if more agents are ever added on
+      # this host. See research §3 (ticket 01).
+      - /opt/buildagent/work:/opt/buildagent/work
+      - /opt/buildagent/temp:/opt/buildagent/temp
+      - /opt/buildagent/tools:/opt/buildagent/tools
+      - /opt/buildagent/plugins:/opt/buildagent/plugins
+      - /opt/buildagent/system:/opt/buildagent/system
+    depends_on:
+      - teamcity-server
