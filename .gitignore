@@ -1,0 +1,4 @@
+.claude/worktrees/
+.env
+bootstrap/demo-project-*/build/
+bootstrap/demo-project-*/deps/
