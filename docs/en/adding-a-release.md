@@ -1,3 +1,5 @@
+🇬🇧 English · [🇷🇺 Русский](../ru/adding-a-release.md)
+
 # Adding a new release
 
 A **release** (see `CONTEXT.md`) is one `cxx_ci_demo/<config_name>/` directory in `ci-infra` —

@@ -1,3 +1,5 @@
+🇬🇧 English · [🇷🇺 Русский](docs/ru/CONTEXT.md)
+
 # CI CXX
 
 Docker-compose demo CI stand: GitLab (VCS) + TeamCity (build server, single agent) build C++ projects inside Docker containers, with a root Docker-image build as the base dependency for the whole build tree.
@@ -5,36 +7,36 @@ Docker-compose demo CI stand: GitLab (VCS) + TeamCity (build server, single agen
 ## Language
 
 **ci_cxx**:
-Репозиторий на хосте, где живут docker-compose и bootstrap-обвязка для подъёма стенда (GitLab + TeamCity). Сам по себе не содержит C++ кода и не является CI-конфигурацией TeamCity.
-_Avoid_: проект, монорепо
+The host-side repo that holds docker-compose and the bootstrap wiring for standing up the stand (GitLab + TeamCity). Contains no C++ code itself and is not TeamCity's CI configuration.
+_Avoid_: project, monorepo
 
 **ci-infra**:
-Центральный репозиторий внутри GitLab, хранящий Kotlin DSL (versioned settings) TeamCity для всего дерева сборок — включая build configuration корневой сборки образа — и Dockerfile этого образа.
+The central repo inside GitLab holding TeamCity's Kotlin DSL (versioned settings) for the whole build tree — including the root image build's build configuration — and that image's Dockerfile.
 _Avoid_: settings repo, teamcity repo
 
-**Корневая сборка образа**:
-Build configuration в TeamCity, которая собирает Docker-образ для сборки C++ (по Dockerfile из ci-infra) и является самой корневой зависимостью всего дерева сборок; её пересборка триггерит пересборку всего, что от неё зависит.
+**Root image build**:
+The TeamCity build configuration that builds the Docker image used for building C++ (from `ci-infra`'s Dockerfile) and is the root-most dependency of the entire build tree; rebuilding it triggers a rebuild of everything that depends on it.
 _Avoid_: base build, image job
 
-**Тег образа**:
-Конфигурационная переменная TeamCity (`%build_image_cxx%`), хранящая тег Docker-образа, который используют нижестоящие сборки C++ проектов для запуска контейнера сборки.
+**Image tag**:
+The TeamCity configuration parameter (`%build_image_cxx%`) holding the Docker image tag that downstream C++ project builds use to run their build container.
 
 **Bootstrap**:
-Разовый automated-скрипт (и директория `bootstrap/` с поддиректорией на каждый репозиторий), который после `docker compose up` создаёт репозитории в GitLab через API и наполняет их начальным содержимым (DSL, demo-проекты).
+The one-shot automated script (and the `bootstrap/` directory, with a subdirectory per repo) that, after `docker compose up`, creates GitLab repos via its API and seeds them with initial content (DSL, demo projects).
 
-**Demo-проект**:
-Минимальный skeleton C++ проект (CMake), созданный в рамках этой карты для сквозной проверки пайплайна. Один из двух demo-проектов зависит от другого — для проверки резолюции зависимостей по ветке.
+**Demo project**:
+A minimal skeleton C++ project (CMake) created for this map's end-to-end pipeline verification. One of the two demo projects depends on the other, to verify branch-based dependency resolution.
 
-**Snapshot-зависимость**:
-Механизм TeamCity, гарантирующий, что зависимая сборка триггерится и берётся с той же ветки, что и триггерящая сборка, а если такой ветки нет в VCS root'е зависимости — с default branch.
+**Snapshot dependency**:
+The TeamCity mechanism that guarantees a dependent build is triggered and taken from the same branch as the triggering build, falling back to the default branch if that branch doesn't exist in the dependency's VCS root.
 _Avoid_: build trigger dependency
 
-**Artifact-зависимость**:
-Механизм TeamCity, передающий собранные бинарники/заголовки одного C++ проекта в другой для линковки, без пересборки с нуля.
+**Artifact dependency**:
+The TeamCity mechanism that passes one C++ project's built binaries/headers to another for linking, without rebuilding from scratch.
 
-**Релиз** (branch family):
-Один поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — своя TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории demo-проектов (`demo-project-a`/`demo-project-b`). Релизы различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/adding-a-release.md`.
-_Avoid_: конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри релиза)
+**Release** (branch family):
+One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab demo-project repos (`demo-project-a`/`demo-project-b`). Releases differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-release.md`.
+_Avoid_: build configuration (too vague — conflicts with an individual project's build configuration inside a release)
 
 **config_name**:
-Имя релиза, используемое и как имя его директории (`cxx_ci_demo/<config_name>/`), и как базовое имя ветки в demo-проектах (`refs/heads/<config_name>`). Ветки-производные этого релиза именуются `<config_name>-*` (например, релиз `release_2_0` → ветки `release_2_0`, `release_2_0-hotfix-1`).
+The release's name, used both as its directory name (`cxx_ci_demo/<config_name>/`) and as the base branch name in the demo projects (`refs/heads/<config_name>`). Branches derived from that release are named `<config_name>-*` (e.g. release `release_2_0` → branches `release_2_0`, `release_2_0-hotfix-1`).

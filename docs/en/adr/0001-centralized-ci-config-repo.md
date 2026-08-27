@@ -1,3 +1,5 @@
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0001-centralized-ci-config-repo.md)
+
 # Centralized CI configuration repo (ci-infra) instead of per-project .teamcity
 
 TeamCity's idiomatic pattern is per-project versioned settings (a `.teamcity` folder inside each project's own repo). We instead put all Kotlin DSL — the root image build, every C++ project's build configuration, and the snapshot/artifact dependency wiring between them — into one central `ci-infra` repository in GitLab, separate from the C++ project repos.

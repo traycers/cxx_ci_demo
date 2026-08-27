@@ -1,6 +1,9 @@
-# ci_cxx
+# cxx_ci_demo
 
-Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in containers. See `CONTEXT.md` for the glossary and `docs/adr/` for the architecture decisions. The full plan lives on the wayfinder map at `.scratch/teamcity-cxx-ci/map.md`.
+🇬🇧 English · [🇷🇺 Русский](docs/ru/README.md)
+
+
+Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in containers. See `CONTEXT.md` for the glossary and `docs/en/adr/` for the architecture decisions. The full plan lives on the wayfinder map at `.scratch/teamcity-cxx-ci/map.md`. Documentation is maintained in English and Russian (`docs/ru/`) — see [ADR 0005](docs/en/adr/0005-bilingual-docs-mirror-tree.md) for the convention.
 
 ## Bringing the stand up
 
@@ -46,5 +49,5 @@ Everything past this point (repo creation, Kotlin DSL, demo projects) is automat
 
 The `cxx_ci_demo` project in TeamCity is split into one directory per release under
 `bootstrap/ci-infra/.teamcity/cxx_ci_demo/` (currently just `main/`). See
-`docs/adding-a-release.md` for the step-by-step procedure and the `<config_name>`/`<config_name>-*`
+`docs/en/adding-a-release.md` for the step-by-step procedure and the `<config_name>`/`<config_name>-*`
 branch naming convention.
