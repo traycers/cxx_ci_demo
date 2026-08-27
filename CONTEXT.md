@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](docs/ru/CONTEXT.md)
+🇬🇧 English · [🇷🇺 Русский](docs/ru/CONTEXT.md) · [🇨🇳 中文](docs/zh/CONTEXT.md)
 
 # CI CXX
 

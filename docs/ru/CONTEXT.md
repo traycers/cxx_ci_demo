@@ -1,6 +1,6 @@
-[🇬🇧 English](../../CONTEXT.md) · 🇷🇺 Русский
+[🇬🇧 English](../../CONTEXT.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/CONTEXT.md)
 
-_Перевод `CONTEXT.md`. При изменении оригинала обновите и эту версию — см. [ADR 0005](adr/0005-bilingual-docs-mirror-tree.md)._
+_Перевод `CONTEXT.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
 
 # CI CXX
 

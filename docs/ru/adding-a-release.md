@@ -1,6 +1,6 @@
-[🇬🇧 English](../en/adding-a-release.md) · 🇷🇺 Русский
+[🇬🇧 English](../en/adding-a-release.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/adding-a-release.md)
 
-_Перевод `docs/en/adding-a-release.md`. При изменении оригинала обновите и эту версию — см. [ADR 0005](adr/0005-bilingual-docs-mirror-tree.md)._
+_Перевод `docs/en/adding-a-release.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
 
 # Добавление нового релиза
 

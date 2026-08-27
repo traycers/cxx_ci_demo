@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md)
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md) · [🇨🇳 中文](../../zh/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md)
 
 **Superseded by [ADR 0004](0004-kotlin-dsl-versioned-settings-import-mode.md)**: the "permanently impossible" conclusion below was wrong — re-tested later against the real tree, Kotlin DSL compiles fully offline via the server's own local `dsl-plugins-repository`. Kept for history; the mechanism this ADR describes is no longer what `bootstrap.sh` does.
 

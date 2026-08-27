@@ -1,6 +1,6 @@
-[🇬🇧 English](../../en/adr/0001-centralized-ci-config-repo.md) · 🇷🇺 Русский
+[🇬🇧 English](../../en/adr/0001-centralized-ci-config-repo.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0001-centralized-ci-config-repo.md)
 
-_Перевод `docs/en/adr/0001-centralized-ci-config-repo.md`. При изменении оригинала обновите и эту версию — см. [ADR 0005](0005-bilingual-docs-mirror-tree.md)._
+_Перевод `docs/en/adr/0001-centralized-ci-config-repo.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
 
 # Централизованный репозиторий CI-конфигурации (ci-infra) вместо .teamcity в каждом проекте
 

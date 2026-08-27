@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0001-centralized-ci-config-repo.md)
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0001-centralized-ci-config-repo.md) · [🇨🇳 中文](../../zh/adr/0001-centralized-ci-config-repo.md)
 
 # Centralized CI configuration repo (ci-infra) instead of per-project .teamcity
 

@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0004-kotlin-dsl-versioned-settings-import-mode.md)
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0004-kotlin-dsl-versioned-settings-import-mode.md) · [🇨🇳 中文](../../zh/adr/0004-kotlin-dsl-versioned-settings-import-mode.md)
 
 # Kotlin DSL versioned settings, import mode — git/UI is the source of truth
 

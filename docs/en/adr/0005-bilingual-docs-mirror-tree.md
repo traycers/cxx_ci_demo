@@ -1,4 +1,6 @@
-🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0005-bilingual-docs-mirror-tree.md)
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0005-bilingual-docs-mirror-tree.md) · [🇨🇳 中文](../../zh/adr/0005-bilingual-docs-mirror-tree.md)
+
+**Superseded by [ADR 0006](0006-trilingual-docs-mirror-tree.md)**: documentation moved from two languages to three (Chinese added); kept here for the history of why the mirror is shaped the way it is.
 
 # Bilingual documentation — `docs/en/` + `docs/ru/`, root `README.md`/`CONTEXT.md` stay put
 

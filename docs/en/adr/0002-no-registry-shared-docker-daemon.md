@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0002-no-registry-shared-docker-daemon.md)
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0002-no-registry-shared-docker-daemon.md) · [🇨🇳 中文](../../zh/adr/0002-no-registry-shared-docker-daemon.md)
 
 # No Docker registry — root image build stays in the shared host Docker daemon
 

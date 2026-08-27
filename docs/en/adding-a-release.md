@@ -1,4 +1,4 @@
-🇬🇧 English · [🇷🇺 Русский](../ru/adding-a-release.md)
+🇬🇧 English · [🇷🇺 Русский](../ru/adding-a-release.md) · [🇨🇳 中文](../zh/adding-a-release.md)
 
 # Adding a new release
 

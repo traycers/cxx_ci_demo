@@ -1,11 +1,11 @@
 # cxx_ci_demo
 
-[🇬🇧 English](../../README.md) · 🇷🇺 Русский
+[🇬🇧 English](../../README.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/README.md)
 
-_Перевод `README.md`. При изменении оригинала обновите и эту версию — см. [ADR 0005](adr/0005-bilingual-docs-mirror-tree.md)._
+_Перевод `README.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
 
 
-Демо-стенд CI на docker-compose: GitLab + TeamCity собирают C++ проекты в контейнерах. Глоссарий — в `CONTEXT.md`, архитектурные решения — в `docs/ru/adr/`. Полный план живёт на wayfinder-карте `.scratch/teamcity-cxx-ci/map.md`. Документация ведётся на английском и русском (`docs/ru/`) — конвенция описана в [ADR 0005](adr/0005-bilingual-docs-mirror-tree.md).
+Демо-стенд CI на docker-compose: GitLab + TeamCity собирают C++ проекты в контейнерах. Глоссарий — в `CONTEXT.md`, архитектурные решения — в `docs/ru/adr/`. Полный план живёт на wayfinder-карте `.scratch/teamcity-cxx-ci/map.md`. Документация ведётся на английском, русском и китайском (`docs/ru/`, `docs/zh/`) — конвенция описана в [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md).
 
 ## Поднятие стенда
 
