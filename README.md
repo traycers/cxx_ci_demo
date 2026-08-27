@@ -1,6 +1,6 @@
-# cxx_ci_demo
+# ci_cxx
 
-Demonstrating a multi-release C++ CI strategy. Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in containers. See `CONTEXT.md` for the glossary and `docs/adr/` for the architecture decisions. The full plan lives on the wayfinder map at `.scratch/teamcity-cxx-ci/map.md`.
+Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in containers. See `CONTEXT.md` for the glossary and `docs/adr/` for the architecture decisions. The full plan lives on the wayfinder map at `.scratch/teamcity-cxx-ci/map.md`.
 
 ## Bringing the stand up
 
@@ -13,6 +13,34 @@ Demonstrating a multi-release C++ CI strategy. Docker-compose demo CI stand: Git
 6. GitLab is reachable at `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` with `root` / the password from `.env`.
 
 Everything past this point (repo creation, Kotlin DSL, demo projects) is automated by `bootstrap.sh` — see ticket 08 on the map.
+
+## Troubleshooting
+
+- **`docker compose up` fails mounting `/opt/buildagent/*`** (permission denied): that path
+  requires the docker daemon to be able to create/own directories under `/opt` — true for a
+  normal rootful Docker install, not for rootless Docker or a host account without root. Set
+  `BUILDAGENT_DATA_DIR` in `.env` to a directory you actually own (e.g.
+  `BUILDAGENT_DATA_DIR=${HOME}/.local/share/cxxci-buildagent`) and re-run. These specifically
+  have to be host bind mounts, not named volumes — see the comment on `teamcity-agent` in
+  `docker-compose.yml` for why.
+- **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
+  `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
+  can look similar at a glance — `git` did reach `gitlab.local` and got a real response back from
+  GitLab, it just didn't like the password. If this hits `demo-project-a`/`demo-project-b`'s own
+  VCS roots specifically, it usually means `bootstrap.sh` didn't get to its credential-injection
+  step (step 4 of `provision_teamcity`) — which only runs once `CxxCiDemo_Main_DemoProjectA`
+  exists, i.e. only after versioned settings successfully imported the DSL tree. Re-run
+  `bootstrap.sh`; every REST call it makes now checks its response status and fails loudly with
+  the actual HTTP code and response body instead of silently continuing (an earlier version
+  didn't, and a fresh-machine run showed exactly this: versioned settings silently failed to
+  enable, so the tree — and the credential injection — never happened, and the confusing
+  "Access denied" a step later was the real, but delayed, symptom).
+- **`gitlab.local` genuinely unreachable from inside a container** (connection refused/timeout,
+  not an auth error) is a different problem — check the containers are actually on the `cxxci`
+  network (`docker compose ps`) and that nothing on the host is intercepting traffic on the
+  published ports (this repo hit a local proxy doing exactly that during development — see
+  `bootstrap.sh`'s comments on why its own REST calls go through a throwaway container on the
+  `cxxci` network instead of the published host ports).
 
 ## Adding a new release
 

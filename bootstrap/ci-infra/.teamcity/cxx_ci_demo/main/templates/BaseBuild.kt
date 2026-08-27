@@ -7,7 +7,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 // The build script is the single source of truth for how every C++ project in this release
 // builds/tests/installs — edit it here, not in a separate shell script (see ADR 0004: the old
 // docs/build.sh was removed once this became the only place it actually lived).
-object BaseBuild : Template({
+object Main_BaseBuild : Template({
     id((MainId / "BaseBuild").toString())
     name = "base_build"
 
@@ -96,7 +96,7 @@ object BaseBuild : Template({
     }
 
     dependencies {
-        snapshot(BuildCImage) {
+        snapshot(Main_BuildCImage) {
             onDependencyFailure = FailureAction.FAIL_TO_START
         }
     }

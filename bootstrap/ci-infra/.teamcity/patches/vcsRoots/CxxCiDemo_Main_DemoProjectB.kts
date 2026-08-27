@@ -13,7 +13,7 @@ changeVcsRoot(RelativeId("CxxCiDemo_Main_DemoProjectB")) {
     val expected = GitVcsRoot({
         id("CxxCiDemo_Main_DemoProjectB")
         name = "demo-project-b"
-        url = "http://gitlab.local:8929/root/demo-project-b.git"
+        url = "http://gitlab:8929/root/demo-project-b.git"
         branch = "%branch_default%"
         branchSpec = "%branch_spec%"
         checkoutPolicy = GitVcsRoot.AgentCheckoutPolicy.NO_MIRRORS
@@ -30,7 +30,7 @@ changeVcsRoot(RelativeId("CxxCiDemo_Main_DemoProjectB")) {
     (this as GitVcsRoot).apply {
         authMethod = password {
             userName = "root"
-            password = "credentialsJSON:f334f54e-6d8a-48a8-aa0d-117995e9bb37"
+            password = "credentialsJSON:ed2e40ed-f84e-429a-85c6-90844f5e6b42"
         }
     }
 

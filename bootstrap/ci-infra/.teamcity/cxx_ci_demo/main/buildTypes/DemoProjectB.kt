@@ -2,17 +2,17 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
-object DemoProjectB : BuildType({
+object Main_DemoProjectB : BuildType({
     id((MainId / "DemoProjectB").toString())
-    templates(BaseBuild)
+    templates(Main_BaseBuild)
     name = "demo-project-b"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainConfigName}-${BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(DemoProjectBVcs, "%vcs_rules%")
+        root(Main_DemoProjectBVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -24,7 +24,7 @@ object DemoProjectB : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_4"
-            buildType = "${BuildCImage.id}"
+            buildType = "${Main_BuildCImage.id}"
             successfulOnly = true
             branchFilter = ""
         }

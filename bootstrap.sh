@@ -22,6 +22,14 @@ GITLAB_HTTP_PORT="${GITLAB_HTTP_PORT:-8929}"
 TEAMCITY_HTTP_PORT="${TEAMCITY_HTTP_PORT:-8111}"
 GITLAB_URL="http://${GITLAB_HOSTNAME}:${GITLAB_HTTP_PORT}"
 TEAMCITY_URL="http://localhost:${TEAMCITY_HTTP_PORT}"
+# GITLAB_HOSTNAME (gitlab.local) is for anything resolved on the HOST — this script's own git/curl
+# calls below run directly on the host shell, and the host only has gitlab.local in /etc/hosts
+# (README step 2), not the plain compose service name. GITLAB_CONTAINER_HOST is for URLs that a
+# container on the cxxci network resolves instead — Compose already registers the plain service
+# name automatically, no docker-compose.yml change needed. Used for CiInfraVersionedSettingsVcs's
+# url below, since that's fetched by teamcity-server, not this script. Verified live before
+# adopting it: a scratch VCS root + real TeamCity build against http://gitlab:8929/... succeeded.
+GITLAB_CONTAINER_HOST="gitlab"
 
 # These are local docker-published services, not something to route through an ambient
 # http_proxy/https_proxy — but curl honors those env vars even for localhost unless told
@@ -217,7 +225,7 @@ vcs_root_json() {
   "id": "${id}", "name": "${name}", "vcsName": "jetbrains.git",
   "project": {"id": "_Root"},
   "properties": {"property": [
-    {"name": "url", "value": "http://${GITLAB_HOSTNAME}:${GITLAB_HTTP_PORT}/root/${repo}.git"},
+    {"name": "url", "value": "http://${GITLAB_CONTAINER_HOST}:${GITLAB_HTTP_PORT}/root/${repo}.git"},
     {"name": "branch", "value": "refs/heads/main"},
     {"name": "teamcity:branchSpec", "value": "+:refs/heads/*"},
     {"name": "authMethod", "value": "PASSWORD"},
@@ -242,8 +250,23 @@ provision_teamcity() {
 
     # 1. The one VCS root the DSL itself cannot create: without it, versioned settings has
     #    nothing to fetch ci-infra's .teamcity/settings.kts from in the first place.
+    #
+    # NOTE: every REST call in this function checks its status explicitly and fails loudly
+    # (rather than silently continuing) — a real fresh-machine run surfaced the alternative:
+    # this VCS root creation returned a non-200 (transient GitLab/network hiccup right after
+    # first boot), the old code didn't check, and the script happily reported "provisioned"
+    # while versioned settings was never actually wired up — confusing to debug after the fact.
     if [ "$(tc_get_status /app/rest/vcs-roots/id:CiInfraVersionedSettingsVcs)" != "200" ]; then
-        tc_post /app/rest/vcs-roots "$(vcs_root_json CiInfraVersionedSettingsVcs "ci-infra (versioned settings)" ci-infra "$gitlab_token")" >/dev/null
+        local vcs_create_out vcs_create_status
+        vcs_create_out="$(tc_post /app/rest/vcs-roots "$(vcs_root_json CiInfraVersionedSettingsVcs "ci-infra (versioned settings)" ci-infra "$gitlab_token")")"
+        vcs_create_status="$(echo "$vcs_create_out" | head -1)"
+        if [ "$vcs_create_status" != "200" ]; then
+            log "ERROR: failed to create VCS root CiInfraVersionedSettingsVcs (HTTP ${vcs_create_status})."
+            log "Response: $(echo "$vcs_create_out" | tail -n +2)"
+            log "This can happen if GitLab wasn't fully ready for git operations yet even though"
+            log "readiness passed, or a transient network issue. Re-run bootstrap.sh."
+            return 1
+        fi
         log "  created VCS root CiInfraVersionedSettingsVcs"
     fi
 
@@ -269,10 +292,15 @@ provision_teamcity() {
         curl -s -o /dev/null -w '%{http_code}' -u ":${TC_SU_TOKEN}" -H 'Content-Type: application/json' -H 'Accept: application/json' \
         --request PUT "http://teamcity-server:8111/app/rest/projects/id:_Root/versionedSettings/config" --data "$vs_config")"
     if [ "$vs_status" = "500" ]; then
-        docker run --rm --network cxxci curlimages/curl:latest \
-            curl -s -o /dev/null -u ":${TC_SU_TOKEN}" -H 'Content-Type: application/json' -H 'Accept: application/json' \
+        vs_status="$(docker run --rm --network cxxci curlimages/curl:latest \
+            curl -s -o /dev/null -w '%{http_code}' -u ":${TC_SU_TOKEN}" -H 'Content-Type: application/json' -H 'Accept: application/json' \
             --request PUT "http://teamcity-server:8111/app/rest/projects/id:_Root/versionedSettings/config" \
-            --data "$(echo "$vs_config" | sed 's/}$/,"importDecision":"importFromVCS"}/')"
+            --data "$(echo "$vs_config" | sed 's/}$/,"importDecision":"importFromVCS"}/')")"
+    fi
+    if [ "$vs_status" != "200" ]; then
+        log "ERROR: failed to enable versioned settings (HTTP ${vs_status})."
+        log "Check that VCS root CiInfraVersionedSettingsVcs exists and is valid, then re-run bootstrap.sh."
+        return 1
     fi
     log "  versioned settings pointed at ci-infra (Kotlin, import mode)"
 

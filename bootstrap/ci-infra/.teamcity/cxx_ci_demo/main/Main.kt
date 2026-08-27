@@ -3,9 +3,9 @@ import jetbrains.buildServer.configs.kotlin.*
 val MainId = CxxCiDemoId / "Main"
 
 // The release's word, doubling as: this directory's name (cxx_ci_demo/main/), the docker image
-// tag prefix (BuildCImage.kt, DemoProjectA.kt, DemoProjectB.kt — cxxci-build:main-%build.number%,
-// so two releases sharing the one docker daemon per ADR 0002 never collide on a tag), and the
-// base git branch name (branch_default/branch_spec below).
+// tag prefix (buildTypes/BuildCImage.kt, DemoProjectA.kt, DemoProjectB.kt —
+// cxxci-build:main-%build.number%, so two releases sharing the one docker daemon per ADR 0002
+// never collide on a tag), and the base git branch name (branch_default/branch_spec below).
 val MainConfigName = "main"
 
 // One "release" / branch-family configuration — see docs/adding-a-release.md.
@@ -14,15 +14,15 @@ object Main : Project({
     name = MainConfigName
     description = """Build for the "main" branch and its derivatives. Copyable for the new release."""
 
-    vcsRoot(DemoProjectBVcs)
-    vcsRoot(DemoProjectAVcs)
+    vcsRoot(Main_DemoProjectBVcs)
+    vcsRoot(Main_DemoProjectAVcs)
 
-    buildType(DemoProjectB)
-    buildType(DemoProjectA)
-    buildType(BuildCImage)
-    buildType(ResultBuild)
+    buildType(Main_DemoProjectB)
+    buildType(Main_DemoProjectA)
+    buildType(Main_BuildCImage)
+    buildType(Main_ResultBuild)
 
-    template(BaseBuild)
+    template(Main_BaseBuild)
 
     params {
         password("gitlab_credentials_password", "")

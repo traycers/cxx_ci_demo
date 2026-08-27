@@ -6,17 +6,17 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // parameter — see ticket 09). revisionName=sameChain — the paired snapshot dependency on B,
 // inherited from the template, must resolve first in the same chain; no independent branch-based
 // fallback here (Case A from ticket 03's research).
-object DemoProjectA : BuildType({
+object Main_DemoProjectA : BuildType({
     id((MainId / "DemoProjectA").toString())
-    templates(BaseBuild)
+    templates(Main_BaseBuild)
     name = "demo-project-a"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainConfigName}-${BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(DemoProjectAVcs, "%vcs_rules%")
+        root(Main_DemoProjectAVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -28,14 +28,14 @@ object DemoProjectA : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_5"
-            buildType = "${DemoProjectB.id}"
+            buildType = "${Main_DemoProjectB.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(DemoProjectB) {
+        dependency(Main_DemoProjectB) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

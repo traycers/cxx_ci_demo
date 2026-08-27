@@ -15,7 +15,7 @@ changeProject(RelativeId("CxxCiDemo_Main")) {
             password("gitlab_credentials_password", "")
         }
         update {
-            password("gitlab_credentials_password", "credentialsJSON:f334f54e-6d8a-48a8-aa0d-117995e9bb37")
+            password("gitlab_credentials_password", "credentialsJSON:ed2e40ed-f84e-429a-85c6-90844f5e6b42")
         }
     }
 }

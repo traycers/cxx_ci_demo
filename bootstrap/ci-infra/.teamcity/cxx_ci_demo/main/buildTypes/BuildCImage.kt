@@ -12,7 +12,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // on DslContext.settingsRoot for agent-side checkout ("Checkout rules are not supported for vcs
 // root ... Unsupported rules for agent-side checkout", confirmed live) — so -f/context point at
 // the release's own subdirectory explicitly instead.
-object BuildCImage : BuildType({
+object Main_BuildCImage : BuildType({
     id((MainId / "BuildCImage").toString())
     name = "Build C++ image"
 
