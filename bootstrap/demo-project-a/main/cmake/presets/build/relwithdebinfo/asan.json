@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "include": ["../../configure/relwithdebinfo/asan.json"],
+    "buildPresets": [
+        {
+            "name": "relwithdebinfo-asan",
+            "configurePreset": "relwithdebinfo-asan"
+        }
+    ]
+}

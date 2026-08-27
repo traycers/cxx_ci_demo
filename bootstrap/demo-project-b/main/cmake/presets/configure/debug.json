@@ -1,0 +1,15 @@
+{
+    "version": 6,
+    "include": ["clang.json"],
+    "configurePresets": [
+        {
+            "name": "debug",
+            "hidden": true,
+            "inherits": "clang",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
+            }
+        }
+    ]
+}

@@ -1,16 +1,46 @@
-cmake_minimum_required(VERSION 3.20)
-project(mathutils CXX)
+cmake_minimum_required (VERSION 3.25)
+set(PACKAGE_NAMESPACE cxx-ci-demo)
+set(PACKAGE_NAME project_b)
+project(${PACKAGE_NAME})
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+list(
+    APPEND
+    CMAKE_MODULE_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(cmake_utils)
 
-add_library(mathutils STATIC src/mathutils.cpp)
-target_include_directories(mathutils PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
 
-install(TARGETS mathutils ARCHIVE DESTINATION lib)
-install(FILES include/mathutils.h DESTINATION include)
+option(USE_TEST "use tests" ON)
 
-enable_testing()
-find_package(GTest REQUIRED)
-add_executable(test_mathutils tests/test_mathutils.cpp)
-target_link_libraries(test_mathutils PRIVATE mathutils GTest::gtest GTest::gtest_main)
-add_test(NAME mathutils_tests COMMAND test_mathutils)
+
+# find_package(
+#     %package_name% REQUIRED)
+
+
+if(USE_TEST)
+    enable_testing()
+    find_package(GTest REQUIRED)
+endif()
+
+
+
+handle_version()
+add_subdirectory(mathutils)
+
+
+
+if(USE_TEST)
+    add_subdirectory(tests)
+endif()
+
+
+
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+    file(
+        CREATE_LINK
+        "${CMAKE_BINARY_DIR}/compile_commands.json"
+        "${CMAKE_SOURCE_DIR}/compile_commands.json"
+        SYMBOLIC)
+endif()

@@ -1,0 +1,16 @@
+{
+    "version": 6,
+    "include": [
+        "../debug.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "debug-asan",
+            "inherits": "debug",
+            "binaryDir": "${sourceDir}/build/Debug/asan",
+            "cacheVariables": {
+                "ENABLE_ASAN": "ON"
+            }
+        }
+    ]
+}
