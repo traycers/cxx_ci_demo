@@ -24,7 +24,7 @@ _避免使用_:base build、image job
 TeamCity 的配置参数(`%build_image_cxx%`)，保存下游 C++ 项目构建用于运行其构建容器的 Docker 镜像标签。
 
 **Bootstrap**:
-一次性的自动化脚本(以及 `bootstrap/` 目录，每个仓库对应一个子目录)，在 `docker compose up` 之后通过 API 在 GitLab 中创建仓库，并用初始内容(DSL、demo 项目)填充它们。
+一次性的自动化脚本(以及 `bootstrap/` 目录，每个仓库对应一个子目录，子目录内部再按每一个预先准备好的分支各自对应一个子目录，见 ADR 0007)，在 `docker compose up` 之后通过 API 在 GitLab 中创建仓库，并用初始内容(DSL、demo 项目)填充每个仓库的各个分支。
 
 **Demo 项目**:
 一个最小化的骨架 C++ 项目(CMake)，为本地图(map)端到端流水线验证而创建。两个 demo 项目中的一个依赖另一个，用于验证基于分支的依赖解析。

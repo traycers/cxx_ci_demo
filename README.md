@@ -48,6 +48,8 @@ Everything past this point (repo creation, Kotlin DSL, demo projects) is automat
 ## Adding a new release
 
 The `cxx_ci_demo` project in TeamCity is split into one directory per release under
-`bootstrap/ci-infra/.teamcity/cxx_ci_demo/` (currently just `main/`). See
+`bootstrap/ci-infra/main/.teamcity/cxx_ci_demo/` (currently just a release named `main`, not to
+be confused with the outer `bootstrap/ci-infra/main/` — that one is the seeded git branch, see
+ADR 0007). See
 `docs/en/adding-a-release.md` for the step-by-step procedure and the `<config_name>`/`<config_name>-*`
 branch naming convention.

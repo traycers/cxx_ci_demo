@@ -50,5 +50,7 @@ _Перевод `README.md`. При изменении оригинала обн
 ## Добавление нового релиза
 
 Проект `cxx_ci_demo` в TeamCity разбит на одну директорию на релиз внутри
-`bootstrap/ci-infra/.teamcity/cxx_ci_demo/` (сейчас только `main/`). Пошаговую процедуру и
-конвенцию именования веток `<config_name>`/`<config_name>-*` см. в `docs/ru/adding-a-release.md`.
+`bootstrap/ci-infra/main/.teamcity/cxx_ci_demo/` (сейчас только релиз с именем `main` — не путать
+с внешним `bootstrap/ci-infra/main/`: это заготовленная git-ветка, см. ADR 0007). Пошаговую
+процедуру и конвенцию именования веток `<config_name>`/`<config_name>-*` см. в
+`docs/ru/adding-a-release.md`.

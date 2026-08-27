@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # One-shot bootstrap: run once after `docker compose up -d` has settled.
-# Creates the 3 GitLab repos, pushes bootstrap/<repo>/ content into them (including
-# bootstrap/ci-infra/.teamcity/settings.kts — the actual TeamCity project tree definition), then
+# Creates the 3 GitLab repos, pushes bootstrap/<repo>/<branch>/ content into them — one branch per
+# subdirectory, see push_repo_content() below — (including bootstrap/ci-infra/main/.teamcity/settings.kts
+# — the actual TeamCity project tree definition), then
 # points TeamCity's Kotlin DSL versioned settings at ci-infra in import mode (git/UI is the
 # source of truth — see provision_teamcity() below) and injects the one thing the DSL itself
 # cannot carry: the GitLab credential used by the tree's own VCS roots.
@@ -111,24 +112,53 @@ create_gitlab_repo() {
     fi
 }
 
-# --- 4. Push bootstrap/<repo>/ content into each repo -----------------------------------------
-# Done from a throwaway copy so we never run `git init` inside bootstrap/<repo>/ itself — that
-# would nest a second .git inside this repo's own working tree.
+# --- 4. Push bootstrap/<repo>/<branch>/ content into each repo, one branch per subdirectory ----
+# Each subdirectory of bootstrap/<repo>/ is an independent, pre-made branch: adding a branch to
+# seed is just adding a directory, no script changes needed (see ADR 0007). Every branch is
+# pushed as its own orphan commit (fresh `git init`, single commit, done from a throwaway copy so
+# we never run `git init` inside bootstrap/<repo>/<branch>/ itself — that would nest a second
+# .git inside this repo's own working tree) — there's no shared history between branches, since
+# the directories hold deliberately different content, not a fork of one codebase.
+#
+# `main` is always pushed first when present: GitLab makes the first branch ever pushed to an
+# empty repo its default branch, so pushing `main` first keeps that default what everyone expects
+# regardless of directory-listing order.
 #
 # Idempotency: GitLab protects the default branch from force-push out of the box, so re-running
 # with --force (the original approach) gets rejected by GitLab's own pre-receive hook. Instead,
-# only push when the remote's `main` genuinely doesn't exist yet (`git ls-remote` against an
-# empty repo returns nothing / non-zero) — a plain, non-force push into an empty repo needs no
-# special permission and respects branch protection as-is.
+# each branch is checked and pushed independently — only push a branch that genuinely doesn't
+# exist on the remote yet (`git ls-remote` against a missing branch returns nothing / non-zero) —
+# a plain, non-force push of a new branch needs no special permission and respects branch
+# protection as-is. Checking per branch (not per repo) also means re-running bootstrap.sh after
+# adding a new branch directory to an already-bootstrapped repo pushes just the new branch,
+# instead of skipping the whole repo because *some* branch already exists.
 push_repo_content() {
     local name="$1" token="$2"
-    local src="bootstrap/${name}"
-    [ -d "$src" ] || die "bootstrap/${name} does not exist — did tickets 05/06/07 run first?"
+    local repo_dir="bootstrap/${name}"
+    [ -d "$repo_dir" ] || die "bootstrap/${name} does not exist — did tickets 05/06/07 run first?"
 
     local url="http://root:${token}@${GITLAB_HOSTNAME}:${GITLAB_HTTP_PORT}/root/${name}.git"
 
-    if git -c http.proxy= ls-remote --exit-code "$url" main >/dev/null 2>&1; then
-        log "  '${name}' already has a 'main' branch on GitLab, skipping push (bootstrap.sh is safe to re-run)."
+    local branches=()
+    [ -d "${repo_dir}/main" ] && branches+=("main")
+    local d branch
+    for d in "${repo_dir}"/*/; do
+        branch="$(basename "$d")"
+        [ "$branch" = "main" ] && continue
+        branches+=("$branch")
+    done
+
+    for branch in "${branches[@]}"; do
+        push_repo_branch "$name" "$branch" "$url"
+    done
+}
+
+push_repo_branch() {
+    local name="$1" branch="$2" url="$3"
+    local src="bootstrap/${name}/${branch}"
+
+    if git -c http.proxy= ls-remote --exit-code "$url" "$branch" >/dev/null 2>&1; then
+        log "  '${name}' already has a '${branch}' branch on GitLab, skipping push (bootstrap.sh is safe to re-run)."
         return 0
     fi
 
@@ -139,13 +169,13 @@ push_repo_content() {
     (
         cd "$tmp"
         git init -q
-        git checkout -q -b main
+        git checkout -q -b "$branch"
         git add -A
         git -c user.email="bootstrap@ci-infra.local" -c user.name="ci_cxx bootstrap" \
             commit -q -m "initial content from ci_cxx bootstrap.sh"
         git remote add origin "$url"
-        log "pushing '${name}' to GitLab..."
-        git -c http.proxy= push -q -u origin main
+        log "pushing '${name}' branch '${branch}' to GitLab..."
+        git -c http.proxy= push -q -u origin "$branch"
     )
     rm -rf "$tmp"
 }
@@ -354,7 +384,7 @@ provision_teamcity() {
 
     log "TeamCity provisioned: versioned settings import from ci-infra owns the project tree"
     log "(CxxCiDemo_Main: base_build template + BuildCImage + DemoProjectA/B + Result) — edit"
-    log "bootstrap/ci-infra/.teamcity/settings.kts or the TeamCity UI, both land in git. See ADR 0004."
+    log "bootstrap/ci-infra/main/.teamcity/settings.kts or the TeamCity UI, both land in git. See ADR 0004."
 }
 
 main() {

@@ -27,4 +27,4 @@ _翻译自 `README.md`。原文变更时请同步更新本文件——参见 [AD
 
 ## 添加新的 release
 
-TeamCity 中的 `cxx_ci_demo` 项目按 release 拆分为 `bootstrap/ci-infra/.teamcity/cxx_ci_demo/` 下的多个目录(目前只有 `main/`)。分步操作流程以及 `<config_name>`/`<config_name>-*` 分支命名约定见 `docs/zh/adding-a-release.md`。
+TeamCity 中的 `cxx_ci_demo` 项目按 release 拆分为 `bootstrap/ci-infra/main/.teamcity/cxx_ci_demo/` 下的多个目录(目前只有一个名为 `main` 的 release——不要与外层的 `bootstrap/ci-infra/main/` 混淆，后者是预先准备好的 git 分支，见 ADR 0007)。分步操作流程以及 `<config_name>`/`<config_name>-*` 分支命名约定见 `docs/zh/adding-a-release.md`。

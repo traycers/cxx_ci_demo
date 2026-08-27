@@ -22,7 +22,7 @@ NEW_CONFIG_NAME="${1:?usage: scripts/new-release.sh <new_config_name> [source_co
 SOURCE_CONFIG_NAME="${2:-main}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CXX_CI_DEMO_DIR="${REPO_ROOT}/bootstrap/ci-infra/.teamcity/cxx_ci_demo"
+CXX_CI_DEMO_DIR="${REPO_ROOT}/bootstrap/ci-infra/main/.teamcity/cxx_ci_demo"
 INDEX_FILE="${CXX_CI_DEMO_DIR}/CxxCiDemo.kt"
 
 SRC_DIR="${CXX_CI_DEMO_DIR}/${SOURCE_CONFIG_NAME}"
@@ -87,7 +87,7 @@ echo
 echo "Next steps:"
 echo "  1. Review the diff, especially ${DST_DIR#"$REPO_ROOT"/}/${NEW_WORD}.kt (branch_default/branch_spec/description)."
 echo "  2. If this release needs a different build environment, edit ${DST_DIR#"$REPO_ROOT"/}/Dockerfile."
-echo "  3. Push bootstrap/ci-infra/.teamcity to the live ci-infra repo's main branch."
+echo "  3. Push bootstrap/ci-infra/main/.teamcity to the live ci-infra repo's main branch."
 echo "  4. Run bootstrap.sh once so it injects the GitLab credential into ${NEW_WORD}'s VCS roots"
 echo "     (it currently only loops over the main release's — see bootstrap.sh's provision_teamcity)."
 echo "  5. Create refs/heads/${NEW_CONFIG_NAME} in demo-project-a and demo-project-b on GitLab."

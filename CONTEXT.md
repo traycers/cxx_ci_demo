@@ -22,7 +22,7 @@ _Avoid_: base build, image job
 The TeamCity configuration parameter (`%build_image_cxx%`) holding the Docker image tag that downstream C++ project builds use to run their build container.
 
 **Bootstrap**:
-The one-shot automated script (and the `bootstrap/` directory, with a subdirectory per repo) that, after `docker compose up`, creates GitLab repos via its API and seeds them with initial content (DSL, demo projects).
+The one-shot automated script (and the `bootstrap/` directory, with a subdirectory per repo, each holding one subdirectory per pre-made branch — see ADR 0007) that, after `docker compose up`, creates GitLab repos via its API and seeds each one's branches with their initial content (DSL, demo projects).
 
 **Demo project**:
 A minimal skeleton C++ project (CMake) created for this map's end-to-end pipeline verification. One of the two demo projects depends on the other, to verify branch-based dependency resolution.
