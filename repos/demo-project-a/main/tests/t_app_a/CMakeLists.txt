@@ -41,7 +41,7 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
-        gtest::gtest
+        GTest::GTest
         ${PACKAGE_NAME}::sanitizer
         ${PACKAGE_NAME}::mathutils
 )

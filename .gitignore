@@ -2,3 +2,4 @@
 .env
 repos/demo-project-*/*/build/
 repos/demo-project-*/*/deps/
+CMakeUserPresets.json
