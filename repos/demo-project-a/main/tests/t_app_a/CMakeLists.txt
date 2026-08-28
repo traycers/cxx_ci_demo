@@ -42,8 +42,9 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         GTest::GTest
+        GTest::Main
         ${PACKAGE_NAME}::sanitizer
-        ${PACKAGE_NAME}::mathutils
+        cxx::ci::demo::project_b::mathutils
 )
 
 
