@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "include": ["../../configure/relwithdebinfo/tsan.json"],
+    "testPresets": [
+        {
+            "name": "relwithdebinfo-tsan",
+            "configurePreset": "relwithdebinfo-tsan",
+            "environment": {
+                "TSAN_OPTIONS": "suppressions=${sourceDir}/sanitizer/suppressions/tsan.txt:print_suppressions=0:second_deadlock_stack=1"
+            }
+        }
+    ]
+}
