@@ -29,11 +29,11 @@ object Release1 : Project({
         param("deps_archive_name", "sdk.zip")
         param("deps_dir", "_deps")
         param("branch_spec", """
-            +:refs/heads/(Release1)
-            +:refs/heads/(Release1-*)
+            +:refs/heads/(release_1)
+            +:refs/heads/(release_1-*)
         """.trimIndent())
         param("vcs_rules", "+:. => %vcs_dir%")
-        param("branch_default", "refs/heads/Release1")
+        param("branch_default", "refs/heads/release_1")
         param("cxx_standard", "20")
         param("keep_images_count", "3")
     }

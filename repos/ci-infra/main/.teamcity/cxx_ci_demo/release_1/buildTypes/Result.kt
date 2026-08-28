@@ -37,6 +37,7 @@ object Release1_ResultBuild : BuildType({
             id = "creating_an_installer"
             scriptContent = """
                 echo "creating an installer"
+                mkdir -p %install_dir%
                 cp -r %deps_dir%/bin/* %install_dir%/
             """.trimIndent()
         }
