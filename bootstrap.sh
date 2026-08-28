@@ -215,17 +215,19 @@ teamcity_super_user_token() {
 }
 
 # tc_post <path> <json-body-string> -> prints "<http_status>\n<response_body>"
+# Body goes in over stdin (`--data @-`, `docker run -i`), not a bind-mounted temp file: an earlier
+# version wrote the payload to a host temp dir and bind-mounted it in, which broke on at least one
+# machine with "curl: option --data: error encountered when reading a file" — curlimages/curl runs
+# as a non-root UID (100) inside the container, and depending on the host's mount/SELinux/Docker
+# setup that UID isn't guaranteed to be able to read a bind-mounted host path even at 644/755.
+# Piping over stdin never touches the host filesystem, so no host-side permission state can break it.
 tc_post() {
     local path="$1" body="$2"
-    local workdir; workdir="$(mktemp -d)"; chmod 755 "$workdir"
-    printf '%s' "$body" > "${workdir}/payload.json"
-    chmod 644 "${workdir}/payload.json"
     local out
-    out="$(docker run --rm --network cxxci -v "${workdir}:/work:ro" curlimages/curl:latest \
+    out="$(printf '%s' "$body" | docker run --rm -i --network cxxci curlimages/curl:latest \
         curl -s -w '\n%{http_code}' -u ":${TC_SU_TOKEN}" \
         -H 'Content-Type: application/json' -H 'Accept: application/json' \
-        --request POST "http://teamcity-server:8111${path}" --data @/work/payload.json)"
-    rm -rf "$workdir"
+        --request POST "http://teamcity-server:8111${path}" --data @-)"
     printf '%s\n%s' "$(echo "$out" | tail -1)" "$(echo "$out" | sed '$d')"
 }
 
