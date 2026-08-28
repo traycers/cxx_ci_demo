@@ -163,10 +163,16 @@ def provision_teamcity(gitlab_token):
         log("  re-run bootstrap once CxxCiDemo_Main_DemoProjectA exists to inject credentials.")
 
     # 5. Agent authorization: documented as a manual UI step, but has a REST escape hatch.
+    # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed
+    # (this REST call was apparently never actually exercised before; same-host agents do NOT
+    # auto-authorize here despite the docs suggesting they might).
     agent_resp = tc.get("/app/rest/agents/id:1?fields=authorized")
     if '"authorized":true' not in agent_resp.text:
-        tc.post("/app/rest/agents/id:1/authorizedInfo", json.dumps({"status": True, "text": "authorized by bootstrap"}))
-        log("  authorized build agent")
+        status, body = tc.put("/app/rest/agents/id:1/authorizedInfo", json.dumps({"status": True, "text": "authorized by bootstrap"}))
+        if status != 200:
+            log(f"ERROR: failed to authorize agent (HTTP {status}): {body}")
+        else:
+            log("  authorized build agent")
 
     log("TeamCity provisioned: versioned settings import from ci-infra owns the project tree")
     log("(CxxCiDemo_Main: base_build template + BuildCImage + DemoProjectA/B + Result) — edit")

@@ -108,7 +108,11 @@ def _push_repo_branch(name, branch, url, src_dir):
 
     tmp = tempfile.mkdtemp()
     try:
-        shutil.copytree(src_dir, tmp, dirs_exist_ok=True)
+        # symlinks=True: copy symlinks as symlinks (matching the old `cp -a`), rather than
+        # following them — seed content can carry a stale/broken symlink (e.g. a
+        # compile_commands.json pointing at a devcontainer-only build/ path), and the default
+        # dereferencing behavior crashes on those instead of just copying the link as-is.
+        shutil.copytree(src_dir, tmp, dirs_exist_ok=True, symlinks=True)
         repo = Repo.init(tmp)
         repo.git.checkout("-b", branch)
         repo.git.add(A=True)
