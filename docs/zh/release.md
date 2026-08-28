@@ -49,6 +49,7 @@ flowchart TD
 ```mermaid
 gitGraph
    commit id: "init"
+
    branch feature_1 order: 0
    commit id: "feature_1 work"
    commit id: "feature_1 work 2"
@@ -63,10 +64,11 @@ gitGraph
    commit id: "hotfix_1 fix 2"
    checkout release_1
    merge hotfix_1
-   commit id: "release_1 update 1"
-
    checkout main
+   merge hotfix_1
+   merge release_1 id: "release_1 launch" type: HIGHLIGHT
    commit id: "main update 2"
+
    branch hotfix_2 order: 1
    commit id: "hotfix_2 fix"
    commit id: "hotfix_2 fix 2"
@@ -81,30 +83,45 @@ gitGraph
    merge feature_2
    commit id: "main update 4"
 
-   branch release_2 order: 6
-   commit id: "release_2 start"
-   branch special_feature order: 7
+   branch release_client_x order: 9
+   commit id: "release_client_x start"
+   branch special_feature order: 10
    commit id: "special_feature work"
    commit id: "special_feature work 2"
-   checkout release_2
+   checkout release_client_x
    merge special_feature
-   commit id: "release_2 update 1"
+   commit id: "release_client_x continues"
+
+   checkout main
+   branch release_2 order: 7
+   commit id: "release_2 start"
+   checkout main
+   merge release_2 id: "release_2 launch" type: HIGHLIGHT
+
+   checkout release_2
+   branch hotfix_4 order: 8
+   commit id: "hotfix_4 fix"
+   commit id: "hotfix_4 fix 2"
+   checkout release_2
+   merge hotfix_4
+   checkout main
+   merge hotfix_4
 
    checkout release_1
-   commit id: "release_1 update 2"
-   branch hotfix_3 order: 8
+   branch hotfix_3 order: 6
    commit id: "hotfix_3 fix"
    commit id: "hotfix_3 fix 2"
    checkout release_1
    merge hotfix_3
-   commit id: "release_1 update 3"
-
    checkout main
+   merge hotfix_3
    commit id: "main update 5"
+
    branch feature_3 order: 3
    commit id: "feature_3 work"
    commit id: "feature_3 work 2"
    checkout main
    merge feature_3
    commit id: "main final"
+
 ```
