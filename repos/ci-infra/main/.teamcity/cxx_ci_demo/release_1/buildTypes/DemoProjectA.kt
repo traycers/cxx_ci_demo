@@ -1,0 +1,51 @@
+import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
+import jetbrains.buildServer.configs.kotlin.triggers.vcs
+
+// Artifact dependency on B via %deps_unpack_all% (sdk.zip!** => %deps_dir%, itself a project
+// parameter — see ticket 09). revisionName=sameChain — the paired snapshot dependency on B,
+// inherited from the template, must resolve first in the same chain; no independent branch-based
+// fallback here (Case A from ticket 03's research).
+object Release1_DemoProjectA : BuildType({
+    id((Release1Id / "DemoProjectA").toString())
+    templates(Release1_BaseBuild)
+    name = "demo-project-a"
+
+    params {
+        param("build_image_cxx", "cxxci-build:${Release1ConfigName}-${Release1_BuildCImage.depParamRefs.buildNumber}")
+    }
+
+    vcs {
+        root(Release1_DemoProjectAVcs, "%vcs_rules%")
+
+        cleanCheckout = true
+    }
+
+    triggers {
+        vcs {
+            id = "TRIGGER_3"
+            enableQueueOptimization = false
+        }
+        finishBuildTrigger {
+            id = "TRIGGER_5"
+            buildType = "${Release1_DemoProjectB.id}"
+            successfulOnly = true
+            branchFilter = ""
+        }
+    }
+
+    dependencies {
+        dependency(Release1_DemoProjectB) {
+            snapshot {
+                onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+            artifacts {
+                id = "ARTIFACT_DEPENDENCY_1"
+                buildRule = sameChain()
+                cleanDestination = true
+                artifactRules = "%deps_unpack_all%"
+            }
+        }
+    }
+})

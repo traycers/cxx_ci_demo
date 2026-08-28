@@ -12,4 +12,5 @@ object CxxCiDemo : Project({
     name = "cxx_ci_demo"
 
     subProject(Main)
+    subProject(Release1)
 })
