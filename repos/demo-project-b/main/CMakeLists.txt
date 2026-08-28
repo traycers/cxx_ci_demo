@@ -15,8 +15,12 @@ include(cmake_utils)
 option(USE_TEST "use tests" ON)
 
 
-# find_package(
-#     %package_name% REQUIRED)
+set(PROJECT_DEPS
+    # PKG Boost
+    #     COMPONENTS
+    #         url
+)
+find_pkgs(PROJECT_DEPS)
 
 
 if(USE_TEST)
@@ -35,6 +39,8 @@ if(USE_TEST)
     add_subdirectory(tests)
 endif()
 
+
+install_package_config()
 
 
 if(CMAKE_EXPORT_COMPILE_COMMANDS)

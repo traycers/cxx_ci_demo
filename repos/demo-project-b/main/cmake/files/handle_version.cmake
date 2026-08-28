@@ -4,7 +4,7 @@
 
 set(
     _handle_version_current_dir
-    ${CMAKE_CURRENT_LIST_DIR})
+    ${CMAKE_CURRENT_LIST_DIR}/handle_version)
 
 function(handle_version)
     set(options)
@@ -45,19 +45,19 @@ function(handle_version)
     file(MAKE_DIRECTORY "${tdir}/include/${PARAM_NAME}")
     file(MAKE_DIRECTORY "${tdir}/sources")
     configure_file(
-        ${_handle_version_current_dir}/version.hpp.in
+        ${_handle_version_current_dir}/header.hpp.in
         ${tdir}/include/${PARAM_NAME}/version.hpp
         @ONLY)
     configure_file(
-        ${_handle_version_current_dir}/version_thin.cpp.in
+        ${_handle_version_current_dir}/thin.cpp.in
         ${tdir}/sources/version_thin.cpp
         @ONLY)
     configure_file(
-        ${_handle_version_current_dir}/version_wide.cpp.in
+        ${_handle_version_current_dir}/wide.cpp.in
         ${tdir}/sources/version_wide.cpp
         @ONLY)
     configure_file(
-        ${_handle_version_current_dir}/version_u8.cpp.in
+        ${_handle_version_current_dir}/u8.cpp.in
         ${tdir}/sources/version_u8.cpp
         @ONLY)
     add_library(

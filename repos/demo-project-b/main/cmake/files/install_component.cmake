@@ -1,38 +1,3 @@
-function(install_component_validate)
-    if((NOT DEFINED PACKAGE_NAME)
-        OR (NOT PACKAGE_NAME))
-        message(FATAL_ERROR [==[
-
-    Variable 'PACKAGE_NAME' is empty or not set.
-
-    This variable is required by install_component() to correctly
-    export targets and generate CMake config files.
-
-    Define it in your root CMakeLists.txt:
-
-        set(PACKAGE_NAME <your_project_name>)
-        project(${PACKAGE_NAME})
-
-    ]==])
-    endif()
-
-    if((NOT DEFINED PACKAGE_NAMESPACE)
-        OR (NOT PACKAGE_NAMESPACE))
-        message(FATAL_ERROR [==[
-
-    Variable 'PACKAGE_NAMESPACE' is empty or not set.
-
-    This variable is required by install_component() to correctly
-    namespace exported targets.
-
-    Define it in your root CMakeLists.txt:
-
-        set(PACKAGE_NAMESPACE <your_namespace_prefix>)
-
-    ]==])
-    endif()
-endfunction()
-
 function(install_component)
     set(options
         NO_HEADERS)
@@ -46,7 +11,7 @@ function(install_component)
         "${oneValueArgs}"
         "${multiValueArgs}"
         ${ARGN})
-    install_component_validate()
+    get_package_id(_pkg)
     string(
         REPLACE "-" "::"
         PACKAGE_NAMESPACE_COLON
@@ -69,11 +34,12 @@ function(install_component)
     endif()
     install(
         TARGETS ${PARAMS_TARGET_NAME}
-        EXPORT ${PACKAGE_NAMESPACE}-${PACKAGE_NAME}Config
+        EXPORT ${_pkg}-config
         COMPONENT ${PARAMS_TARGET_NAME})
     install(
-        EXPORT ${PACKAGE_NAMESPACE}-${PACKAGE_NAME}Config
+        EXPORT ${_pkg}-config
+        FILE ${_pkg}-targets.cmake
         NAMESPACE ${PACKAGE_NAMESPACE_COLON}::${PACKAGE_NAME}::
-        DESTINATION lib/cmake/${PACKAGE_NAMESPACE}-${PACKAGE_NAME}
+        DESTINATION lib/cmake/${_pkg}
         COMPONENT ${PARAMS_TARGET_NAME})
 endfunction()
