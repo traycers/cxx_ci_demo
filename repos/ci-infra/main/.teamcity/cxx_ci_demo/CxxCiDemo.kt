@@ -13,4 +13,5 @@ object CxxCiDemo : Project({
 
     subProject(Main)
     subProject(Release1)
+    subProject(Release2)
 })
