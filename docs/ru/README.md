@@ -13,11 +13,8 @@ _Перевод `README.md`. При изменении оригинала обн
 2. Добавьте `127.0.0.1 gitlab.local` в `/etc/hosts` хоста (или тот hostname, что указан в `GITLAB_HOSTNAME`). Это единственный момент, который не покрывает документация GitLab — сеть compose бесплатно даёт соседним контейнерам DNS-резолвинг, но хостовой ОС нужна эта запись, чтобы резолвить тот же hostname так же, как это будут делать VCS root'ы и clone-ссылки TeamCity. См. `.scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md` §2.
 3. `docker compose up -d`
 4. **Один неизбежный ручной шаг**: откройте `http://localhost:${TEAMCITY_HTTP_PORT:-8111}` и один раз пройдите мастер первого запуска TeamCity (подтвердить data dir, принять EULA, создать аккаунт администратора). В текущем образе headless-эквивалента нет — см. `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` §1.
-5. Возьмите Super User token TeamCity для скриптового доступа:
-   `docker compose logs teamcity-server | grep "Super user authentication token:"`
-6. GitLab доступен на `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` под `root` / паролем из `.env`.
-
-Всё, что дальше (создание репозиториев, Kotlin DSL, demo-проекты), автоматизирует `bootstrap.sh` — см. тикет 08 на карте.
+5. GitLab доступен на `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` под `root` / паролем из `.env`.
+6. `docker compose run --rm bootstrap` — создаёт 3 репозитория в GitLab, пушит в них посевное содержимое из `repos/<repo>/<branch>/` и направляет versioned settings TeamCity на `ci-infra`. Работает как одноразовый контейнер, подключённый напрямую к сети `cxxci` (см. ADR 0008), а не как хостовой скрипт — поэтому ничего здесь не зависит от версий `curl`/`git`/`docker` на хосте. Безопасно перезапускать.
 
 ## Диагностика проблем
 
@@ -30,27 +27,28 @@ _Перевод `README.md`. При изменении оригинала обн
   `teamcity-agent` в `docker-compose.yml`.
 - **"Test connection"/сборка VCS root падает с `HTTP Basic: Access denied` или
   `Authentication failed`**: это проблема учётных данных, а не сети/DNS, хотя на первый взгляд
-  может выглядеть похоже — `git` реально достучался до `gitlab.local` и получил настоящий ответ
-  от GitLab, ему просто не понравился пароль. Если это бьёт конкретно по VCS root'ам
-  `demo-project-a`/`demo-project-b`, обычно значит, что `bootstrap.sh` не дошёл до шага внедрения
-  credentials (шаг 4 в `provision_teamcity`) — он выполняется только после того, как появился
-  `CxxCiDemo_Main_DemoProjectA`, то есть только после того, как versioned settings успешно
-  импортировали дерево DSL. Перезапустите `bootstrap.sh`; теперь каждый его REST-вызов проверяет
-  статус ответа и громко падает с реальным HTTP-кодом и телом ответа вместо тихого продолжения
-  (более ранняя версия так не делала, и прогон на чистой машине показал ровно это: versioned
-  settings тихо не включились, поэтому дерево — и внедрение credentials — так и не произошли, а
-  запутывающий "Access denied" шагом позже был реальным, но отложенным симптомом).
-- **`gitlab.local` действительно недоступен изнутри контейнера** (connection refused/timeout,
-  а не ошибка аутентификации) — это другая проблема: проверьте, что контейнеры реально в сети
-  `cxxci` (`docker compose ps`) и что ничто на хосте не перехватывает трафик на опубликованных
-  портах (в этом репозитории именно так вёл себя локальный прокси во время разработки — см.
-  комментарии в `bootstrap.sh` о том, почему его собственные REST-вызовы идут через одноразовый
-  контейнер в сети `cxxci`, а не через опубликованные хостовые порты).
+  может выглядеть похоже. Если это бьёт конкретно по VCS root'ам `demo-project-a`/`demo-project-b`,
+  обычно значит, что контейнер `bootstrap` не дошёл до шага внедрения credentials (шаг 4 в
+  `provision_teamcity()` из `scripts/bootstrap/teamcity_ops.py`) — он выполняется только после
+  того, как появился `CxxCiDemo_Main_DemoProjectA`, то есть только после того, как versioned
+  settings успешно импортировали дерево DSL. Перезапустите `docker compose run --rm bootstrap`;
+  каждый его REST-вызов проверяет статус ответа и громко падает с реальным HTTP-кодом и телом
+  ответа вместо тихого продолжения (более ранняя версия так не делала, и прогон на чистой машине
+  показал ровно это: versioned settings тихо не включились, поэтому дерево — и внедрение
+  credentials — так и не произошли, а запутывающий "Access denied" шагом позже был реальным, но
+  отложенным симптомом).
+- **`gitlab` недоступен из контейнера `bootstrap`** (connection refused/timeout, а не ошибка
+  аутентификации) — проверьте, что контейнеры реально в сети `cxxci` (`docker compose ps`). В
+  отличие от шага с браузером выше, контейнер `bootstrap` обращается к `gitlab`/`teamcity-server`
+  напрямую по их именам compose-сервисов через сеть `cxxci` — он никогда не идёт через
+  `gitlab.local`, опубликованный хостовый порт или хостовый прокси, так что хостовые сетевые
+  особенности (hairpin NAT, локальный прокси, перехватывающий `localhost`), влияющие на браузер и
+  хостовой `git`, на него не распространяются. См. ADR 0008.
 
 ## Добавление нового релиза
 
 Проект `cxx_ci_demo` в TeamCity разбит на одну директорию на релиз внутри
-`bootstrap/ci-infra/main/.teamcity/cxx_ci_demo/` (сейчас только релиз с именем `main` — не путать
-с внешним `bootstrap/ci-infra/main/`: это заготовленная git-ветка, см. ADR 0007). Пошаговую
+`repos/ci-infra/main/.teamcity/cxx_ci_demo/` (сейчас только релиз с именем `main` — не путать
+с внешним `repos/ci-infra/main/`: это заготовленная git-ветка, см. ADR 0007/0008). Пошаговую
 процедуру и конвенцию именования веток `<config_name>`/`<config_name>-*` см. в
 `docs/ru/adding-a-release.md`.

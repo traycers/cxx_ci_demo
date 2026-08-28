@@ -1,4 +1,10 @@
-.claude/worktrees/
+.git/
+.scratch/
+.claude/
+docs/
+*.md
+LICENSE
 .env
+.env.example
 repos/demo-project-*/*/build/
 repos/demo-project-*/*/deps/

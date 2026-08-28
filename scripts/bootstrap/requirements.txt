@@ -1,0 +1,4 @@
+python-gitlab==8.5.0
+docker==7.2.0
+GitPython==3.1.60
+requests==2.34.2

@@ -2,6 +2,8 @@
 
 _翻译自 `docs/en/adr/0007-per-branch-bootstrap-content.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
 
+**已被 [ADR 0008](0008-python-bootstrap-container.md) 重命名**：本 ADR 描述的 `bootstrap/` 目录现在叫做 `repos/`——除此之外的一切(按分支划分的结构、orphan 提交、`main` 优先推送的顺序、按分支的幂等性)都没有变化，仍然是当前的策略。下文中的 `bootstrap/<repo>/<branch>/` 请理解为 `repos/<repo>/<branch>/`。
+
 # 按分支划分的 bootstrap 内容——`bootstrap/<repo>/<branch>/`
 
 此前 `bootstrap/<repo>/` 是扁平的——每个仓库一个文件目录，由 `push_repo_content()` 作为唯一的 `main` 分支推送。我们把它改造成了 `bootstrap/<repo>/<branch>/`——每个分支对应一个子目录，这样一个仓库就可以从一开始就用多个预先准备好、内容刻意不同的分支来填充，而不只是 `main`。三个已有仓库(`ci-infra`、`demo-project-a`、`demo-project-b`)在同一次改动中就迁移到了这个结构(它们的内容被移进了 `.../main/`)，而不是继续留在旧的扁平结构上——这样 `bootstrap.sh` 只需要支持一种目录形态。

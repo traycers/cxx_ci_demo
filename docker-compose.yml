@@ -15,9 +15,11 @@ volumes:
 
 services:
   gitlab:
-    image: gitlab/gitlab-ce:latest
-    # TODO(ticket 04 follow-up): pin to a specific verified tag once the stack has been
-    # brought up successfully once — see .scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md
+    image: gitlab/gitlab-ce:19.3.1-ce.0
+    # Pinned rather than `:latest` — current stable at the time this was pinned (2026-08-28),
+    # matching the exact-version convention already used for teamcity-server/teamcity-agent
+    # below. `:latest` was never actually verified against a specific version; nothing here
+    # relies on 19.3.1-ce.0 specifically, so bumping it later just needs a re-run of bootstrap.
     hostname: ${GITLAB_HOSTNAME:-gitlab.local}
     restart: unless-stopped
     shm_size: '256m'
@@ -95,3 +97,23 @@ services:
       - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/system:/opt/buildagent/system
     depends_on:
       - teamcity-server
+
+  # One-shot provisioning tool, not part of `docker compose up`: run manually with
+  # `docker compose run --rm bootstrap` once GitLab + TeamCity have settled (and the one
+  # unavoidable manual TeamCity first-start step is done — see README). Runs attached to the
+  # cxxci network directly instead of shelling out to sibling `docker run` containers for every
+  # call — see ADR 0008.
+  bootstrap:
+    build:
+      context: .
+      dockerfile: scripts/bootstrap/Dockerfile
+    profiles: ["tools"]
+    networks:
+      - cxxci
+    environment:
+      GITLAB_HTTP_PORT: ${GITLAB_HTTP_PORT:-8929}
+    volumes:
+      # Docker-outside-of-Docker, same pattern as teamcity-agent above: needed to exec into the
+      # gitlab container (minting the root PAT) and read teamcity-server's logs (super user
+      # token) — both require reaching into a sibling container, not just HTTP to it.
+      - /var/run/docker.sock:/var/run/docker.sock

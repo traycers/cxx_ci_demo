@@ -1,5 +1,7 @@
 🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0007-per-branch-bootstrap-content.md) · [🇨🇳 中文](../../zh/adr/0007-per-branch-bootstrap-content.md)
 
+**Renamed by [ADR 0008](0008-python-bootstrap-container.md)**: the `bootstrap/` directory this ADR describes is now `repos/` — everything below (the per-branch layout, orphan commits, `main`-first push order, per-branch idempotency) is otherwise unchanged and still the current policy. Read `bootstrap/<repo>/<branch>/` below as `repos/<repo>/<branch>/`.
+
 # Per-branch bootstrap content — `bootstrap/<repo>/<branch>/`
 
 `bootstrap/<repo>/` used to be flat — one directory of files per repo, pushed as the single `main` branch by `push_repo_content()`. We restructured it to `bootstrap/<repo>/<branch>/`, one subdirectory per branch, so a repo can be seeded with several pre-made branches carrying deliberately different content, not just `main`. All three existing repos (`ci-infra`, `demo-project-a`, `demo-project-b`) were migrated to this shape in the same change (their content moved to `.../main/`) rather than leaving them on the old flat layout — `bootstrap.sh` only has to support one directory shape this way.
