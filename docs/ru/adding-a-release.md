@@ -4,11 +4,8 @@ _Перевод `docs/en/adding-a-release.md`. При изменении ори�
 
 # Добавление нового релиза
 
-**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/<config_name>/` в `ci-infra` —
-со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим
-`Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (`demo-project-a`,
-`demo-project-b`). Релизы различаются тем, на какую ветку смотрит каждый VCS root, и своим
-префиксом тега docker-образа (ниже) — на стороне GitLab ничего не копируется и не форкается.
+**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/config_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (`demo-project-a`, `demo-project-b`).
+Релизы различаются тем, на какую ветку смотрит каждый VCS root, и своим префиксом тега docker-образа (ниже) — на стороне GitLab ничего не копируется и не форкается.
 
 ## Быстрый способ: `scripts/new-release.sh`
 
@@ -105,18 +102,18 @@ toolchain — как и всё остальное в нём.
    чтобы копирование *из* любого релиза работало одинаково, включая `main` — без особых случаев.
    Для `release_2_0`:
 
-   | main/ (имя объекта)      | release_2_0/ (имя объекта)         |
-   |--------------------------|-------------------------------------|
-   | `Main`                   | `Release20`                        |
-   | `MainId`                 | `Release20Id`                      |
-   | `MainConfigName`         | `Release20ConfigName`              |
-   | `Main_DemoProjectA`      | `Release20_DemoProjectA`           |
-   | `Main_DemoProjectB`      | `Release20_DemoProjectB`           |
-   | `Main_DemoProjectAVcs`   | `Release20_DemoProjectAVcs`        |
-   | `Main_DemoProjectBVcs`   | `Release20_DemoProjectBVcs`        |
-   | `Main_BuildCImage`       | `Release20_BuildCImage`            |
-   | `Main_ResultBuild`       | `Release20_ResultBuild`            |
-   | `Main_BaseBuild`         | `Release20_BaseBuild`              |
+   | main/ (имя объекта)    | release_2_0/ (имя объекта)  |
+   | ---------------------- | --------------------------- |
+   | `Main`                 | `Release20`                 |
+   | `MainId`               | `Release20Id`               |
+   | `MainConfigName`       | `Release20ConfigName`       |
+   | `Main_DemoProjectA`    | `Release20_DemoProjectA`    |
+   | `Main_DemoProjectB`    | `Release20_DemoProjectB`    |
+   | `Main_DemoProjectAVcs` | `Release20_DemoProjectAVcs` |
+   | `Main_DemoProjectBVcs` | `Release20_DemoProjectBVcs` |
+   | `Main_BuildCImage`     | `Release20_BuildCImage`     |
+   | `Main_ResultBuild`     | `Release20_ResultBuild`     |
+   | `Main_BaseBuild`       | `Release20_BaseBuild`       |
 
    **Не трогайте** голые строковые литералы, передаваемые в вызовы `id(...)` (например,
    `id((MainId / "DemoProjectA").toString())`) сверх замены `MainId` на `Release20Id` — именно
