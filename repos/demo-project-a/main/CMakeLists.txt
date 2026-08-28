@@ -15,11 +15,11 @@ include(cmake_utils)
 option(USE_TEST "use tests" ON)
 
 
-find_package(
-     cxx-ci-demo-project_b
-     REQUIRED)
-
-
+set(
+    PROJECT_DEPS
+    PKG cxx-ci-demo-project_b
+)
+find_pkgs(PROJECT_DEPS)
 if(USE_TEST)
     enable_testing()
     find_package(GTest REQUIRED)
@@ -36,6 +36,8 @@ if(USE_TEST)
     add_subdirectory(tests)
 endif()
 
+
+install_package_config()
 
 
 if(CMAKE_EXPORT_COMPILE_COMMANDS)
