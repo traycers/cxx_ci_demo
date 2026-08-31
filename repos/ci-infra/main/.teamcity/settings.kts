@@ -1,5 +1,4 @@
 import jetbrains.buildServer.configs.kotlin.*
-import jetbrains.buildServer.configs.kotlin.projectFeatures.buildReportTab
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -27,14 +26,6 @@ version = "2026.1"
 
 project {
     description = "Contains all other projects"
-
-    features {
-        buildReportTab {
-            id = "PROJECT_EXT_1"
-            title = "Code Coverage"
-            startPage = "coverage.zip!index.html"
-        }
-    }
 
     cleanup {
         baseRule {
