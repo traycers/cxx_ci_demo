@@ -14,7 +14,7 @@ _Перевод `README.md`. При изменении оригинала обн
 3. `docker compose up -d`
 4. **Один неизбежный ручной шаг**: откройте `http://localhost:${TEAMCITY_HTTP_PORT:-8111}` и один раз пройдите мастер первого запуска TeamCity (подтвердить data dir, принять EULA, создать аккаунт администратора). В текущем образе headless-эквивалента нет — см. `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` §1.
 5. GitLab доступен на `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` под `root` / паролем из `.env`.
-6. `docker compose run --rm bootstrap` — создаёт 3 репозитория в GitLab, пушит в них посевное содержимое из `repos/<repo>/<branch>/` и направляет versioned settings TeamCity на `ci-infra`. Работает как одноразовый контейнер, подключённый напрямую к сети `cxxci` (см. ADR 0008), а не как хостовой скрипт — поэтому ничего здесь не зависит от версий `curl`/`git`/`docker` на хосте. Безопасно перезапускать.
+6. `docker compose run --rm bootstrap` — создаёт 6 репозиториев в GitLab (`ci-infra` и пять `demo-project-*`), пушит в них посевное содержимое из `repos/<repo>/<branch>/` и направляет versioned settings TeamCity на `ci-infra`. Работает как одноразовый контейнер, подключённый напрямую к сети `cxxci` (см. ADR 0008), а не как хостовой скрипт — поэтому ничего здесь не зависит от версий `curl`/`git`/`docker` на хосте. Безопасно перезапускать.
 
 ## Диагностика проблем
 
@@ -27,7 +27,7 @@ _Перевод `README.md`. При изменении оригинала обн
   `teamcity-agent` в `docker-compose.yml`.
 - **"Test connection"/сборка VCS root падает с `HTTP Basic: Access denied` или
   `Authentication failed`**: это проблема учётных данных, а не сети/DNS, хотя на первый взгляд
-  может выглядеть похоже. Если это бьёт конкретно по VCS root'ам `demo-project-a`/`demo-project-b`,
+  может выглядеть похоже. Если это бьёт конкретно по одному из VCS root'ов `demo-project-*`,
   обычно значит, что контейнер `bootstrap` не дошёл до шага внедрения credentials (шаг 4 в
   `provision_teamcity()` из `scripts/bootstrap/teamcity_ops.py`) — он выполняется только после
   того, как появился `CxxCiDemo_Main_DemoProjectA`, то есть только после того, как versioned

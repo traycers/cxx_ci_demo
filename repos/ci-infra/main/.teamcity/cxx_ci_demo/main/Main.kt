@@ -15,10 +15,16 @@ object Main : Project({
     description = """Build for the "main" branch and its derivatives. Copyable for the new release."""
 
     vcsRoot(Main_DemoProjectBVcs)
+    vcsRoot(Main_DemoProjectDVcs)
+    vcsRoot(Main_DemoProjectCVcs)
     vcsRoot(Main_DemoProjectAVcs)
+    vcsRoot(Main_DemoProjectEVcs)
 
     buildType(Main_DemoProjectB)
+    buildType(Main_DemoProjectD)
+    buildType(Main_DemoProjectC)
     buildType(Main_DemoProjectA)
+    buildType(Main_DemoProjectE)
     buildType(Main_BuildCImage)
     buildType(Main_ResultBuild)
 

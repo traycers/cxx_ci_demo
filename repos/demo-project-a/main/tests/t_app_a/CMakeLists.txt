@@ -44,7 +44,7 @@ target_link_libraries(
         GTest::GTest
         GTest::Main
         ${PACKAGE_NAME}::sanitizer
-        cxx::ci::demo::project_b::mathutils
+        ${PACKAGE_NAME}::app_a_core
 )
 
 

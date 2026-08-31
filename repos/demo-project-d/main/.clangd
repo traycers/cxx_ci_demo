@@ -1,0 +1,60 @@
+# .clangd
+# в IDE необходимо добавить cli параметры
+#
+#     --background-index
+#     --pretty
+#     --log=error
+#     --completion-style=detailed
+#     --header-insertion=iwyu
+#     --pch-storage=memory
+#
+CompileFlags:
+  Remove:
+    - -m*
+    - -f*exceptions
+    - -f*visibility*
+    - --sysroot*
+    - -Werror*
+    - -stdlib=*
+    - -stdlib=libc++
+
+  Add:
+    - -std=c++20
+    - -stdlib=libstdc++
+    - --gcc-toolchain=/usr
+    - -cxx-isystem/usr/include/c++/16
+    - -cxx-isystem/usr/include/x86_64-linux-gnu/c++/16
+    - -isystem/usr/include/boost
+    - -isystem/usr/include/drogon
+    - -isystem/usr/include/immer
+
+  Compiler: clang++
+
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: Loose
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+      - readability-*
+      - bugprone-*
+    Remove:
+      - modernize-use-trailing-return-type
+      - readability-magic-numbers
+      - readability-identifier-length
+
+Index:
+  Background: Build
+  StandardLibrary: Yes
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Completion:
+  AllScopes: Yes
+
+Style:
+  BasedOnFile: .clang-format

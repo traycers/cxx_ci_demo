@@ -6,7 +6,8 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // implicit import.
 //
 // Aggregation/release-packaging build type: pulls demo-project-a's sdk.zip (which itself already
-// covers demo-project-b transitively via its own snapshot+artifact chain), stages it, and
+// covers demo-project-b transitively via its own snapshot+artifact chain) and demo-project-e's
+// sdk.zip (e is self-sufficient — no artifact chain of its own to bring along), stages both, and
 // publishes result.zip. "files checking"/"protection of executable files"/"signing files" are
 // still placeholder steps for future release-hardening logic.
 object Main_ResultBuild : BuildType({
@@ -53,6 +54,16 @@ object Main_ResultBuild : BuildType({
 
     dependencies {
         dependency(Main_DemoProjectA) {
+            snapshot {
+                onDependencyFailure = FailureAction.FAIL_TO_START
+            }
+
+            artifacts {
+                buildRule = sameChain()
+                artifactRules = "%deps_unpack_all%"
+            }
+        }
+        dependency(Main_DemoProjectE) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

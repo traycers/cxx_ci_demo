@@ -21,7 +21,14 @@ GITLAB_URL = f"http://{GITLAB_HOST}:{GITLAB_HTTP_PORT}"
 TEAMCITY_HOST = "teamcity-server"
 TEAMCITY_URL = f"http://{TEAMCITY_HOST}:8111"
 
-REPOS = ["ci-infra", "demo-project-a", "demo-project-b"]
+REPOS = [
+    "ci-infra",
+    "demo-project-a",
+    "demo-project-b",
+    "demo-project-c",
+    "demo-project-d",
+    "demo-project-e",
+]
 REPOS_DIR = "/app/repos"
 
 GIT_AUTHOR_NAME = "ci_cxx bootstrap"

@@ -1,11 +1,13 @@
 #include <iostream>
-#include <mathutils/mathutils.hpp>
+#include <app_a_core/app_a_core.hpp>
 
 int main()
 {
-    std::cout                     //
-        << "2 + 3 = "             //
-        << mathutils::add(2, 3)   //
+    vecutils::Vector2 v{2, 3};
+    auto r = app_a_core::scale(v, 2);
+    std::cout                                                             //
+        << "scale((" << v.x << ", " << v.y << "), x2) = "                 //
+        << "(" << r.x << ", " << r.y << ")"                               //
         << "\n";
     return 0;
 }

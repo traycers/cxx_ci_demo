@@ -1,0 +1,7 @@
+{
+    "version": 6,
+    "include": [
+        "debug/asan.json",
+        "debug/tsan.json"
+    ]
+}

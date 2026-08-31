@@ -1,0 +1,56 @@
+// NOLINTBEGIN
+// clang-format off
+#include "@PROJECT_NAME@/version.hpp"
+
+namespace @PROJECT_NAME@
+{
+    template<>
+    char const*
+    Build<detail::thin, char const*>::summary(){
+        return
+            "name=@PROJECT_NAME@"
+            ", version=@build_version@"
+            ", commit=@build_commit@"
+            ", branch=@build_branch@"
+            ", date=@build_date@";
+    }
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::name(){
+        return "@PROJECT_NAME@";
+    }
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::branch(){
+        return "@build_branch@";
+    }
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::commit(){
+        return "@build_commit@";
+    }
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::date(){
+        return "@build_date@";
+    }
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::number(){
+        return "@build_number@";
+    }
+
+
+    template<>
+    char const*
+    Build<detail::thin, char const*>::version(){
+        return "@build_version@";
+    }
+}
+// clang-format on
+// NOLINTEND

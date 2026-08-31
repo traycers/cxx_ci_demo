@@ -27,7 +27,7 @@ TeamCity 的配置参数(`%build_image_cxx%`)，保存下游 C++ 项目构建用
 一次性的 provisioning 容器(`scripts/bootstrap/`，通过 `docker compose run --rm bootstrap` 运行——见 ADR 0008)，在 `docker compose up` 之后通过 API 在 GitLab 中创建仓库，并用来自 `repos/<repo>/<branch>/` 的初始内容(DSL、demo 项目)填充每个仓库的各个分支(每个仓库对应一个子目录，子目录内部再按每一个预先准备好的分支各自对应一个子目录，见 ADR 0007)。
 
 **Demo 项目**:
-一个最小化的骨架 C++ 项目(CMake)，为本地图(map)端到端流水线验证而创建。两个 demo 项目中的一个依赖另一个，用于验证基于分支的依赖解析。
+一个最小化的骨架 C++ 项目(CMake)，为本地图(map)端到端流水线验证而创建。共有五个(`a`–`e`):`a` 经由 `c` 链到 `d`,构成一条用来验证多级 `install_package_config` 解析的依赖链(见 ADR 0009);`b` 和 `e` 各自独立,其中 `e` 是刻意做成自给自足的(不依赖任何其他 demo 项目)。
 
 **Snapshot 依赖**:
 TeamCity 的机制，保证被依赖的构建会从与触发构建相同的分支被触发和获取；如果该分支在依赖项的 VCS root 中不存在，则回退到默认分支。
@@ -37,7 +37,7 @@ _避免使用_:build trigger dependency
 TeamCity 的机制，将一个 C++ 项目已构建好的二进制文件/头文件传递给另一个项目用于链接，而无需从头重新构建。
 
 **Release**(分支族):
-`ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 子树——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration，但共享 GitLab 上同样的 demo 项目仓库(`demo-project-a`/`demo-project-b`)。各个 release 之间的区别纯粹在于每个 VCS root 监视哪个分支(`branch_default`/`branch_spec`)。参见 `docs/zh/adding-a-release.md`。
+`ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 子树——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration，但共享 GitLab 上同样的 demo 项目仓库(从 `demo-project-a` 到 `demo-project-e`)。各个 release 之间的区别纯粹在于每个 VCS root 监视哪个分支(`branch_default`/`branch_spec`)。参见 `docs/zh/adding-a-release.md`。
 _避免使用_:build configuration(过于含糊——会与某个 release 内部单个项目自己的 build configuration 混淆)
 
 **config_name**:

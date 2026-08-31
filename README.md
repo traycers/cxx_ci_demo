@@ -12,7 +12,7 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 3. `docker compose up -d`
 4. **One unavoidable manual step**: open `http://localhost:${TEAMCITY_HTTP_PORT:-8111}` and click through the TeamCity first-start wizard once (confirm data dir, accept EULA, create the admin account). No headless equivalent exists in the current image — see `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` §1.
 5. GitLab is reachable at `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` with `root` / the password from `.env`.
-6. `docker compose run --rm bootstrap` — creates the 3 GitLab repos, pushes `repos/<repo>/<branch>/` seed content into them, and points TeamCity's versioned settings at `ci-infra`. Runs as a one-shot container attached to the `cxxci` network directly (see ADR 0008) rather than a host script, so nothing here depends on host-side `curl`/`git`/`docker` versions. Safe to re-run.
+6. `docker compose run --rm bootstrap` — creates the 6 GitLab repos (`ci-infra` and the five `demo-project-*`), pushes `repos/<repo>/<branch>/` seed content into them, and points TeamCity's versioned settings at `ci-infra`. Runs as a one-shot container attached to the `cxxci` network directly (see ADR 0008) rather than a host script, so nothing here depends on host-side `curl`/`git`/`docker` versions. Safe to re-run.
 
 ## Troubleshooting
 
@@ -25,7 +25,7 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
   `docker-compose.yml` for why.
 - **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
   `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
-  can look similar at a glance. If this hits `demo-project-a`/`demo-project-b`'s own VCS roots
+  can look similar at a glance. If this hits one of the `demo-project-*` VCS roots
   specifically, it usually means the `bootstrap` container didn't get to its credential-injection
   step (step 4 of `provision_teamcity()` in `scripts/bootstrap/teamcity_ops.py`) — which only runs
   once `CxxCiDemo_Main_DemoProjectA` exists, i.e. only after versioned settings successfully

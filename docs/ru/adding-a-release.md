@@ -4,7 +4,7 @@ _Перевод `docs/en/adding-a-release.md`. При изменении ори�
 
 # Добавление нового релиза
 
-**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/config_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (`demo-project-a`, `demo-project-b`).
+**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/config_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (от `demo-project-a` до `demo-project-e`).
 Релизы различаются тем, на какую ветку смотрит каждый VCS root, и своим префиксом тега docker-образа (ниже) — на стороне GitLab ничего не копируется и не форкается.
 
 ## Быстрый способ: `scripts/new-release.sh`
@@ -147,10 +147,10 @@ toolchain — как и всё остальное в нём.
 
 6. **Запушить в `ci-infra`, дождаться применения**, затем один раз запустить `bootstrap.sh`, чтобы
    он внедрил GitLab credential и в VCS root'ы нового релиза тоже (сейчас он проходит циклом по
-   `CxxCiDemo_Main_DemoProjectA`/`B` — расширьте этот цикл, либо добавьте id VCS root'ов нового
-   релиза, когда демо перестанет быть однорелизным).
+   `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` — расширьте этот цикл, либо добавьте id VCS
+   root'ов нового релиза, когда демо перестанет быть однорелизным).
 
-7. **Создать реальные ветки** в GitLab-репозиториях `demo-project-a`/`demo-project-b`:
+7. **Создать реальные ветки** в GitLab-репозиториях от `demo-project-a` до `demo-project-e`:
    как минимум `refs/heads/<config_name>`, чтобы VCS root'ам релиза было что собирать.
 
 ## Проверка результата

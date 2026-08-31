@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "include": ["../../configure/relwithdebinfo/asan.json"],
+    "testPresets": [
+        {
+            "name": "relwithdebinfo-asan",
+            "configurePreset": "relwithdebinfo-asan",
+            "environment": {
+                "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizer/suppressions/lsan.txt:print_suppressions=0"
+            }
+        }
+    ]
+}

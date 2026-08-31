@@ -25,7 +25,7 @@ The TeamCity configuration parameter (`%build_image_cxx%`) holding the Docker im
 The one-shot provisioning container (`scripts/bootstrap/`, run via `docker compose run --rm bootstrap` — see ADR 0008) that, after `docker compose up`, creates GitLab repos via its API and seeds each one's branches with their initial content (DSL, demo projects) from `repos/<repo>/<branch>/` (one subdirectory per repo, each holding one subdirectory per pre-made branch — see ADR 0007).
 
 **Demo project**:
-A minimal skeleton C++ project (CMake) created for this map's end-to-end pipeline verification. One of the two demo projects depends on the other, to verify branch-based dependency resolution.
+A minimal skeleton C++ project (CMake) created for this map's end-to-end pipeline verification. Five exist (`a`–`e`): `a` chains through `c` into `d` to exercise multi-hop `install_package_config` resolution (see ADR 0009), `b` and `e` stand alone, with `e` deliberately self-sufficient (no dependency on any other demo project).
 
 **Snapshot dependency**:
 The TeamCity mechanism that guarantees a dependent build is triggered and taken from the same branch as the triggering build, falling back to the default branch if that branch doesn't exist in the dependency's VCS root.
@@ -35,7 +35,7 @@ _Avoid_: build trigger dependency
 The TeamCity mechanism that passes one C++ project's built binaries/headers to another for linking, without rebuilding from scratch.
 
 **Release** (branch family):
-One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab demo-project repos (`demo-project-a`/`demo-project-b`). Releases differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-release.md`.
+One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab demo-project repos (`demo-project-a` through `demo-project-e`). Releases differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-release.md`.
 _Avoid_: build configuration (too vague — conflicts with an individual project's build configuration inside a release)
 
 **config_name**:

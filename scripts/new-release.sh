@@ -14,7 +14,7 @@
 #
 # What it does NOT do (still yours to do — see the printed next-steps at the end):
 #   - Push the result to the live ci-infra repo, or run bootstrap.sh
-#   - Create the actual refs/heads/<new_config_name> branch in demo-project-a/b on GitLab
+#   - Create the actual refs/heads/<new_config_name> branch in demo-project-a/b/c/d/e on GitLab
 #   - Edit the new Dockerfile if this release needs a different toolchain/base image
 set -euo pipefail
 
@@ -90,4 +90,4 @@ echo "  2. If this release needs a different build environment, edit ${DST_DIR#"
 echo "  3. Push repos/ci-infra/main/.teamcity to the live ci-infra repo's main branch."
 echo "  4. Run bootstrap.sh once so it injects the GitLab credential into ${NEW_WORD}'s VCS roots"
 echo "     (it currently only loops over the main release's — see bootstrap.sh's provision_teamcity)."
-echo "  5. Create refs/heads/${NEW_CONFIG_NAME} in demo-project-a and demo-project-b on GitLab."
+echo "  5. Create refs/heads/${NEW_CONFIG_NAME} in demo-project-a, -b, -c, -d and -e on GitLab."

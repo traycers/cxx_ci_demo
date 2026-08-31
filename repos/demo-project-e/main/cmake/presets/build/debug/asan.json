@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "include": ["../../configure/debug/asan.json"],
+    "buildPresets": [
+        {
+            "name": "debug-asan",
+            "configurePreset": "debug-asan"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "version": 6,
+    "include": ["gcc.json"],
+    "configurePresets": [
+        {
+            "name": "relwithdebinfo",
+            "hidden": true,
+            "inherits": "gcc",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/RelWithDebInfo/generators/conan_toolchain.cmake"
+            }
+        }
+    ]
+}

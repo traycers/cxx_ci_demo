@@ -1,0 +1,16 @@
+{
+    "version": 6,
+    "include": [
+        "../debug.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "debug-tsan",
+            "inherits": "debug",
+            "binaryDir": "${sourceDir}/build/Debug/tsan",
+            "cacheVariables": {
+                "ENABLE_TSAN": "ON"
+            }
+        }
+    ]
+}

@@ -147,7 +147,13 @@ def provision_teamcity(gitlab_token):
 
     # 4. The GitLab credential the demo VCS roots need — not carried by the DSL (see ADR 0004).
     if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_DemoProjectA") == 200:
-        for vcs in ("CxxCiDemo_Main_DemoProjectA", "CxxCiDemo_Main_DemoProjectB"):
+        for vcs in (
+            "CxxCiDemo_Main_DemoProjectA",
+            "CxxCiDemo_Main_DemoProjectB",
+            "CxxCiDemo_Main_DemoProjectC",
+            "CxxCiDemo_Main_DemoProjectD",
+            "CxxCiDemo_Main_DemoProjectE",
+        ):
             tc.put(f"/app/rest/vcs-roots/id:{vcs}/properties/secure:password", gitlab_token, content_type="text/plain")
         param_payload = json.dumps(
             {
@@ -175,6 +181,6 @@ def provision_teamcity(gitlab_token):
             log("  authorized build agent")
 
     log("TeamCity provisioned: versioned settings import from ci-infra owns the project tree")
-    log("(CxxCiDemo_Main: base_build template + BuildCImage + DemoProjectA/B + Result) — edit")
+    log("(CxxCiDemo_Main: base_build template + BuildCImage + DemoProjectA/B/C/D/E + Result) — edit")
     log("repos/ci-infra/main/.teamcity/settings.kts or the TeamCity UI, both land in git. See ADR 0004.")
     return True

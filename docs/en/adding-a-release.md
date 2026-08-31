@@ -4,8 +4,8 @@
 
 A **release** (see `CONTEXT.md`) is one `cxx_ci_demo/<config_name>/` directory in `ci-infra` —
 its own TeamCity subproject, its own VCS roots, its own set of build configurations, its own
-`Dockerfile`, but the *same* GitLab repos as every other release (`demo-project-a`,
-`demo-project-b`). Releases are distinguished by which branch each one's VCS roots watch, and by
+`Dockerfile`, but the *same* GitLab repos as every other release (`demo-project-a` through
+`demo-project-e`). Releases are distinguished by which branch each one's VCS roots watch, and by
 their own docker image tag prefix (below) — nothing is copied or forked on the GitLab side.
 
 ## The quick way: `scripts/new-release.sh`
@@ -144,10 +144,10 @@ comes along automatically when you copy `main/`'s `params { }` block, nothing to
 
 6. **Push to `ci-infra`, watch it apply**, then run `bootstrap.sh` once so it injects the GitLab
    credential into the new release's VCS roots too (it loops over
-   `CxxCiDemo_Main_DemoProjectA`/`B` today — extend that loop, or add the new release's VCS root
-   ids, when this stops being a one-release demo).
+   `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` today — extend that loop, or add the new
+   release's VCS root ids, when this stops being a one-release demo).
 
-7. **Create the actual branches** in `demo-project-a`/`demo-project-b` GitLab repos:
+7. **Create the actual branches** in the `demo-project-a` through `demo-project-e` GitLab repos:
    `refs/heads/<config_name>` at minimum, so the release's VCS roots have something to build.
 
 ## Verifying it worked

@@ -17,7 +17,7 @@ option(USE_TEST "use tests" ON)
 
 set(
     PROJECT_DEPS
-    PKG cxx-ci-demo-project_b
+    PKG cxx-ci-demo-project_c
 )
 find_pkgs(PROJECT_DEPS)
 if(USE_TEST)
@@ -28,6 +28,7 @@ endif()
 
 
 handle_version()
+add_subdirectory(app_a_core)
 add_subdirectory(app_a)
 
 

@@ -4,7 +4,7 @@ _翻译自 `docs/en/adding-a-release.md`。原文变更时请同步更新本文�
 
 # 添加新的 release
 
-**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(`demo-project-a`、`demo-project-b`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。
+**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(从 `demo-project-a` 到 `demo-project-e`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。
 
 ## 快捷方式：`scripts/new-release.sh`
 
@@ -72,9 +72,9 @@ param("branch_default", "refs/heads/release_2_0")
 
 5. **注册它**：在 `cxx_ci_demo/CxxCiDemo.kt` 中添加 `subProject(Release20)`。
 
-6. **推送到 `ci-infra`，等待应用生效**，然后运行一次 `bootstrap.sh`，让它把 GitLab 凭据也注入新 release 的 VCS root(它目前是对 `CxxCiDemo_Main_DemoProjectA`/`B` 做循环——当这不再是单 release 的 demo 时，需要扩展这个循环，或者添加新 release 的 VCS root id)。
+6. **推送到 `ci-infra`，等待应用生效**，然后运行一次 `bootstrap.sh`，让它把 GitLab 凭据也注入新 release 的 VCS root(它目前是对 `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` 做循环——当这不再是单 release 的 demo 时，需要扩展这个循环，或者添加新 release 的 VCS root id)。
 
-7. **在 `demo-project-a`/`demo-project-b` 的 GitLab 仓库中创建实际分支**：至少需要 `refs/heads/<config_name>`，这样该 release 的 VCS root 才有东西可构建。
+7. **在从 `demo-project-a` 到 `demo-project-e` 的 GitLab 仓库中创建实际分支**：至少需要 `refs/heads/<config_name>`，这样该 release 的 VCS root 才有东西可构建。
 
 ## 验证是否成功
 
