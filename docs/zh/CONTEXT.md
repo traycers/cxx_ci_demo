@@ -42,3 +42,10 @@ _避免使用_:build configuration(过于含糊——会与某个 release 内部
 
 **config_name**:
 release 的名称，既作为其目录名(`cxx_ci_demo/<config_name>/`)，也作为 demo 项目中的基础分支名(`refs/heads/<config_name>`)。从该 release 派生出的分支命名为 `<config_name>-*`(例如 release `release_2_0` → 分支 `release_2_0`、`release_2_0-hotfix-1`)。
+
+**Package variant**(规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)):
+构建类型限定符——`optimized` 或 `debug`——未来将用于区分 demo 项目可复用的构建产物,无论它是作为可下载压缩包被消费(roadmap Phase 1),还是日后作为包管理器引用被消费(roadmap Phase 2)。`optimized` 对应 `CMAKE_BUILD_TYPE=RelWithDebInfo`(今天已经为测试/产物而构建,见 `BaseBuild.kt`),`debug` 对应 `CMAKE_BUILD_TYPE=Debug`(尚未构建)。刻意不叫 "release",以避免与上面已有的 **Release**(分支族)术语冲突。
+_避免使用_:release(作为变体名称——已保留给分支族使用)
+
+**Dev container image**(规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)):
+一个 Docker 镜像,在 TeamCity 上以根镜像构建的镜像为 `FROM` 基础构建,并推送到 registry,供 demo 项目的 `devcontainer.json` 直接引用——这样开发者就不必自己构建该镜像。这与根镜像构建的镜像不同,后者从不离开宿主机上共享的 Docker daemon(见 ADR 0002)——这是本环境中第一个计划经由 registry 分发的产物。

@@ -25,4 +25,4 @@ The process rests on two scripts:
 1. **A fetch/switch script** — clones (or updates) the needed repos into the task directory and switches them to the needed branches.
 2. **A build script** — builds the projects inside the task directory.
 
-As of this writing, neither script exists yet (see [`docs/en/tradeoff.md`](tradeoff.md), disadvantage 4) — this describes the target workflow to get to, not the current state.
+As of this writing, neither script exists yet (see [`docs/en/tradeoff.md`](tradeoff.md), disadvantage 4) — this describes the target workflow to get to, not the current state. See [`docs/en/roadmap.md`](roadmap.md) for how the build script is planned to evolve — a dev container plus debug package variants.

@@ -40,3 +40,10 @@ _Avoid_: build configuration (too vague — conflicts with an individual project
 
 **config_name**:
 The release's name, used both as its directory name (`cxx_ci_demo/<config_name>/`) and as the base branch name in the demo projects (`refs/heads/<config_name>`). Branches derived from that release are named `<config_name>-*` (e.g. release `release_2_0` → branches `release_2_0`, `release_2_0-hotfix-1`).
+
+**Package variant** (planned — see [`docs/en/roadmap.md`](docs/en/roadmap.md)):
+The build-type qualifier — `optimized` or `debug` — that will distinguish a demo project's reusable build outputs, whether consumed as a downloadable archive (roadmap Phase 1) or, later, as a package manager reference (roadmap Phase 2). `optimized` maps to `CMAKE_BUILD_TYPE=RelWithDebInfo` (already built today for tests/artifacts, per `BaseBuild.kt`), `debug` to `CMAKE_BUILD_TYPE=Debug` (not yet built). Deliberately not called "release", to avoid colliding with the existing **Release** (branch family) term above.
+_Avoid_: release (as a variant name — reserved for the branch family)
+
+**Dev container image** (planned — see [`docs/en/roadmap.md`](docs/en/roadmap.md)):
+A Docker image, built `FROM` the root image build's image and pushed to a registry, meant to be referenced directly from a demo project's `devcontainer.json` so developers don't have to build it themselves. Distinct from the root image build's image, which never leaves the shared host Docker daemon (see ADR 0002) — this is the first artifact in the stand planned to go through a registry at all.
