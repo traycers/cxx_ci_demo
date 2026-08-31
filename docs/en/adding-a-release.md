@@ -6,7 +6,8 @@ A **release** (see `CONTEXT.md`) is one `cxx_ci_demo/<config_name>/` directory i
 its own TeamCity subproject, its own VCS roots, its own set of build configurations, its own
 `Dockerfile`, but the *same* GitLab repos as every other release (`project_a` through
 `project_e`). Releases are distinguished by which branch each one's VCS roots watch, and by
-their own docker image tag prefix (below) — nothing is copied or forked on the GitLab side.
+their own docker image tag prefix (below) — nothing is copied or forked on the GitLab side. See
+`releases.md` for the concrete releases that exist right now.
 
 ## The quick way: `scripts/new-release.sh`
 

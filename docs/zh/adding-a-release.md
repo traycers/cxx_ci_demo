@@ -4,7 +4,7 @@ _翻译自 `docs/en/adding-a-release.md`。原文变更时请同步更新本文�
 
 # 添加新的 release
 
-**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(从 `project_a` 到 `project_e`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。
+**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(从 `project_a` 到 `project_e`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。现在实际存在哪些 release,见 `releases.md`。
 
 ## 快捷方式：`scripts/new-release.sh`
 
