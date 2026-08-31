@@ -6,10 +6,12 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // implicit import.
 //
 // Aggregation/release-packaging build type: pulls project_a's sdk.zip (which itself already
-// covers project_b transitively via its own snapshot+artifact chain) and project_e's
-// sdk.zip (e is self-sufficient — no artifact chain of its own to bring along), stages both, and
-// publishes result.zip. "files checking"/"protection of executable files"/"signing files" are
-// still placeholder steps for future release-hardening logic.
+// covers the whole a->c->d chain via its own flat snapshot+artifact dependencies — see ADR 0009)
+// and project_e's sdk.zip (e is self-sufficient — no artifact chain of its own to bring along),
+// stages both, and publishes result.zip. project_b isn't part of this release's chain at all (see
+// the `paused` comment on Main_ProjectB) so it has nothing to contribute here. "files
+// checking"/"protection of executable files"/"signing files" are still placeholder steps for
+// future release-hardening logic.
 object Main_ResultBuild : BuildType({
     id((MainId / "Result").toString())
     name = "result"
