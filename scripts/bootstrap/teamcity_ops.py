@@ -146,15 +146,20 @@ def provision_teamcity(gitlab_token):
     log(f"  {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
 
     # 4. The GitLab credential the demo VCS roots need — not carried by the DSL (see ADR 0004).
+    #    Discovered dynamically (every VCS root outside _Root, i.e. every release's demo VCS
+    #    roots) rather than a hardcoded per-release list: a hardcoded list goes stale the moment
+    #    a new release is added via scripts/new-release.sh, exactly as adding-a-release.md warns
+    #    ("extend that loop... when this stops being a one-release demo") — confirmed live: with
+    #    the old Main-only list, release_1/release_2's VCS roots kept an empty
+    #    gitlab_credentials_password forever, no matter how many times bootstrap re-ran.
     if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200:
-        for vcs in (
-            "CxxCiDemo_Main_ProjectA",
-            "CxxCiDemo_Main_ProjectB",
-            "CxxCiDemo_Main_ProjectC",
-            "CxxCiDemo_Main_ProjectD",
-            "CxxCiDemo_Main_ProjectE",
-        ):
-            tc.put(f"/app/rest/vcs-roots/id:{vcs}/properties/secure:password", gitlab_token, content_type="text/plain")
+        vcs_resp = tc.get("/app/rest/vcs-roots?fields=vcs-root(id,project(id))")
+        demo_vcs_roots = [
+            v for v in vcs_resp.json().get("vcs-root", [])
+            if v["project"]["id"] != "_Root"
+        ]
+        for v in demo_vcs_roots:
+            tc.put(f"/app/rest/vcs-roots/id:{v['id']}/properties/secure:password", gitlab_token, content_type="text/plain")
         param_payload = json.dumps(
             {
                 "name": "gitlab_credentials_password",
@@ -162,8 +167,11 @@ def provision_teamcity(gitlab_token):
                 "type": {"rawValue": "password display='normal'"},
             }
         )
-        tc.post("/app/rest/projects/id:CxxCiDemo_Main/parameters", param_payload)
-        log("  injected GitLab credential into the demo project's VCS roots")
+        release_project_ids = {v["project"]["id"] for v in demo_vcs_roots}
+        for project_id in release_project_ids:
+            tc.post(f"/app/rest/projects/id:{project_id}/parameters", param_payload)
+        log(f"  injected GitLab credential into {len(demo_vcs_roots)} demo VCS root(s) across "
+            f"{len(release_project_ids)} release project(s): {', '.join(sorted(release_project_ids))}")
     else:
         log("  demo project tree not present yet (DSL import may still be settling) —")
         log("  re-run bootstrap once CxxCiDemo_Main_ProjectA exists to inject credentials.")

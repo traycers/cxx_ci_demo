@@ -83,7 +83,14 @@ object Release2_BaseBuild : Template({
             """.trimIndent()
             dockerImage = "%build_image_cxx%"
             dockerImagePlatform = ScriptBuildStep.ImagePlatform.Linux
+            dockerPull = false
             dockerRunParameters = "-v %teamcity.build.checkoutDir%:/host_dir"
+            // dockerPull=false above serializes to an EMPTY property value (plugin.docker.pull.enabled=""),
+            // not the string "false" — TeamCity's runtime treats empty/unset as its own historical
+            // default, which is to pull. Forcing the literal string here is what actually disables it.
+            // Confirmed live: without this line the agent ran `docker pull` and failed with
+            // "pull access denied" against an image that only ever exists locally (see ADR 0002).
+            param("plugin.docker.pull.enabled", "false")
         }
     }
 
