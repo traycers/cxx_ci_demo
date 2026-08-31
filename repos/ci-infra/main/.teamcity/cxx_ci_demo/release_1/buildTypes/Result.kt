@@ -57,8 +57,11 @@ object Release1_ResultBuild : BuildType({
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
 
+            // cleanDestination so leftover files from a previous build on this agent can't
+            // survive into result.zip.
             artifacts {
                 buildRule = sameChain()
+                cleanDestination = true
                 artifactRules = "%deps_unpack_all%"
             }
         }

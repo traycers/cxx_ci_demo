@@ -60,8 +60,14 @@ object Main_ResultBuild : BuildType({
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
 
+            // cleanDestination here (same %deps_dir% as the E dependency below) so leftover
+            // files from a previous build on this agent can't survive into result.zip — see
+            // ProjectA.kt's C/D dependencies for the same pattern. Exactly one dependency in a
+            // group sharing a destination may clean it; E deliberately doesn't repeat this.
             artifacts {
+                id = "ARTIFACT_DEPENDENCY_1"
                 buildRule = sameChain()
+                cleanDestination = true
                 artifactRules = "%deps_unpack_all%"
             }
         }
@@ -70,7 +76,10 @@ object Main_ResultBuild : BuildType({
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
 
+            // No cleanDestination here — it would wipe out project_a's just-unpacked files in
+            // the same %deps_dir% (cleaned once, above).
             artifacts {
+                id = "ARTIFACT_DEPENDENCY_2"
                 buildRule = sameChain()
                 artifactRules = "%deps_unpack_all%"
             }
