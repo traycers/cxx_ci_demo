@@ -40,12 +40,3 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
   published host port or a host-side proxy, so host-level network quirks (hairpin NAT, a local
   proxy intercepting `localhost`) that affect the browser/host `git` don't apply to it. See ADR
   0008.
-
-## Adding a new release
-
-The `cxx_ci_demo` project in TeamCity is split into one directory per release under
-`repos/ci-infra/main/.teamcity/cxx_ci_demo/` (currently just a release named `main`, not to
-be confused with the outer `repos/ci-infra/main/` — that one is the seeded git branch, see
-ADR 0007/0008). See
-`docs/en/adding-a-release.md` for the step-by-step procedure and the `<config_name>`/`<config_name>-*`
-branch naming convention.
