@@ -7,6 +7,14 @@ object Main_ProjectB : BuildType({
     templates(Main_BaseBuild)
     name = "project_b"
 
+    // main's chain is a -> c -> d (see ADR 0009); nothing in this release depends on project_b's
+    // artifacts, unlike release_1/release_2 where project_a still depends on it directly. Paused
+    // rather than removed so the build type — VCS root, triggers, everything — stays intact and
+    // ready: unpause (paused = false) is the entire re-enable step if a consumer shows up again.
+    // Paused only stops the triggers below from firing automatically; a snapshot dependency added
+    // later would still be able to trigger this build without unpausing it first.
+    paused = true
+
     params {
         param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
