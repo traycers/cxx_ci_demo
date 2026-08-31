@@ -1,7 +1,7 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
-// Same id as the Release2_DemoProjectA buildType (buildTypes/DemoProjectA.kt) — allowed, VCS roots and
+// Same id as the Main_ProjectA buildType (buildTypes/ProjectA.kt) — allowed, VCS roots and
 // build types have separate id namespaces in TeamCity. Matches what was already live.
 //
 // url uses the plain docker-compose service name "gitlab", not "gitlab.local" — this traffic is
@@ -11,10 +11,10 @@ import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 // changing this one: git resolves "gitlab" via Compose's automatic per-service DNS entry (no
 // docker-compose.yml change needed), and GitLab's git-http backend doesn't reject a Host header
 // that doesn't match external_url the way its browser-facing routes might.
-object Release2_DemoProjectAVcs : GitVcsRoot({
-    id((Release2Id / "DemoProjectA").toString())
-    name = "demo-project-a"
-    url = "http://gitlab:8929/root/demo-project-a.git"
+object Main_ProjectAVcs : GitVcsRoot({
+    id((MainId / "ProjectA").toString())
+    name = "project_a"
+    url = "http://gitlab:8929/root/project_a.git"
     branch = "%branch_default%"
     branchSpec = "%branch_spec%"
     checkoutPolicy = GitVcsRoot.AgentCheckoutPolicy.NO_MIRRORS

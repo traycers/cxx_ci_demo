@@ -3,7 +3,7 @@ import jetbrains.buildServer.configs.kotlin.*
 val MainId = CxxCiDemoId / "Main"
 
 // The release's word, doubling as: this directory's name (cxx_ci_demo/main/), the docker image
-// tag prefix (buildTypes/BuildCImage.kt, DemoProjectA.kt, DemoProjectB.kt —
+// tag prefix (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
 // cxxci-build:main-%build.number%, so two releases sharing the one docker daemon per ADR 0002
 // never collide on a tag), and the base git branch name (branch_default/branch_spec below).
 val MainConfigName = "main"
@@ -14,17 +14,17 @@ object Main : Project({
     name = MainConfigName
     description = """Build for the "main" branch and its derivatives. Copyable for the new release."""
 
-    vcsRoot(Main_DemoProjectBVcs)
-    vcsRoot(Main_DemoProjectDVcs)
-    vcsRoot(Main_DemoProjectCVcs)
-    vcsRoot(Main_DemoProjectAVcs)
-    vcsRoot(Main_DemoProjectEVcs)
+    vcsRoot(Main_ProjectBVcs)
+    vcsRoot(Main_ProjectDVcs)
+    vcsRoot(Main_ProjectCVcs)
+    vcsRoot(Main_ProjectAVcs)
+    vcsRoot(Main_ProjectEVcs)
 
-    buildType(Main_DemoProjectB)
-    buildType(Main_DemoProjectD)
-    buildType(Main_DemoProjectC)
-    buildType(Main_DemoProjectA)
-    buildType(Main_DemoProjectE)
+    buildType(Main_ProjectB)
+    buildType(Main_ProjectD)
+    buildType(Main_ProjectC)
+    buildType(Main_ProjectA)
+    buildType(Main_ProjectE)
     buildType(Main_BuildCImage)
     buildType(Main_ResultBuild)
 

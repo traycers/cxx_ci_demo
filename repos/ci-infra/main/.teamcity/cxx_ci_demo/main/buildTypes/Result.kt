@@ -5,8 +5,8 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // Named Main_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
 // implicit import.
 //
-// Aggregation/release-packaging build type: pulls demo-project-a's sdk.zip (which itself already
-// covers demo-project-b transitively via its own snapshot+artifact chain) and demo-project-e's
+// Aggregation/release-packaging build type: pulls project_a's sdk.zip (which itself already
+// covers project_b transitively via its own snapshot+artifact chain) and project_e's
 // sdk.zip (e is self-sufficient — no artifact chain of its own to bring along), stages both, and
 // publishes result.zip. "files checking"/"protection of executable files"/"signing files" are
 // still placeholder steps for future release-hardening logic.
@@ -53,7 +53,7 @@ object Main_ResultBuild : BuildType({
     }
 
     dependencies {
-        dependency(Main_DemoProjectA) {
+        dependency(Main_ProjectA) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -63,7 +63,7 @@ object Main_ResultBuild : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Main_DemoProjectE) {
+        dependency(Main_ProjectE) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

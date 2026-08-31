@@ -23,11 +23,11 @@ TEAMCITY_URL = f"http://{TEAMCITY_HOST}:8111"
 
 REPOS = [
     "ci-infra",
-    "demo-project-a",
-    "demo-project-b",
-    "demo-project-c",
-    "demo-project-d",
-    "demo-project-e",
+    "project_a",
+    "project_b",
+    "project_c",
+    "project_d",
+    "project_e",
 ]
 REPOS_DIR = "/app/repos"
 

@@ -3,7 +3,7 @@ import jetbrains.buildServer.configs.kotlin.*
 val Release2Id = CxxCiDemoId / "Release2"
 
 // The release's word, doubling as: this directory's name (cxx_ci_demo/release_2/), the docker image
-// tag prefix (buildTypes/BuildCImage.kt, DemoProjectA.kt, DemoProjectB.kt —
+// tag prefix (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
 // cxxci-build:release_2-%build.number%, so two releases sharing the one docker daemon per ADR 0002
 // never collide on a tag), and the base git branch name (branch_default/branch_spec below).
 val Release2ConfigName = "release_2"
@@ -14,11 +14,11 @@ object Release2 : Project({
     name = Release2ConfigName
     description = """Build for the "release_2" branch and its derivatives. Copyable for the new release."""
 
-    vcsRoot(Release2_DemoProjectBVcs)
-    vcsRoot(Release2_DemoProjectAVcs)
+    vcsRoot(Release2_ProjectBVcs)
+    vcsRoot(Release2_ProjectAVcs)
 
-    buildType(Release2_DemoProjectB)
-    buildType(Release2_DemoProjectA)
+    buildType(Release2_ProjectB)
+    buildType(Release2_ProjectA)
     buildType(Release2_BuildCImage)
     buildType(Release2_ResultBuild)
 

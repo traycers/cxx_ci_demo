@@ -6,17 +6,17 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // see ADR 0009 for why this build still needs D's own artifacts directly, flat, rather than
 // relying on some transitive re-packaging). revisionName=sameChain — the paired snapshot
 // dependency on D, inherited from the template, must resolve first in the same chain.
-object Main_DemoProjectC : BuildType({
-    id((MainId / "DemoProjectC").toString())
+object Main_ProjectC : BuildType({
+    id((MainId / "ProjectC").toString())
     templates(Main_BaseBuild)
-    name = "demo-project-c"
+    name = "project_c"
 
     params {
         param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(Main_DemoProjectCVcs, "%vcs_rules%")
+        root(Main_ProjectCVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -28,14 +28,14 @@ object Main_DemoProjectC : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_10"
-            buildType = "${Main_DemoProjectD.id}"
+            buildType = "${Main_ProjectD.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(Main_DemoProjectD) {
+        dependency(Main_ProjectD) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

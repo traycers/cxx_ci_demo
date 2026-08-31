@@ -14,7 +14,7 @@
 #
 # What it does NOT do (still yours to do — see the printed next-steps at the end):
 #   - Push the result to the live ci-infra repo, or run bootstrap.sh
-#   - Create the actual refs/heads/<new_config_name> branch in demo-project-a/b/c/d/e on GitLab
+#   - Create the actual refs/heads/<new_config_name> branch in project_a through project_e on GitLab
 #   - Edit the new Dockerfile if this release needs a different toolchain/base image
 set -euo pipefail
 
@@ -53,7 +53,7 @@ mv "${DST_DIR}/${SOURCE_WORD}.kt" "${DST_DIR}/${NEW_WORD}.kt"
 # throughout so e.g. a Vcs-suffixed object isn't partially caught by a shorter pattern first.
 # This only touches Kotlin identifiers made of <SourceWord> plus a suffix/prefix — it does NOT
 # touch the plain leaf words passed as string literals into IdPath composition
-# (id((MainId / "DemoProjectA").toString())) because those strings don't contain SOURCE_WORD as
+# (id((MainId / "ProjectA").toString())) because those strings don't contain SOURCE_WORD as
 # a substring, only the *object* names being renamed do.
 find "$DST_DIR" -name '*.kt' -print0 | xargs -0 sed -i \
     -e "s/\\b${SOURCE_WORD}Id\\b/${NEW_WORD}Id/g" \
@@ -90,4 +90,4 @@ echo "  2. If this release needs a different build environment, edit ${DST_DIR#"
 echo "  3. Push repos/ci-infra/main/.teamcity to the live ci-infra repo's main branch."
 echo "  4. Run bootstrap.sh once so it injects the GitLab credential into ${NEW_WORD}'s VCS roots"
 echo "     (it currently only loops over the main release's — see bootstrap.sh's provision_teamcity)."
-echo "  5. Create refs/heads/${NEW_CONFIG_NAME} in demo-project-a, -b, -c, -d and -e on GitLab."
+echo "  5. Create refs/heads/${NEW_CONFIG_NAME} in project_a through project_e on GitLab."

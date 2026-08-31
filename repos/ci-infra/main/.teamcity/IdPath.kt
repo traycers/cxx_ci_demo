@@ -7,7 +7,7 @@
 // declaration — same default package as every other file here).
 //
 // Usage: val MainId = CxxCiDemoId / "Main"   ->  "CxxCiDemo_Main"
-//        val DemoProjectAId = MainId / "DemoProjectA"  ->  "CxxCiDemo_Main_DemoProjectA"
+//        val ProjectAId = MainId / "ProjectA"  ->  "CxxCiDemo_Main_ProjectA"
 class IdPath(private val value: String) {
     operator fun div(word: String) = IdPath("${value}_${word}")
     override fun toString() = value

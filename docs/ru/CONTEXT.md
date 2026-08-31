@@ -37,7 +37,7 @@ _Избегать_: build trigger dependency
 Механизм TeamCity, передающий собранные бинарники/заголовки одного C++ проекта в другой для линковки, без пересборки с нуля.
 
 **Релиз** (branch family):
-Один поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — своя TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории demo-проектов (от `demo-project-a` до `demo-project-e`). Релизы различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/ru/adding-a-release.md`.
+Один поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — своя TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории (от `project_a` до `project_e`). Релизы различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/ru/adding-a-release.md`.
 _Избегать_: конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри релиза)
 
 **config_name**:

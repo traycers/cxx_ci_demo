@@ -8,19 +8,19 @@ Blocked by: 03, 06
 
 - Root TeamCity Project.
 - VCS root + build configuration для корневой сборки образа (Dockerfile из тикета 05, `docker build`, публикует тег в конфигурационную переменную `%build_image_cxx%`).
-- VCS root + build configuration для `demo-project-b` (собирается внутри контейнера из `%build_image_cxx%`, публикует артефакт — см. тикет 06 для пути).
-- VCS root + build configuration для `demo-project-a` (аналогично, плюс artifact-зависимость на `demo-project-b` и snapshot-зависимость с branch-match/default-fallback по результату тикета 03).
+- VCS root + build configuration для `project_b` (собирается внутри контейнера из `%build_image_cxx%`, публикует артефакт — см. тикет 06 для пути).
+- VCS root + build configuration для `project_a` (аналогично, плюс artifact-зависимость на `project_b` и snapshot-зависимость с branch-match/default-fallback по результату тикета 03).
 - Snapshot-зависимость обеих сборок проектов на корневую сборку образа (пересборка при обновлении образа — см. `map.md`).
 
-Готово, когда DSL синтаксически валиден и описывает полный граф зависимостей (образ → demo-project-b → demo-project-a) с нужной branch-резолюцией.
+Готово, когда DSL синтаксически валиден и описывает полный граф зависимостей (образ → project_b → project_a) с нужной branch-резолюцией.
 
 ## Answer
 
-`bootstrap/ci-infra/.teamcity/settings.kts` — Root Project, 3 VCS root'а (ci-infra, demo-project-a, demo-project-b, у всех симметричный `branchSpec = "+:refs/heads/*"` — предпосылка из ответа тикета 03), 3 build configuration:
+`bootstrap/ci-infra/.teamcity/settings.kts` — Root Project, 3 VCS root'а (ci-infra, project_a, project_b, у всех симметричный `branchSpec = "+:refs/heads/*"` — предпосылка из ответа тикета 03), 3 build configuration:
 
 - `BuildImage` — VCS root ci-infra, `docker build -t cxxci-build:%build.number% .`.
-- `DemoProjectB` — snapshot-зависимость на `BuildImage`, `%build_image_cxx% = cxxci-build:%dep.BuildImage.build.number%`, сборка через `docker run` с volume-mount checkout dir (модель исполнения из charting, Q5), публикует `dist/lib/libmathutils.a => lib` и `dist/include/mathutils.h => include` (раскладка из ответа тикета 06).
-- `DemoProjectA` — snapshot на `BuildImage` И на `DemoProjectB`, artifact-зависимость на `DemoProjectB` с `buildRule = sameChain()` (Case A из тикета 03 — не задавать отдельный branch-based `buildRule`, иначе разъедется с snapshot-зависимостью), кладёт артефакты в `deps/mathutils/{lib,include}` как и ждёт `CMakeLists.txt` проекта A.
+- `ProjectB` — snapshot-зависимость на `BuildImage`, `%build_image_cxx% = cxxci-build:%dep.BuildImage.build.number%`, сборка через `docker run` с volume-mount checkout dir (модель исполнения из charting, Q5), публикует `dist/lib/libmathutils.a => lib` и `dist/include/mathutils.h => include` (раскладка из ответа тикета 06).
+- `ProjectA` — snapshot на `BuildImage` И на `ProjectB`, artifact-зависимость на `ProjectB` с `buildRule = sameChain()` (Case A из тикета 03 — не задавать отдельный branch-based `buildRule`, иначе разъедется с snapshot-зависимостью), кладёт артефакты в `deps/mathutils/{lib,include}` как и ждёт `CMakeLists.txt` проекта A.
 
 **Важная находка по скоупу, меняющая план**: pom.xml/Maven-обвязку для DSL руками писать нельзя корректно — TeamCity резолвит саму DSL-библиотеку (`org.jetbrains.teamcity:configs-dsl-kotlin`) из репозитория **самого работающего сервера** (`{server url}/app/dsl-plugins-repository`), а не из публичного Maven Central (проверено: официальные доки TeamCity + реальный пример `pom.xml` из публичного репозитория `hhariri/teamcity-dsl` на GitHub, оба подтверждают этот паттерн). Значит, pom.xml/scaffold **не может** быть корректно захардкожен заранее — его генерирует сам TeamCity при включении Versioned Settings (Kotlin) на живом проекте. Это смещает шаг «включить versioned settings на ci-infra и свести сгенерированный scaffold с этим `settings.kts`» в тикет 08/09, против реально поднятого сервера — что и так входило в scope тикета 08 (п.5 его тела), отдельно ничего доводить не нужно.
 

@@ -4,8 +4,8 @@
 
 A **release** (see `CONTEXT.md`) is one `cxx_ci_demo/<config_name>/` directory in `ci-infra` —
 its own TeamCity subproject, its own VCS roots, its own set of build configurations, its own
-`Dockerfile`, but the *same* GitLab repos as every other release (`demo-project-a` through
-`demo-project-e`). Releases are distinguished by which branch each one's VCS roots watch, and by
+`Dockerfile`, but the *same* GitLab repos as every other release (`project_a` through
+`project_e`). Releases are distinguished by which branch each one's VCS roots watch, and by
 their own docker image tag prefix (below) — nothing is copied or forked on the GitLab side.
 
 ## The quick way: `scripts/new-release.sh`
@@ -54,8 +54,8 @@ param("branch_default", "refs/heads/release_2_0")
 ```
 
 A branch that doesn't match either pattern isn't picked up by this release's VCS roots at all —
-that's what keeps multiple releases from stepping on each other's branches in the same two
-demo-project repos.
+that's what keeps multiple releases from stepping on each other's branches in the same shared
+project repos.
 
 ## Docker image tag convention
 
@@ -88,14 +88,14 @@ comes along automatically when you copy `main/`'s `params { }` block, nothing to
    that's what `scripts/new-release.sh`'s `to_pascal_case` does; keep any manual renaming
    consistent with it). Files that contain *only* `object` declarations (every other file in the
    tree) don't have this problem — their compiled class name is the object's name, already
-   unique — so they can keep their generic basenames (`DemoProjectA.kt` etc.) across every
+   unique — so they can keep their generic basenames (`ProjectA.kt` etc.) across every
    release directory.
 
 3. **Rename every object in the copy**, prefixing each with the release's word — Kotlin objects
    in this DSL all share one default package (no `package` declarations anywhere under
-   `.teamcity/`, on purpose — see `IdPath.kt`), so `main`'s `Main_DemoProjectA`,
-   `Main_BuildCImage`, `Main_ResultBuild`, `Main_BaseBuild`, `Main_DemoProjectAVcs`,
-   `Main_DemoProjectBVcs` are already taken. This is the same constraint CMake's
+   `.teamcity/`, on purpose — see `IdPath.kt`), so `main`'s `Main_ProjectA`,
+   `Main_BuildCImage`, `Main_ResultBuild`, `Main_BaseBuild`, `Main_ProjectAVcs`,
+   `Main_ProjectBVcs` are already taken. This is the same constraint CMake's
    `add_library`/`add_executable` target names have — one flat global namespace, must be unique.
    `main`'s own objects are prefixed too (not left bare) specifically so that copying *from* any
    release works identically, `main` included — there's no special case. For `release_2_0`:
@@ -105,19 +105,19 @@ comes along automatically when you copy `main/`'s `params { }` block, nothing to
    | `Main`                   | `Release20`                        |
    | `MainId`                 | `Release20Id`                      |
    | `MainConfigName`         | `Release20ConfigName`              |
-   | `Main_DemoProjectA`      | `Release20_DemoProjectA`           |
-   | `Main_DemoProjectB`      | `Release20_DemoProjectB`           |
-   | `Main_DemoProjectAVcs`   | `Release20_DemoProjectAVcs`        |
-   | `Main_DemoProjectBVcs`   | `Release20_DemoProjectBVcs`        |
+   | `Main_ProjectA`      | `Release20_ProjectA`           |
+   | `Main_ProjectB`      | `Release20_ProjectB`           |
+   | `Main_ProjectAVcs`   | `Release20_ProjectAVcs`        |
+   | `Main_ProjectBVcs`   | `Release20_ProjectBVcs`        |
    | `Main_BuildCImage`       | `Release20_BuildCImage`            |
    | `Main_ResultBuild`       | `Release20_ResultBuild`            |
    | `Main_BaseBuild`         | `Release20_BaseBuild`              |
 
    **Do not** touch the plain word strings passed to `id(...)` calls (e.g.
-   `id((MainId / "DemoProjectA").toString())`) beyond swapping `MainId` for `Release20Id` — that
-   string is what `IdPath` composes into the actual TeamCity id (`CxxCiDemo_Release20_DemoProjectA`).
+   `id((MainId / "ProjectA").toString())`) beyond swapping `MainId` for `Release20Id` — that
+   string is what `IdPath` composes into the actual TeamCity id (`CxxCiDemo_Release20_ProjectA`).
    Prefixing it too doubles up the word in the id (a real mistake made and caught while verifying
-   this procedure live, twice: `CxxCiDemo_Main_Main_DemoProjectA` the first time round, matched
+   this procedure live, twice: `CxxCiDemo_Main_Main_ProjectA` the first time round, matched
    again by `scripts/new-release.sh`'s own sanity check the second time). If you're renaming by
    hand, a plain `sed` pass over the whole word (`s/\bMain\b/Release20/g`) will hit these string
    literals too, because sed can't tell a Kotlin identifier from a string — that's exactly why the
@@ -144,10 +144,10 @@ comes along automatically when you copy `main/`'s `params { }` block, nothing to
 
 6. **Push to `ci-infra`, watch it apply**, then run `bootstrap.sh` once so it injects the GitLab
    credential into the new release's VCS roots too (it loops over
-   `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` today — extend that loop, or add the new
+   `CxxCiDemo_Main_ProjectA`/`B`/`C`/`D`/`E` today — extend that loop, or add the new
    release's VCS root ids, when this stops being a one-release demo).
 
-7. **Create the actual branches** in the `demo-project-a` through `demo-project-e` GitLab repos:
+7. **Create the actual branches** in the `project_a` through `project_e` GitLab repos:
    `refs/heads/<config_name>` at minimum, so the release's VCS roots have something to build.
 
 ## Verifying it worked

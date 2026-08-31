@@ -11,17 +11,17 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // paired snapshot dependencies, inherited from the template plus the explicit ones below, must
 // resolve first in the same chain; no independent branch-based fallback here (Case A from ticket
 // 03's research).
-object Main_DemoProjectA : BuildType({
-    id((MainId / "DemoProjectA").toString())
+object Main_ProjectA : BuildType({
+    id((MainId / "ProjectA").toString())
     templates(Main_BaseBuild)
-    name = "demo-project-a"
+    name = "project_a"
 
     params {
         param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(Main_DemoProjectAVcs, "%vcs_rules%")
+        root(Main_ProjectAVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -33,14 +33,14 @@ object Main_DemoProjectA : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_5"
-            buildType = "${Main_DemoProjectC.id}"
+            buildType = "${Main_ProjectC.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(Main_DemoProjectC) {
+        dependency(Main_ProjectC) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -52,7 +52,7 @@ object Main_DemoProjectA : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Main_DemoProjectD) {
+        dependency(Main_ProjectD) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

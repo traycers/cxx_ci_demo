@@ -4,7 +4,7 @@ _翻译自 `docs/en/adding-a-release.md`。原文变更时请同步更新本文�
 
 # 添加新的 release
 
-**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(从 `demo-project-a` 到 `demo-project-e`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。
+**Release**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 release *相同* 的 GitLab 仓库(从 `project_a` 到 `project_e`)。各 release 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。
 
 ## 快捷方式：`scripts/new-release.sh`
 
@@ -35,7 +35,7 @@ param("branch_spec", """
 param("branch_default", "refs/heads/release_2_0")
 ```
 
-不匹配任一模式的分支根本不会被该 release 的 VCS root 拾取——这正是防止多个 release 在同样两个 demo 项目仓库中互相踩踏对方分支的机制。
+不匹配任一模式的分支根本不会被该 release 的 VCS root 拾取——这正是防止多个 release 在同一批共享的 demo 项目仓库中互相踩踏对方分支的机制。
 
 ## Docker 镜像标签约定
 
@@ -47,24 +47,24 @@ param("branch_default", "refs/heads/release_2_0")
 
 1. **复制目录。** `cxx_ci_demo/main/` → `cxx_ci_demo/<config_name>/`(例如 `cxx_ci_demo/release_2_0/`)，包含其中的一切——这样也就顺带带上了 `Dockerfile`，不需要单独处理。
 
-2. **把项目文件重命名为一个唯一的基础文件名。** 项目文件(`main/` 中的 `Main.kt`)包含一个顶层的 `val ...Id = ...`，而不只是一个 `object`。Kotlin 会把顶层的 val/函数包装进一个以**文件名**(而不是目录名)命名的合成类——不同目录下两个都叫 `Main.kt` 的文件会编译失败，报 `Duplicate JVM class name`。把它重命名为该 release 单词的 PascalCase 形式，例如 `release_2_0` 对应 `Release20.kt`(snake_case → PascalCase：把每个用 `_` 分隔的片段首字母大写，再无分隔符地拼接起来——这正是 `scripts/new-release.sh` 里 `to_pascal_case` 所做的；手动重命名时请保持与它一致)。只包含 `object` 声明的文件(树中其他所有文件)没有这个问题——它们编译后的类名取自 object 的名字，本身已经唯一——所以它们可以在每个 release 目录中保留通用的基础文件名(`DemoProjectA.kt` 等)。
+2. **把项目文件重命名为一个唯一的基础文件名。** 项目文件(`main/` 中的 `Main.kt`)包含一个顶层的 `val ...Id = ...`，而不只是一个 `object`。Kotlin 会把顶层的 val/函数包装进一个以**文件名**(而不是目录名)命名的合成类——不同目录下两个都叫 `Main.kt` 的文件会编译失败，报 `Duplicate JVM class name`。把它重命名为该 release 单词的 PascalCase 形式，例如 `release_2_0` 对应 `Release20.kt`(snake_case → PascalCase：把每个用 `_` 分隔的片段首字母大写，再无分隔符地拼接起来——这正是 `scripts/new-release.sh` 里 `to_pascal_case` 所做的；手动重命名时请保持与它一致)。只包含 `object` 声明的文件(树中其他所有文件)没有这个问题——它们编译后的类名取自 object 的名字，本身已经唯一——所以它们可以在每个 release 目录中保留通用的基础文件名(`ProjectA.kt` 等)。
 
-3. **重命名副本中的每一个 object**，给每个都加上 release 单词作为前缀——这套 DSL 中的 Kotlin object 全部共享同一个默认包(`.teamcity/` 下任何地方都没有 `package` 声明，这是有意为之——见 `IdPath.kt`)，所以 `main` 中的 `Main_DemoProjectA`、`Main_BuildCImage`、`Main_ResultBuild`、`Main_BaseBuild`、`Main_DemoProjectAVcs`、`Main_DemoProjectBVcs` 都已经被占用了。这和 CMake 的 `add_library`/`add_executable` target 名称面临的约束是一样的——一个扁平的全局命名空间，所有名字都必须唯一。`main` 自己的 object 同样被加了前缀(而不是保持裸露)，专门是为了让从*任意* release 复制这个操作方式都一致，`main` 本身也不例外——不存在特殊情况。对 `release_2_0` 而言：
+3. **重命名副本中的每一个 object**，给每个都加上 release 单词作为前缀——这套 DSL 中的 Kotlin object 全部共享同一个默认包(`.teamcity/` 下任何地方都没有 `package` 声明，这是有意为之——见 `IdPath.kt`)，所以 `main` 中的 `Main_ProjectA`、`Main_BuildCImage`、`Main_ResultBuild`、`Main_BaseBuild`、`Main_ProjectAVcs`、`Main_ProjectBVcs` 都已经被占用了。这和 CMake 的 `add_library`/`add_executable` target 名称面临的约束是一样的——一个扁平的全局命名空间，所有名字都必须唯一。`main` 自己的 object 同样被加了前缀(而不是保持裸露)，专门是为了让从*任意* release 复制这个操作方式都一致，`main` 本身也不例外——不存在特殊情况。对 `release_2_0` 而言：
 
    | main/(object 名) | release_2_0/(object 名) |
    |--------------------------|-------------------------------------|
    | `Main`                   | `Release20`                        |
    | `MainId`                 | `Release20Id`                      |
    | `MainConfigName`         | `Release20ConfigName`              |
-   | `Main_DemoProjectA`      | `Release20_DemoProjectA`           |
-   | `Main_DemoProjectB`      | `Release20_DemoProjectB`           |
-   | `Main_DemoProjectAVcs`   | `Release20_DemoProjectAVcs`        |
-   | `Main_DemoProjectBVcs`   | `Release20_DemoProjectBVcs`        |
+   | `Main_ProjectA`      | `Release20_ProjectA`           |
+   | `Main_ProjectB`      | `Release20_ProjectB`           |
+   | `Main_ProjectAVcs`   | `Release20_ProjectAVcs`        |
+   | `Main_ProjectBVcs`   | `Release20_ProjectBVcs`        |
    | `Main_BuildCImage`       | `Release20_BuildCImage`            |
    | `Main_ResultBuild`       | `Release20_ResultBuild`            |
    | `Main_BaseBuild`         | `Release20_BaseBuild`              |
 
-   除了把 `MainId` 换成 `Release20Id` 之外，**不要**改动传给 `id(...)` 调用的裸字符串字面量(例如 `id((MainId / "DemoProjectA").toString())`)——正是这个字符串被 `IdPath` 用来拼出真正的 TeamCity id(`CxxCiDemo_Release20_DemoProjectA`)。如果连它也加上前缀，这个单词就会在 id 中重复出现(这是在真实验证这个流程时实际踩中并两次被抓到的错误：第一次是 `CxxCiDemo_Main_Main_DemoProjectA`，第二次被 `scripts/new-release.sh` 自身的合理性检查再次抓到)。如果手动重命名，对整个单词做一次简单的 `sed`(`s/\bMain\b/Release20/g`)也会误伤这些字符串字面量，因为 sed 无法分辨 Kotlin 标识符和字符串——这正是脚本要把 `*Id`/`*ConfigName`/`<单词>_` 前缀替换拆成几个更窄的独立步骤、而不是一次性整体替换单词的原因。
+   除了把 `MainId` 换成 `Release20Id` 之外，**不要**改动传给 `id(...)` 调用的裸字符串字面量(例如 `id((MainId / "ProjectA").toString())`)——正是这个字符串被 `IdPath` 用来拼出真正的 TeamCity id(`CxxCiDemo_Release20_ProjectA`)。如果连它也加上前缀，这个单词就会在 id 中重复出现(这是在真实验证这个流程时实际踩中并两次被抓到的错误：第一次是 `CxxCiDemo_Main_Main_ProjectA`，第二次被 `scripts/new-release.sh` 自身的合理性检查再次抓到)。如果手动重命名，对整个单词做一次简单的 `sed`(`s/\bMain\b/Release20/g`)也会误伤这些字符串字面量，因为 sed 无法分辨 Kotlin 标识符和字符串——这正是脚本要把 `*Id`/`*ConfigName`/`<单词>_` 前缀替换拆成几个更窄的独立步骤、而不是一次性整体替换单词的原因。
 
    同样**不要**改动 `buildTypes/BuildCImage.kt` 中 `docker build -f .teamcity/cxx_ci_demo/${...ConfigName}/Dockerfile .teamcity/cxx_ci_demo/${...ConfigName}` 里字面的 `.teamcity/cxx_ci_demo/` 路径片段——这一行里只需要把 `${MainConfigName}` 这个引用改成 `${Release20ConfigName}`，与你重命名的 val 保持一致。`.teamcity/cxx_ci_demo/` 部分是固定的(这是每个 release 目录相对于 TeamCity 实际检出的仓库根目录的真实位置——`DslContext.settingsRoot` 不支持 agent 侧检出的自定义 checkout rules，这一点已在真实环境中确认过，所以检出的永远是整个 `ci-infra` 仓库，里面的路径必须显式写出)。
 
@@ -72,9 +72,9 @@ param("branch_default", "refs/heads/release_2_0")
 
 5. **注册它**：在 `cxx_ci_demo/CxxCiDemo.kt` 中添加 `subProject(Release20)`。
 
-6. **推送到 `ci-infra`，等待应用生效**，然后运行一次 `bootstrap.sh`，让它把 GitLab 凭据也注入新 release 的 VCS root(它目前是对 `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` 做循环——当这不再是单 release 的 demo 时，需要扩展这个循环，或者添加新 release 的 VCS root id)。
+6. **推送到 `ci-infra`，等待应用生效**，然后运行一次 `bootstrap.sh`，让它把 GitLab 凭据也注入新 release 的 VCS root(它目前是对 `CxxCiDemo_Main_ProjectA`/`B`/`C`/`D`/`E` 做循环——当这不再是单 release 的 demo 时，需要扩展这个循环，或者添加新 release 的 VCS root id)。
 
-7. **在从 `demo-project-a` 到 `demo-project-e` 的 GitLab 仓库中创建实际分支**：至少需要 `refs/heads/<config_name>`，这样该 release 的 VCS root 才有东西可构建。
+7. **在从 `project_a` 到 `project_e` 的 GitLab 仓库中创建实际分支**：至少需要 `refs/heads/<config_name>`，这样该 release 的 VCS root 才有东西可构建。
 
 ## 验证是否成功
 

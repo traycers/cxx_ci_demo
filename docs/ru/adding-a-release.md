@@ -4,7 +4,7 @@ _Перевод `docs/en/adding-a-release.md`. При изменении ори�
 
 # Добавление нового релиза
 
-**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/config_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (от `demo-project-a` до `demo-project-e`).
+**Релиз** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/config_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого релиза (от `project_a` до `project_e`).
 Релизы различаются тем, на какую ветку смотрит каждый VCS root, и своим префиксом тега docker-образа (ниже) — на стороне GitLab ничего не копируется и не форкается.
 
 ## Быстрый способ: `scripts/new-release.sh`
@@ -53,7 +53,7 @@ param("branch_default", "refs/heads/release_2_0")
 ```
 
 Ветка, не подходящая ни под один из паттернов, вообще не подхватывается VCS root'ами этого
-релиза — именно это не даёт разным релизам наступать друг другу на ветки в одних и тех же двух
+релиза — именно это не даёт разным релизам наступать друг другу на ветки в одних и тех же общих
 репозиториях demo-проектов.
 
 ## Конвенция тегов Docker-образа
@@ -90,12 +90,12 @@ toolchain — как и всё остальное в нём.
    при ручном переименовании держитесь той же схемы). У файлов, которые содержат *только*
    объявления `object` (все остальные файлы в дереве), этой проблемы нет — их скомпилированное
    имя класса берётся из имени объекта, уже уникального — так что они могут сохранять общие
-   базовые имена (`DemoProjectA.kt` и т.д.) во всех директориях релизов.
+   базовые имена (`ProjectA.kt` и т.д.) во всех директориях релизов.
 
 3. **Переименовать каждый объект в копии**, добавив префиксом слово релиза — Kotlin-объекты в
    этом DSL все живут в одном общем пакете по умолчанию (нигде под `.teamcity/` нет объявлений
-   `package`, намеренно — см. `IdPath.kt`), поэтому `Main_DemoProjectA`, `Main_BuildCImage`,
-   `Main_ResultBuild`, `Main_BaseBuild`, `Main_DemoProjectAVcs`, `Main_DemoProjectBVcs` из `main`
+   `package`, намеренно — см. `IdPath.kt`), поэтому `Main_ProjectA`, `Main_BuildCImage`,
+   `Main_ResultBuild`, `Main_BaseBuild`, `Main_ProjectAVcs`, `Main_ProjectBVcs` из `main`
    уже заняты. Это то же ограничение, что и у имён target'ов в CMake-`add_library`/
    `add_executable` — одно общее плоское пространство имён, все имена обязаны быть уникальны.
    Собственные объекты `main` тоже префиксуются (а не остаются голыми) специально для того,
@@ -107,20 +107,20 @@ toolchain — как и всё остальное в нём.
    | `Main`                 | `Release20`                 |
    | `MainId`               | `Release20Id`               |
    | `MainConfigName`       | `Release20ConfigName`       |
-   | `Main_DemoProjectA`    | `Release20_DemoProjectA`    |
-   | `Main_DemoProjectB`    | `Release20_DemoProjectB`    |
-   | `Main_DemoProjectAVcs` | `Release20_DemoProjectAVcs` |
-   | `Main_DemoProjectBVcs` | `Release20_DemoProjectBVcs` |
+   | `Main_ProjectA`    | `Release20_ProjectA`    |
+   | `Main_ProjectB`    | `Release20_ProjectB`    |
+   | `Main_ProjectAVcs` | `Release20_ProjectAVcs` |
+   | `Main_ProjectBVcs` | `Release20_ProjectBVcs` |
    | `Main_BuildCImage`     | `Release20_BuildCImage`     |
    | `Main_ResultBuild`     | `Release20_ResultBuild`     |
    | `Main_BaseBuild`       | `Release20_BaseBuild`       |
 
    **Не трогайте** голые строковые литералы, передаваемые в вызовы `id(...)` (например,
-   `id((MainId / "DemoProjectA").toString())`) сверх замены `MainId` на `Release20Id` — именно
+   `id((MainId / "ProjectA").toString())`) сверх замены `MainId` на `Release20Id` — именно
    эта строка используется `IdPath` для составления реального id TeamCity
-   (`CxxCiDemo_Release20_DemoProjectA`). Если префиксовать и её, слово задвоится в id (реальная
+   (`CxxCiDemo_Release20_ProjectA`). Если префиксовать и её, слово задвоится в id (реальная
    ошибка, дважды допущенная и пойманная при живой проверке этой процедуры:
-   `CxxCiDemo_Main_Main_DemoProjectA` в первый раз, затем повторно пойманная уже собственной
+   `CxxCiDemo_Main_Main_ProjectA` в первый раз, затем повторно пойманная уже собственной
    проверкой `scripts/new-release.sh` во второй). Если переименовываете вручную, простой проход
    `sed` по всему слову (`s/\bMain\b/Release20/g`) заденет и эти строковые литералы тоже, потому
    что sed не умеет отличать Kotlin-идентификатор от строки — именно поэтому скрипт делает
@@ -147,10 +147,10 @@ toolchain — как и всё остальное в нём.
 
 6. **Запушить в `ci-infra`, дождаться применения**, затем один раз запустить `bootstrap.sh`, чтобы
    он внедрил GitLab credential и в VCS root'ы нового релиза тоже (сейчас он проходит циклом по
-   `CxxCiDemo_Main_DemoProjectA`/`B`/`C`/`D`/`E` — расширьте этот цикл, либо добавьте id VCS
+   `CxxCiDemo_Main_ProjectA`/`B`/`C`/`D`/`E` — расширьте этот цикл, либо добавьте id VCS
    root'ов нового релиза, когда демо перестанет быть однорелизным).
 
-7. **Создать реальные ветки** в GitLab-репозиториях от `demo-project-a` до `demo-project-e`:
+7. **Создать реальные ветки** в GitLab-репозиториях от `project_a` до `project_e`:
    как минимум `refs/heads/<config_name>`, чтобы VCS root'ам релиза было что собирать.
 
 ## Проверка результата

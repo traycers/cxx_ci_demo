@@ -9,11 +9,11 @@ object Release1 : Project({
     name = Release1ConfigName
     description = """Build for the "Release1" branch and its derivatives. Copyable for the new release."""
 
-    vcsRoot(Release1_DemoProjectBVcs)
-    vcsRoot(Release1_DemoProjectAVcs)
+    vcsRoot(Release1_ProjectBVcs)
+    vcsRoot(Release1_ProjectAVcs)
 
-    buildType(Release1_DemoProjectB)
-    buildType(Release1_DemoProjectA)
+    buildType(Release1_ProjectB)
+    buildType(Release1_ProjectA)
     buildType(Release1_BuildCImage)
     buildType(Release1_ResultBuild)
 

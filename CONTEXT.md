@@ -35,7 +35,7 @@ _Avoid_: build trigger dependency
 The TeamCity mechanism that passes one C++ project's built binaries/headers to another for linking, without rebuilding from scratch.
 
 **Release** (branch family):
-One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab demo-project repos (`demo-project-a` through `demo-project-e`). Releases differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-release.md`.
+One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab repos (`project_a` through `project_e`). Releases differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-release.md`.
 _Avoid_: build configuration (too vague — conflicts with an individual project's build configuration inside a release)
 
 **config_name**:

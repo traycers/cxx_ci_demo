@@ -39,7 +39,7 @@ flowchart TD
     I --> K["result build aggregates everything<br/>and publishes result.zip"]
     J --> K
     K --> C
-    C -- "Release retired" --> L["Directory and branches removed<br/>from ci-infra and the demo-project repos"]
+    C -- "Release retired" --> L["Directory and branches removed<br/>from ci-infra and the project repos"]
 ```
 
 ## Releases diagram

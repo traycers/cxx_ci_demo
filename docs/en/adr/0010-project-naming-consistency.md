@@ -1,0 +1,9 @@
+🇬🇧 English · [🇷🇺 Русский](../../ru/adr/0010-project-naming-consistency.md) · [🇨🇳 中文](../../zh/adr/0010-project-naming-consistency.md)
+
+# Renamed `demo-project-*` to `project_*` everywhere, for cross-tool naming consistency
+
+Every C++ project's own `CMakeLists.txt` has always set `PACKAGE_NAME` to `project_a`, `project_b`, etc. — that's the name baked into every exported CMake target (`cxx::ci::demo::project_c::vecopscale`) and every `find_package()`/`find_dependency()` call. The GitLab repo and the TeamCity DSL, however, spelled the same project `demo-project-a`, and the TeamCity Kotlin identifiers spelled it a third way again (`Main_DemoProjectA`, id path `"DemoProjectA"`). Three tools, three different names for the same project, with no naming rule tying them together — a new reader had no way to guess that `demo-project-c`'s GitLab repo, `CxxCiDemo_Main_DemoProjectC`'s TeamCity id, and `project_c`'s CMake package were the same thing.
+
+We renamed everything — GitLab repo names/URLs, the local `repos/<name>/` seed directories bootstrap pushes from, and every TeamCity Kotlin identifier/id/file name/display name, in `main` and both existing releases (`release_1`, `release_2`, which share the same physical GitLab repos and would otherwise be left with dangling URLs to a repo name that no longer exists) — to the one name CMake already used: `project_a` through `project_e`. No compatibility shim or transition period: this is a demo repo with no external consumers depending on the old names, so there was no reason to keep both spellings alive anywhere.
+
+Following this repo's own established convention (see ADR 0008's note on ADR 0007), the ADRs that predate this rename (0006, 0007, 0008) were left untouched as the historical record of what those decisions actually said at the time, rather than rewritten to use the new name.

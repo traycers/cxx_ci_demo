@@ -140,19 +140,19 @@ def provision_teamcity(gitlab_token):
     #    not the status message text (see the bash version's comment on why).
     log("  waiting for DSL import to apply...")
     for _ in range(30):
-        if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_DemoProjectA") == 200:
+        if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200:
             break
         time.sleep(3)
     log(f"  {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
 
     # 4. The GitLab credential the demo VCS roots need — not carried by the DSL (see ADR 0004).
-    if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_DemoProjectA") == 200:
+    if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200:
         for vcs in (
-            "CxxCiDemo_Main_DemoProjectA",
-            "CxxCiDemo_Main_DemoProjectB",
-            "CxxCiDemo_Main_DemoProjectC",
-            "CxxCiDemo_Main_DemoProjectD",
-            "CxxCiDemo_Main_DemoProjectE",
+            "CxxCiDemo_Main_ProjectA",
+            "CxxCiDemo_Main_ProjectB",
+            "CxxCiDemo_Main_ProjectC",
+            "CxxCiDemo_Main_ProjectD",
+            "CxxCiDemo_Main_ProjectE",
         ):
             tc.put(f"/app/rest/vcs-roots/id:{vcs}/properties/secure:password", gitlab_token, content_type="text/plain")
         param_payload = json.dumps(
@@ -166,7 +166,7 @@ def provision_teamcity(gitlab_token):
         log("  injected GitLab credential into the demo project's VCS roots")
     else:
         log("  demo project tree not present yet (DSL import may still be settling) —")
-        log("  re-run bootstrap once CxxCiDemo_Main_DemoProjectA exists to inject credentials.")
+        log("  re-run bootstrap once CxxCiDemo_Main_ProjectA exists to inject credentials.")
 
     # 5. Agent authorization: documented as a manual UI step, but has a REST escape hatch.
     # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed
@@ -181,6 +181,6 @@ def provision_teamcity(gitlab_token):
             log("  authorized build agent")
 
     log("TeamCity provisioned: versioned settings import from ci-infra owns the project tree")
-    log("(CxxCiDemo_Main: base_build template + BuildCImage + DemoProjectA/B/C/D/E + Result) — edit")
+    log("(CxxCiDemo_Main: base_build template + BuildCImage + ProjectA/B/C/D/E + Result) — edit")
     log("repos/ci-infra/main/.teamcity/settings.kts or the TeamCity UI, both land in git. See ADR 0004.")
     return True

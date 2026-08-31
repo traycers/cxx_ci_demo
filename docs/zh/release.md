@@ -41,7 +41,7 @@ flowchart TD
     I --> K["result 构建汇总一切<br/>并发布 result.zip"]
     J --> K
     K --> C
-    C -- "release 停止维护" --> L["从 ci-infra 和 demo-project 仓库中<br/>删除目录和分支"]
+    C -- "release 停止维护" --> L["从 ci-infra 和各 project 仓库中<br/>删除目录和分支"]
 ```
 
 ## Release 关系图
