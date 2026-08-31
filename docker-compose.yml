@@ -20,20 +20,27 @@ services:
     # matching the exact-version convention already used for teamcity-server/teamcity-agent
     # below. `:latest` was never actually verified against a specific version; nothing here
     # relies on 19.3.1-ce.0 specifically, so bumping it later just needs a re-run of bootstrap.
-    hostname: ${GITLAB_HOSTNAME:-gitlab.local}
+    hostname: gitlab
     restart: unless-stopped
     shm_size: '256m'
     networks:
       cxxci:
         aliases:
-          - ${GITLAB_HOSTNAME:-gitlab.local}
+          - gitlab
     ports:
       # 1:1 host:container mapping is required — NGINX listens on the port from external_url,
       # not on 80. See .scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md §2.
       - "${GITLAB_HTTP_PORT:-8929}:${GITLAB_HTTP_PORT:-8929}"
     environment:
+      # external_url's hostname only has to match the compose service name/alias ("gitlab") for
+      # sibling containers — GitLab doesn't reject requests on a Host header mismatch by default
+      # (no allowed_hosts configured), so the host browser can just hit the published port on
+      # localhost/the host IP directly; no /etc/hosts entry needed. See the allowed_hosts/
+      # Host-header finding in
+      # .scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md §2 (not that section's
+      # own dual-hostname synthesis, which predates this simplification).
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://${GITLAB_HOSTNAME:-gitlab.local}:${GITLAB_HTTP_PORT:-8929}'
+        external_url 'http://gitlab:${GITLAB_HTTP_PORT:-8929}'
         gitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'
         # Lets teamcity-server/teamcity-agent (on the cxxci network) poll /-/readiness and call
         # the API; default whitelist is 127.0.0.0/8 only. See research §5.

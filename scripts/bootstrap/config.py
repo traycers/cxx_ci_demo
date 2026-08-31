@@ -2,9 +2,8 @@
 
 This process always runs attached to the compose-managed `cxxci` network (see ADR 0008), so it
 reaches every other service by its compose service name (`gitlab`, `teamcity-server`) — never by
-the host-facing `gitlab.local` hostname or a published host port. That's the whole point of
-running from inside the network: no hairpin-NAT workaround, no host-side hostname, no proxy
-bypassing for localhost.
+a published host port. That's the whole point of running from inside the network: no
+hairpin-NAT workaround, no host-side hostname, no proxy bypassing for localhost.
 """
 
 import os

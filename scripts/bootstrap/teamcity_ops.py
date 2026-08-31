@@ -92,7 +92,7 @@ def provision_teamcity(gitlab_token):
     token = teamcity_super_user_token()
     if not token:
         log("Could not find a TeamCity Super User token in the logs yet.")
-        log("This means the one unavoidable manual step (README step 4: the first-start")
+        log("This means the one unavoidable manual step (README step 3: the first-start")
         log("browser wizard) hasn't been completed yet. Complete it, then re-run bootstrap.")
         return False
 

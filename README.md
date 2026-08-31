@@ -8,11 +8,10 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 ## Bringing the stand up
 
 1. `cp .env.example .env` and fill in `GITLAB_ROOT_PASSWORD` (a `.env` with a generated password already exists locally from setup — check before overwriting it).
-2. Add `127.0.0.1 gitlab.local` to your host's `/etc/hosts` (or whatever hostname `GITLAB_HOSTNAME` is set to). This is the one piece GitLab's docs don't cover — the compose network gives sibling containers DNS resolution for free, but the host OS needs this entry to resolve the same hostname the way TeamCity's VCS roots and clone links will use it. See `.scratch/teamcity-cxx-ci/research/gitlab-headless-bootstrap.md` §2.
-3. `docker compose up -d`
-4. **One unavoidable manual step**: open `http://localhost:${TEAMCITY_HTTP_PORT:-8111}` and click through the TeamCity first-start wizard once (confirm data dir, accept EULA, create the admin account). No headless equivalent exists in the current image — see `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` §1.
-5. GitLab is reachable at `http://gitlab.local:${GITLAB_HTTP_PORT:-8929}` with `root` / the password from `.env`.
-6. `docker compose run --rm bootstrap` — creates the 6 GitLab repos (`ci-infra` and the five `project_*`), pushes `repos/<repo>/<branch>/` seed content into them, and points TeamCity's versioned settings at `ci-infra`. Runs as a one-shot container attached to the `cxxci` network directly (see ADR 0008) rather than a host script, so nothing here depends on host-side `curl`/`git`/`docker` versions. Safe to re-run.
+2. `docker compose up -d`
+3. **One unavoidable manual step**: open `http://localhost:${TEAMCITY_HTTP_PORT:-8111}` and click through the TeamCity first-start wizard once (confirm data dir, accept EULA, create the admin account). No headless equivalent exists in the current image — see `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` §1.
+4. GitLab is reachable at `http://localhost:${GITLAB_HTTP_PORT:-8929}` with `root` / the password from `.env` — no `/etc/hosts` entry needed, GitLab doesn't reject requests on a Host header mismatch by default, so the published port on `localhost` just works. (Clone URLs shown in GitLab's own UI use the compose service name, `gitlab`, since that's what sibling containers need; only relevant if you're copying a clone URL from the UI rather than using TeamCity's own VCS roots, which already point at `gitlab` directly.)
+5. `docker compose run --rm bootstrap` — creates the 6 GitLab repos (`ci-infra` and the five `project_*`), pushes `repos/<repo>/<branch>/` seed content into them, and points TeamCity's versioned settings at `ci-infra`. Runs as a one-shot container attached to the `cxxci` network directly (see ADR 0008) rather than a host script, so nothing here depends on host-side `curl`/`git`/`docker` versions. Safe to re-run.
 
 ## Troubleshooting
 
@@ -37,10 +36,10 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 - **`gitlab` unreachable from the `bootstrap` container** (connection refused/timeout, not an auth
   error) — check the containers are actually on the `cxxci` network (`docker compose ps`). Unlike
   the browser step above, the `bootstrap` container talks to `gitlab`/`teamcity-server` by their
-  plain compose service names over the `cxxci` network directly — it never goes through
-  `gitlab.local`, a published host port, or a host-side proxy, so host-level network quirks
-  (hairpin NAT, a local proxy intercepting `localhost`) that affect the browser/host `git` don't
-  apply to it. See ADR 0008.
+  plain compose service names over the `cxxci` network directly — it never goes through a
+  published host port or a host-side proxy, so host-level network quirks (hairpin NAT, a local
+  proxy intercepting `localhost`) that affect the browser/host `git` don't apply to it. See ADR
+  0008.
 
 ## Adding a new release
 
