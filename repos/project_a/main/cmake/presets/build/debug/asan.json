@@ -5,6 +5,10 @@
         {
             "name": "debug-asan",
             "configurePreset": "debug-asan"
+        },
+        {
+            "name": "debug-asan-devcontainer",
+            "configurePreset": "debug-asan-devcontainer"
         }
     ]
 }

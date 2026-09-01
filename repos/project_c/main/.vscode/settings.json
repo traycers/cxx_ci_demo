@@ -1,0 +1,5 @@
+{
+    "cmake.configurePreset": "debug-asan-devcontainer",
+    "cmake.buildPreset": "debug-asan-devcontainer",
+    "cmake.testPreset": "debug-asan-devcontainer"
+}
