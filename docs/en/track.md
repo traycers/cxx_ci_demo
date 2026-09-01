@@ -55,16 +55,16 @@ gitGraph
    merge feature_1
    commit id: "main update 1"
 
-   branch track_1 order: 4
-   commit id: "track_1 start"
+   branch release_1 order: 4
+   commit id: "release_1 start"
    branch hotfix_1 order: 5
    commit id: "hotfix_1 fix"
    commit id: "hotfix_1 fix 2"
-   checkout track_1
+   checkout release_1
    merge hotfix_1
    checkout main
    merge hotfix_1
-   merge track_1 id: "track_1 launch" type: HIGHLIGHT
+   merge release_1 id: "release_1 launch" type: HIGHLIGHT
    commit id: "main update 2"
 
    branch hotfix_2 order: 1
@@ -91,25 +91,25 @@ gitGraph
    commit id: "track_client_x continues"
 
    checkout main
-   branch track_2 order: 7
-   commit id: "track_2 start"
+   branch release_2 order: 7
+   commit id: "release_2 start"
    checkout main
-   merge track_2 id: "track_2 launch" type: HIGHLIGHT
+   merge release_2 id: "release_2 launch" type: HIGHLIGHT
 
-   checkout track_2
+   checkout release_2
    branch hotfix_4 order: 8
    commit id: "hotfix_4 fix"
    commit id: "hotfix_4 fix 2"
-   checkout track_2
+   checkout release_2
    merge hotfix_4
    checkout main
    merge hotfix_4
 
-   checkout track_1
+   checkout release_1
    branch hotfix_3 order: 6
    commit id: "hotfix_3 fix"
    commit id: "hotfix_3 fix 2"
-   checkout track_1
+   checkout release_1
    merge hotfix_3
    checkout main
    merge hotfix_3

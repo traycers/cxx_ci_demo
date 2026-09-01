@@ -1,34 +1,34 @@
 import jetbrains.buildServer.configs.kotlin.*
 
-val Track3Id = CxxCiDemoId / "Track3"
+val Release3TrackId = CxxCiDemoId / "Release3Track"
 
-// The track's word, doubling as: this directory's name (cxx_ci_demo/track_3/), the docker image
+// The track's word, doubling as: this directory's name (cxx_ci_demo/release_3/), the docker image
 // tag prefix (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
-// cxxci-build:track_3-%build.number%, so two tracks sharing the one docker daemon per ADR 0002
+// cxxci-build:release_3-%build.number%, so two tracks sharing the one docker daemon per ADR 0002
 // never collide on a tag), and the base git branch name (branch_default/branch_spec below).
-val Track3TrackName = "track_3"
+val Release3TrackName = "release_3"
 
 // One "track" / branch-family configuration — see docs/adding-a-track.md.
-object Track3 : Project({
-    id(Track3Id.toString())
-    name = Track3TrackName
-    description = """Build for the "track_3" branch and its derivatives. Copyable for the new track."""
+object Release3Track : Project({
+    id(Release3TrackId.toString())
+    name = Release3TrackName
+    description = """Build for the "release_3" branch and its derivatives. Copyable for the new track."""
 
-    vcsRoot(Track3_ProjectBVcs)
-    vcsRoot(Track3_ProjectDVcs)
-    vcsRoot(Track3_ProjectCVcs)
-    vcsRoot(Track3_ProjectAVcs)
-    vcsRoot(Track3_ProjectEVcs)
+    vcsRoot(Release3Track_ProjectBVcs)
+    vcsRoot(Release3Track_ProjectDVcs)
+    vcsRoot(Release3Track_ProjectCVcs)
+    vcsRoot(Release3Track_ProjectAVcs)
+    vcsRoot(Release3Track_ProjectEVcs)
 
-    buildType(Track3_ProjectB)
-    buildType(Track3_ProjectD)
-    buildType(Track3_ProjectC)
-    buildType(Track3_ProjectA)
-    buildType(Track3_ProjectE)
-    buildType(Track3_BuildCImage)
-    buildType(Track3_ResultBuild)
+    buildType(Release3Track_ProjectB)
+    buildType(Release3Track_ProjectD)
+    buildType(Release3Track_ProjectC)
+    buildType(Release3Track_ProjectA)
+    buildType(Release3Track_ProjectE)
+    buildType(Release3Track_BuildCImage)
+    buildType(Release3Track_ResultBuild)
 
-    template(Track3_BaseBuild)
+    template(Release3Track_BaseBuild)
 
     params {
         password("gitlab_credentials_password", "")
@@ -40,11 +40,11 @@ object Track3 : Project({
         param("deps_archive_name", "sdk.zip")
         param("deps_dir", "_deps")
         param("branch_spec", """
-            +:refs/heads/(track_3)
-            +:refs/heads/(track_3-*)
+            +:refs/heads/(release_3)
+            +:refs/heads/(release_3-*)
         """.trimIndent())
         param("vcs_rules", "+:. => %vcs_dir%")
-        param("branch_default", "refs/heads/track_3")
+        param("branch_default", "refs/heads/release_3")
         param("cxx_standard", "20")
         param("keep_images_count", "3")
     }

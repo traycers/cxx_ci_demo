@@ -12,7 +12,7 @@ object CxxCiDemo : Project({
     name = "cxx_ci_demo"
 
     subProject(Main)
-    subProject(Track1)
-    subProject(Track2)
-    subProject(Track3)
+    subProject(Release1Track)
+    subProject(Release2Track)
+    subProject(Release3Track)
 })

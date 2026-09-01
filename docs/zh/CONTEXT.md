@@ -38,7 +38,7 @@ TeamCity 的机制，将一个 C++ 项目已构建好的二进制文件/头文�
 
 **Track**(分支族):
 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 子树——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration，但共享 GitLab 上同样的项目仓库(从 `project_a` 到 `project_e`)。各个 track 之间的区别纯粹在于每个 VCS root 监视哪个分支(`branch_default`/`branch_spec`)。参见 `docs/zh/adding-a-track.md`。
-_避免使用_:release(现在是 package variant 的术语——见下文);build configuration(过于含糊——会与某个 track 内部单个项目自己的 build configuration 混淆)
+_避免使用_:单独的 `release` 来指代这个概念本身——这个词现在是 package variant 的术语(见下文)。某个具体的 track 仍然可以*命名*为 `release_1`、`release_2` 等(见 [ADR 0012](adr/0012-release-instance-names-restored.md))——区分两者的是路径中 `track/repo/variant` 的位置,而不是词本身。另外避免:build configuration(过于含糊——会与某个 track 内部单个项目自己的 build configuration 混淆)
 
 **config_name**:
 track 的名称，既作为其目录名(`cxx_ci_demo/<config_name>/`)，也作为 demo 项目中的基础分支名(`refs/heads/<config_name>`)。从该 track 派生出的分支命名为 `<config_name>-*`(例如 track `track_2_0` → 分支 `track_2_0`、`track_2_0-hotfix-1`)。

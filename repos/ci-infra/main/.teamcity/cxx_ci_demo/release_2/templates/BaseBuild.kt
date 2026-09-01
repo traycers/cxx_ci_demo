@@ -7,8 +7,8 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 // The build script is the single source of truth for how every C++ project in this track
 // builds/tests/installs — edit it here, not in a separate shell script (see ADR 0004: the old
 // docs/build.sh was removed once this became the only place it actually lived).
-object Track2_BaseBuild : Template({
-    id((Track2Id / "BaseBuild").toString())
+object Release2Track_BaseBuild : Template({
+    id((Release2TrackId / "BaseBuild").toString())
     name = "base_build"
 
     artifactRules = "%install_dir% => %deps_archive_name%"
@@ -103,7 +103,7 @@ object Track2_BaseBuild : Template({
     }
 
     dependencies {
-        snapshot(Track2_BuildCImage) {
+        snapshot(Release2Track_BuildCImage) {
             onDependencyFailure = FailureAction.FAIL_TO_START
         }
     }

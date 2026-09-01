@@ -2,18 +2,18 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
-// Named Track3_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
+// Named Release3Track_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
 // implicit import.
 //
 // Aggregation/release-packaging build type: pulls project_a's sdk.zip (which itself already
 // covers the whole a->c->d chain via its own flat snapshot+artifact dependencies — see ADR 0009)
 // and project_e's sdk.zip (e is self-sufficient — no artifact chain of its own to bring along),
 // stages both, and publishes result.zip. project_b isn't part of this track's chain at all (see
-// the `paused` comment on Track3_ProjectB) so it has nothing to contribute here. "files
+// the `paused` comment on Release3Track_ProjectB) so it has nothing to contribute here. "files
 // checking"/"protection of executable files"/"signing files" are still placeholder steps for
 // future release-hardening logic.
-object Track3_ResultBuild : BuildType({
-    id((Track3Id / "Result").toString())
+object Release3Track_ResultBuild : BuildType({
+    id((Release3TrackId / "Result").toString())
     name = "result"
     description = "Accumulates build results and triggers automatically on VCS changes."
 
@@ -55,7 +55,7 @@ object Track3_ResultBuild : BuildType({
     }
 
     dependencies {
-        dependency(Track3_ProjectA) {
+        dependency(Release3Track_ProjectA) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -71,7 +71,7 @@ object Track3_ResultBuild : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Track3_ProjectE) {
+        dependency(Release3Track_ProjectE) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

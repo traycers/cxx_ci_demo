@@ -1,10 +1,10 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
-// Same id as the Track3_ProjectC buildType (buildTypes/ProjectC.kt) — allowed, VCS roots and
+// Same id as the Release3Track_ProjectC buildType (buildTypes/ProjectC.kt) — allowed, VCS roots and
 // build types have separate id namespaces in TeamCity. Matches what was already live for A/B.
-object Track3_ProjectCVcs : GitVcsRoot({
-    id((Track3Id / "ProjectC").toString())
+object Release3Track_ProjectCVcs : GitVcsRoot({
+    id((Release3TrackId / "ProjectC").toString())
     name = "project_c"
     url = "http://gitlab:8929/root/project_c.git"
     branch = "%branch_default%"

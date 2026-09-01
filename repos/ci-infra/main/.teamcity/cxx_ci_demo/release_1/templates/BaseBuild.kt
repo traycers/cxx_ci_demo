@@ -5,8 +5,8 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 
 
-object Track1_BaseBuild : Template({
-    id((Track1Id / "BaseBuild").toString())
+object Release1Track_BaseBuild : Template({
+    id((Release1TrackId / "BaseBuild").toString())
     name = "base_build"
 
     artifactRules = "%install_dir% => %deps_archive_name%"
@@ -101,7 +101,7 @@ object Track1_BaseBuild : Template({
     }
 
     dependencies {
-        snapshot(Track1_BuildCImage) {
+        snapshot(Release1Track_BuildCImage) {
             onDependencyFailure = FailureAction.FAIL_TO_START
         }
     }

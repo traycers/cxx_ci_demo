@@ -6,17 +6,17 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // see ADR 0009 for why this build still needs D's own artifacts directly, flat, rather than
 // relying on some transitive re-packaging). revisionName=sameChain — the paired snapshot
 // dependency on D, inherited from the template, must resolve first in the same chain.
-object Track3_ProjectC : BuildType({
-    id((Track3Id / "ProjectC").toString())
-    templates(Track3_BaseBuild)
+object Release3Track_ProjectC : BuildType({
+    id((Release3TrackId / "ProjectC").toString())
+    templates(Release3Track_BaseBuild)
     name = "project_c"
 
     params {
-        param("build_image_cxx", "cxxci-build:${Track3TrackName}-${Track3_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${Release3TrackName}-${Release3Track_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(Track3_ProjectCVcs, "%vcs_rules%")
+        root(Release3Track_ProjectCVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -28,14 +28,14 @@ object Track3_ProjectC : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_10"
-            buildType = "${Track3_ProjectD.id}"
+            buildType = "${Release3Track_ProjectD.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(Track3_ProjectD) {
+        dependency(Release3Track_ProjectD) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

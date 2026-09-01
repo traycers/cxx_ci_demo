@@ -19,7 +19,7 @@ _翻译自 `docs/en/roadmap.md`。原文变更时请同步更新本文件——�
 - **`release`**——即今天的 `RelWithDebInfo`,保留下来是为了与当前的构建/测试流程保持向后兼容。保留最近 **5** 次构建。
 - **`debug`**——新的 `CMAKE_BUILD_TYPE=Debug` 配置,专门为供开发者消费而构建。只保留**最近一次**构建——需要更早 debug 构建的人得自己重新构建,而不是让 CI 保存一份除了最新消费者之外没人需要的深层历史。
 
-叫 `release` 而不是 `optimized`,是因为分支族的术语现在是 `Track` 而不是 `Release`(见 `CONTEXT.md`)——旧的 `project_a/release`("`optimized` 变体"与"`release_1`/`release_2` 分支族"之间)的歧义已经不存在了。
+叫 `release` 而不是 `optimized`,是因为分支族的术语现在是 `Track` 而不是 `Release`(见 `CONTEXT.md`)。某个具体的 track 仍然可以命名为 `release_1`/`release_2` 等(见 [ADR 0012](adr/0012-release-instance-names-restored.md)),并不会与这个 package variant 冲突:两者从不占据路径中同一个位置(`track_name/repo_name/variant`),区分它们的是位置,而不是词本身。
 
 ## Dev container image
 

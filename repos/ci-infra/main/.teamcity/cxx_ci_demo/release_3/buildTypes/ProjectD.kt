@@ -3,18 +3,18 @@ import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 // Root of the a->c->d chain (vecutils) — no dependencies of its own beyond the template's
-// snapshot dependency on BuildCImage, same shape as Track3_ProjectB.
-object Track3_ProjectD : BuildType({
-    id((Track3Id / "ProjectD").toString())
-    templates(Track3_BaseBuild)
+// snapshot dependency on BuildCImage, same shape as Release3Track_ProjectB.
+object Release3Track_ProjectD : BuildType({
+    id((Release3TrackId / "ProjectD").toString())
+    templates(Release3Track_BaseBuild)
     name = "project_d"
 
     params {
-        param("build_image_cxx", "cxxci-build:${Track3TrackName}-${Track3_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${Release3TrackName}-${Release3Track_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(Track3_ProjectDVcs, "%vcs_rules%")
+        root(Release3Track_ProjectDVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -26,7 +26,7 @@ object Track3_ProjectD : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_8"
-            buildType = "${Track3_BuildCImage.id}"
+            buildType = "${Release3Track_BuildCImage.id}"
             successfulOnly = true
             branchFilter = ""
         }

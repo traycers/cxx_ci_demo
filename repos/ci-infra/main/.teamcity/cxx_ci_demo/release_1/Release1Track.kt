@@ -1,23 +1,23 @@
 import jetbrains.buildServer.configs.kotlin.*
 
-val Track1Id = CxxCiDemoId / "Track1"
-val Track1TrackName = "track_1"
+val Release1TrackId = CxxCiDemoId / "Release1Track"
+val Release1TrackName = "release_1"
 
 // One "track" / branch-family configuration — see docs/adding-a-track.md.
-object Track1 : Project({
-    id(Track1Id.toString())
-    name = Track1TrackName
-    description = """Build for the "Track1" branch and its derivatives. Copyable for the new track."""
+object Release1Track : Project({
+    id(Release1TrackId.toString())
+    name = Release1TrackName
+    description = """Build for the "Release1Track" branch and its derivatives. Copyable for the new track."""
 
-    vcsRoot(Track1_ProjectBVcs)
-    vcsRoot(Track1_ProjectAVcs)
+    vcsRoot(Release1Track_ProjectBVcs)
+    vcsRoot(Release1Track_ProjectAVcs)
 
-    buildType(Track1_ProjectB)
-    buildType(Track1_ProjectA)
-    buildType(Track1_BuildCImage)
-    buildType(Track1_ResultBuild)
+    buildType(Release1Track_ProjectB)
+    buildType(Release1Track_ProjectA)
+    buildType(Release1Track_BuildCImage)
+    buildType(Release1Track_ResultBuild)
 
-    template(Track1_BaseBuild)
+    template(Release1Track_BaseBuild)
 
     params {
         password("gitlab_credentials_password", "")
@@ -29,11 +29,11 @@ object Track1 : Project({
         param("deps_archive_name", "sdk.zip")
         param("deps_dir", "_deps")
         param("branch_spec", """
-            +:refs/heads/(track_1)
-            +:refs/heads/(track_1-*)
+            +:refs/heads/(release_1)
+            +:refs/heads/(release_1-*)
         """.trimIndent())
         param("vcs_rules", "+:. => %vcs_dir%")
-        param("branch_default", "refs/heads/track_1")
+        param("branch_default", "refs/heads/release_1")
         param("cxx_standard", "20")
         param("keep_images_count", "3")
     }

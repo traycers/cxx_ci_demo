@@ -11,17 +11,17 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // paired snapshot dependencies, inherited from the template plus the explicit ones below, must
 // resolve first in the same chain; no independent branch-based fallback here (Case A from ticket
 // 03's research).
-object Track3_ProjectA : BuildType({
-    id((Track3Id / "ProjectA").toString())
-    templates(Track3_BaseBuild)
+object Release3Track_ProjectA : BuildType({
+    id((Release3TrackId / "ProjectA").toString())
+    templates(Release3Track_BaseBuild)
     name = "project_a"
 
     params {
-        param("build_image_cxx", "cxxci-build:${Track3TrackName}-${Track3_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${Release3TrackName}-${Release3Track_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
-        root(Track3_ProjectAVcs, "%vcs_rules%")
+        root(Release3Track_ProjectAVcs, "%vcs_rules%")
 
         cleanCheckout = true
     }
@@ -33,14 +33,14 @@ object Track3_ProjectA : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_5"
-            buildType = "${Track3_ProjectC.id}"
+            buildType = "${Release3Track_ProjectC.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(Track3_ProjectC) {
+        dependency(Release3Track_ProjectC) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -52,7 +52,7 @@ object Track3_ProjectA : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Track3_ProjectD) {
+        dependency(Release3Track_ProjectD) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

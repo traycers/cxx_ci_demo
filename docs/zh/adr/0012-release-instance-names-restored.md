@@ -1,0 +1,13 @@
+[🇬🇧 English](../../en/adr/0012-release-instance-names-restored.md) · [🇷🇺 Русский](../../ru/adr/0012-release-instance-names-restored.md) · 🇨🇳 中文
+
+_翻译自 `docs/en/adr/0012-release-instance-names-restored.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
+
+# 三个具体 track 改回命名为 `Release1`/`Release2`/`Release3`(`release_1`/`release_2`/`release_3`),`Track` 仍是概念本身的术语
+
+[ADR 0011](0011-track-term-replaces-release-for-branch-family.md) 把分支族这个*概念*从 `Release` 改名为 `Track`,并在同一次提交里把三个已有的实例也一并改了名(`release_1`/`release_2`/`release_3` → `track_1`/`track_2`/`track_3`),理由是:要避免 `project_a/release` 与计划中的 package variant 术语冲突,不仅要改概念这个词,连实例也得一起改。
+
+这其实把两个不同的决定捆在了一起。概念用词的选择依然成立——`Track` 仍然准确地描述了"一条独立、长期存在的配置线"(ADR 0011 自己反对 `stage`、反对 `release` 带来的"公开产品发布"联想的论证,并不受本 ADR 影响)。但那个关于实例命名的决定,依据的是一个实际上并不存在的冲突:track 自己的名字和 package variant 的名字,从来不会占据路径中同一个位置。[ADR 0010](0010-project-naming-consistency.md) 已经要求 GitLab 上的分支名和 TeamCity 里的 track 名必须完全一致,这就让每一条 build 路径都有固定的形状:`track_name/repo_name/variant`。位置区分这两个字段,就像任何带命名空间的标识符一样——第一个字段是 track 的名字,第三个字段是 variant 的名字,二者永远不会被读成同一个 token。一个 track 完全可以叫 `release_1`,同一棵树里的 package variant 叫 `release`,两者永远不会被搞混。真正需要避免的,是让裸词 `release` 本身指代*概念*(任意 track 对任意 package variant),不带任何限定——这种歧义针对的是概念术语本身,而不是某个具体 track 恰好叫什么名字,而 `Track` 依然解决了这一点。
+
+改回去的内容:`repos/ci-infra/main/.teamcity/cxx_ci_demo/track_{1,2,3}/` → `release_{1,2,3}/`;每一个 `TrackN`/`TrackNId`/`TrackNTrackName`/`TrackN_*` Kotlin 标识符 → `ReleaseNTrack`/`ReleaseNTrackId`/`ReleaseNTrackName`/`ReleaseNTrack_*`(特意保留了 `Track` 这个角色后缀——这些标识符依然表示"这是一个 track",只是现在叫 `Release1` 而不是 `Track1`,例如 `val Release1TrackId = CxxCiDemoId / "Release1Track"`);`branch_default`/`branch_spec` 以及每一个 `TrackName` 的值 → `release_N`;`CxxCiDemo.kt` 里的 `subProject(...)` 调用;`main/buildTypes/ProjectB.kt` 里一处按编号提到两个 track 的散文注释;demo 项目的种子目录 `repos/project_{a..e}/track_N` → `release_N`;以及 `tracks.md` 和 `track.md` 图表里用作示例的 `track_1`/`track_2` 标签——理由和 ADR 0011 自己那张票一致:它们碰巧和真实实例同名,本身并不带独立的标识符约束(`track.md` 里其余虚构的标签,`track_client_x`/`hotfix_*`/`feature_*`/`special_feature`,并不对应任何真实事物,保持不变)。按照 ADR 0010 的规则,这让 GitLab 分支名和 TeamCity track 名两边保持完全一致(`release_1`、`release_2`、`release_3`)。
+
+未改动的部分:概念术语本身——`Track`、`CONTEXT.md` 里的术语条目(只是把 `_避免使用_` 这一行改得更精确,描述按位置区分,而不是一刀切禁止)、`track.md`、`adding-a-track.md` 里的示例(`track_2_0`——一个假设*新建*的 track,与现有三个实例各自叫什么名字无关),以及 `scripts/new-track.sh`(本来就是完全通用的——它把传入的任意名字转成 PascalCase,并没有写死 `Track` 前缀,所以不用改动就已经支持把未来某个 track 命名为 `release_4` 或任何其他名字);`main`,它不属于这次改名的三个实例之一;此外,遵循本仓库自己在 ADR 0010 中确立的先例(见 ADR 0010 里关于 ADR 0008 的说明),ADR 0011 本身保持原样未动,作为该决定在当时实际内容的历史记录——本 ADR 只推翻了它关于实例命名的那部分结论,不推翻它关于概念命名的论证。和 ADR 0011 一样,这次改名只涉及文件;线上的 GitLab/TeamCity 环境目前还是上一次 bootstrap 时用的那套名字,迁移它是另一个、被推迟的独立动作。

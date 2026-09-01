@@ -6,11 +6,11 @@ _Перевод `docs/en/tracks.md`. При изменении оригинал�
 
 Конкретные track'и, которые сейчас существуют в этом репозитории (что такое track вообще — см. `CONTEXT.md`, как создать новый — см. `adding-a-track.md`).
 
-## track_1
+## release_1
 
 Первый track: примитивная структура C++ проектов (плоский `src/`, без поддиректории `cmake/`).
 
-## track_2
+## release_2
 
 Второй track: улучшенная структура C++ проектов (`app_a/`, `cmake/`).
 
@@ -18,6 +18,6 @@ _Перевод `docs/en/tracks.md`. При изменении оригинал�
 
 Текущий track: демонстрирует изменение дерева зависимостей сборки — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).
 
-## track_3
+## release_3
 
-Третий track: демонстрирует изменение дерева зависимостей сборки относительно `track_2` — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).
+Третий track: демонстрирует изменение дерева зависимостей сборки относительно `release_2` — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).

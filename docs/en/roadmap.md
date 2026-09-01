@@ -17,7 +17,7 @@ Today's CI already builds every demo project with `CMAKE_BUILD_TYPE=RelWithDebIn
 - **`release`** — today's `RelWithDebInfo`, kept for backward compatibility with the current build/test flow. Retains the last **5** builds.
 - **`debug`** — a new `CMAKE_BUILD_TYPE=Debug` configuration, built specifically to be consumed by developers. Retains only the **last** build — developers who need an older debug build rebuild it themselves rather than CI storing a deep history nobody but the newest consumer needs.
 
-Called `release` — not `optimized` — now that the branch-family concept is `Track` rather than `Release` (see `CONTEXT.md`); the old `project_a/release` ambiguity between "the package variant" and "the `track_1`/`track_2` branch family" no longer applies.
+Called `release` — not `optimized` — now that the branch-family concept is `Track` rather than `Release` (see `CONTEXT.md`). A specific track can itself be named `release_1`/`release_2`/etc. (see [ADR 0012](adr/0012-release-instance-names-restored.md)) without colliding with this package variant: the two never occupy the same path segment (`track_name/repo_name/variant`), so position — not the word — tells them apart.
 
 ## Dev container image
 

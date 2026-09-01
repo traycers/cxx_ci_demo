@@ -38,7 +38,7 @@ _Избегать_: build trigger dependency
 
 **Track** (branch family):
 Одно поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — свой TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории (от `project_a` до `project_e`). Track'и различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/ru/adding-a-track.md`.
-_Избегать_: release (теперь термин для package variant — см. ниже); конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри track'а)
+_Избегать_: голого `release` как обозначения самого понятия — это слово теперь называет package variant (см. ниже). Конкретный track всё же может быть *назван* `release_1`, `release_2` и т.д. (см. [ADR 0012](adr/0012-release-instance-names-restored.md)) — их различает позиция в пути `track/repo/variant`, а не само слово. Также избегать: конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри track'а)
 
 **config_name**:
 Имя track'а, используемое и как имя его директории (`cxx_ci_demo/<config_name>/`), и как базовое имя ветки в demo-проектах (`refs/heads/<config_name>`). Ветки-производные этого track'а именуются `<config_name>-*` (например, track `track_2_0` → ветки `track_2_0`, `track_2_0-hotfix-1`).

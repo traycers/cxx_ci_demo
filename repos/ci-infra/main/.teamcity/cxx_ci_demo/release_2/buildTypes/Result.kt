@@ -2,15 +2,15 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
-// Named Track2_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
+// Named Release2Track_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
 // implicit import.
 //
 // Aggregation/release-packaging build type: pulls project_a's sdk.zip (which itself already
 // covers project_b transitively via its own snapshot+artifact chain), stages it, and
 // publishes result.zip. "files checking"/"protection of executable files"/"signing files" are
 // still placeholder steps for future release-hardening logic.
-object Track2_ResultBuild : BuildType({
-    id((Track2Id / "Result").toString())
+object Release2Track_ResultBuild : BuildType({
+    id((Release2TrackId / "Result").toString())
     name = "result"
     description = "Accumulates build results and triggers automatically on VCS changes."
 
@@ -52,7 +52,7 @@ object Track2_ResultBuild : BuildType({
     }
 
     dependencies {
-        dependency(Track2_ProjectA) {
+        dependency(Release2Track_ProjectA) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

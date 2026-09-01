@@ -36,7 +36,7 @@ The TeamCity mechanism that passes one C++ project's built binaries/headers to a
 
 **Track** (branch family):
 One `cxx_ci_demo/<config_name>/` subtree in `ci-infra` — its own TeamCity subproject, its own VCS roots, its own set of build configurations, but the shared GitLab repos (`project_a` through `project_e`). Tracks differ purely in which branch each VCS root watches (`branch_default`/`branch_spec`). See `docs/en/adding-a-track.md`.
-_Avoid_: release (now the package variant term — see below); build configuration (too vague — conflicts with an individual project's build configuration inside a track)
+_Avoid_: `release` as a stand-in for this concept itself — that bare word now names the package variant (see below). A specific track may still be *named* `release_1`, `release_2`, etc. (see [ADR 0012](docs/en/adr/0012-release-instance-names-restored.md)) — the `track`/`repo`/`variant` path position disambiguates the two, not the word. Also avoid: build configuration (too vague — conflicts with an individual project's build configuration inside a track)
 
 **config_name**:
 The track's name, used both as its directory name (`cxx_ci_demo/<config_name>/`) and as the base branch name in the demo projects (`refs/heads/<config_name>`). Branches derived from that track are named `<config_name>-*` (e.g. track `track_2_0` → branches `track_2_0`, `track_2_0-hotfix-1`).
