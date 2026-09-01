@@ -5,9 +5,9 @@ val MainId = CxxCiDemoId / "Main"
 // The track's word, doubling as: this directory's name (cxx_ci_demo/main/), the docker image
 // repository name (buildTypes/BuildCImage.kt — cxxci-main:%build.number%/:latest, and
 // buildTypes/BuildDevImage.kt — cxxci-main-dev:latest — so two tracks sharing the one docker
-// daemon per ADR 0002 never collide; `release_1`/`release_2`/`release_3` still use the older
-// cxxci-build:<track>-* scheme, not yet migrated to this one — see this map's ADR ticket), and
-// the base git branch name (branch_default/branch_spec below).
+// daemon per ADR 0002 never collide; `release_1`/`release_2`/`release_3` use the same
+// `cxxci-<track_name>:...` scheme too, minus the `:latest`/dev image, which are `main`-specific —
+// see ADR 0013), and the base git branch name (branch_default/branch_spec below).
 val MainTrackName = "main"
 
 // One "track" / branch-family configuration — see docs/adding-a-track.md.

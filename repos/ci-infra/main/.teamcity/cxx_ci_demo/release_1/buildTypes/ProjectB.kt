@@ -8,7 +8,7 @@ object Release1Track_ProjectB : BuildType({
     name = "project_b"
 
     params {
-        param("build_image_cxx", "cxxci-build:${Release1TrackName}-${Release1Track_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${Release1TrackName}:${Release1Track_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {

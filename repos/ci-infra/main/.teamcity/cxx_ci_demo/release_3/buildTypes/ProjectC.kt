@@ -12,7 +12,7 @@ object Release3Track_ProjectC : BuildType({
     name = "project_c"
 
     params {
-        param("build_image_cxx", "cxxci-build:${Release3TrackName}-${Release3Track_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${Release3TrackName}:${Release3Track_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {

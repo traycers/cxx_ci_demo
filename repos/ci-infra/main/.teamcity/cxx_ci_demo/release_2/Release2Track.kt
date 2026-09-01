@@ -3,9 +3,9 @@ import jetbrains.buildServer.configs.kotlin.*
 val Release2TrackId = CxxCiDemoId / "Release2Track"
 
 // The track's word, doubling as: this directory's name (cxx_ci_demo/release_2/), the docker image
-// tag prefix (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
-// cxxci-build:release_2-%build.number%, so two tracks sharing the one docker daemon per ADR 0002
-// never collide on a tag), and the base git branch name (branch_default/branch_spec below).
+// repository name (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
+// cxxci-release_2:%build.number%, so two tracks sharing the one docker daemon per ADR 0002 never
+// collide — see ADR 0013), and the base git branch name (branch_default/branch_spec below).
 val Release2TrackName = "release_2"
 
 // One "track" / branch-family configuration — see docs/adding-a-track.md.

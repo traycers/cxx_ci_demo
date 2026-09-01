@@ -51,7 +51,7 @@ The map is done when: the `main`-track Kotlin DSL compiles and matches the shape
 
 ## Out of scope
 
-- **Rolling the `cxxci-<track_name>:...` image-naming scheme out to `release_1`/`release_2`/`release_3`** — explicitly deferred to a separate future map once `main`'s version of the pattern has been exercised; they keep `cxxci-build:release_N-*` for now. No real collision risk today (tag, not just repo, already disambiguates tracks under the old scheme).
+- ~~Rolling the `cxxci-<track_name>:...` image-naming scheme out to `release_1`/`release_2`/`release_3`~~ — originally deferred here, but done as a quick standalone follow-up right after this map (see `docs/en/adr/0013-...md`, updated): `BuildCImage.kt` + `build_image_cxx` renamed in all three, same `cxxci-<track_name>:<N>` scheme as `main`, without `main`'s `:latest`/dev-image pieces (they have no dev container). No real collision risk existed either way (tag, not just repo, already disambiguated tracks under the old scheme) — purely a naming-uniformity request from the user.
 - **Package manager selection (Conan/vcpkg/Nix) for external deps** — roadmap Phase 2, undecided at the strategy level; this map's `CMAKE_PREFIX_PATH` addition is only for the internal artifact-dependency chain, not a replacement for the existing per-project Conan flow.
 - **A real Docker registry** — demo stand relies on the shared `docker.sock` (ADR 0002's logic extended to the dev image too); registry stays a documented future option, not implemented.
 - **The multi-repo clone/switch and build scripts from `developer-flow.md`** — still not implemented (see `tradeoff.md` defect 4); this map only makes the devcontainer/CI side ready to be consumed by them once they exist.

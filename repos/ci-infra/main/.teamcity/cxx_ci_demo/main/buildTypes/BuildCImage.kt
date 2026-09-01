@@ -14,11 +14,11 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // the track's own subdirectory explicitly instead.
 //
 // Image repository name is track-scoped (cxxci-<track_name>, not a shared "cxxci-build" with the
-// track only in the tag) — a deliberate rename for `main` specifically, see this map's ADR
-// ticket; `release_1`/`release_2`/`release_3` keep the old `cxxci-build:release_N-*` scheme for
-// now (separate future map). The floating `:latest` tag is what Main_BuildDevImage's Dockerfile
-// (main/Dockerfile.dev) builds FROM, so it needs to always point at this build's own image, not
-// an older one from a previous chain run.
+// track only in the tag) — see ADR 0013; `release_1`/`release_2`/`release_3` have since been
+// migrated to the same `cxxci-<track_name>:...` scheme too (no `:latest`/dev image there — those
+// are `main`-specific, see below). The floating `:latest` tag here is what Main_BuildDevImage's
+// Dockerfile (main/Dockerfile.dev) builds FROM, so it needs to always point at this build's own
+// image, not an older one from a previous chain run.
 object Main_BuildCImage : BuildType({
     id((MainId / "BuildCImage").toString())
     name = "Build C++ image"
