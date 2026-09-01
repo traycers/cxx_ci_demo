@@ -19,6 +19,8 @@ Today's CI already builds every demo project with `CMAKE_BUILD_TYPE=RelWithDebIn
 
 Called `release` — not `optimized` — now that the branch-family concept is `Track` rather than `Release` (see `CONTEXT.md`). A specific track can itself be named `release_1`/`release_2`/etc. (see [ADR 0012](adr/0012-release-instance-names-restored.md)) without colliding with this package variant: the two never occupy the same path segment (`track_name/repo_name/variant`), so position — not the word — tells them apart.
 
+**Implemented for track `main`** — see [ADR 0013](adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md): each variant is a full child TeamCity subproject (`Main_Debug`/`Main_Release`), not a parameter on one build type. `main`'s `debug` `Result` publishes exactly what its artifact-dependencies unpacked, as a downloadable archive — see Phase 1 below. Not yet rolled out to `release_1`/`release_2`/`release_3` (deliberately deferred to a separate future map — no urgency, since each track is independent).
+
 ## Dev container image
 
 A Docker image, built on TeamCity `FROM` the root image build's image (see `CONTEXT.md` — this keeps any change made to the track's root image from being lost rather than re-derived from scratch), pushed to a Docker registry, and referenced directly in each demo project's `devcontainer.json`. Colleagues get a working dev container without ever building the image themselves — they just point `devcontainer.json` at it.
@@ -26,6 +28,8 @@ A Docker image, built on TeamCity `FROM` the root image build's image (see `CONT
 Which registry (GitLab's built-in Container Registry, since GitLab is already part of the stand, vs. a plain `registry:2` image from Docker Hub) is left open — that's an implementation-time decision, not a vision-level one.
 
 This is the first artifact in this stand planned to go through a registry at all. [ADR 0002](adr/0002-no-registry-shared-docker-daemon.md) deliberately skipped a registry for the root image build, because every build shares one Docker daemon on one agent. That reasoning doesn't extend here: a dev container image has to reach developers' machines, not just sibling builds on the same agent, so daemon-sharing can't substitute for a registry the way it does for the root image build. This doesn't reverse ADR 0002 — the root image build stays registry-free — it's just the first case its reasoning was never meant to cover.
+
+**Implemented for track `main`, without a registry** — `Main_BuildDevImage` builds `cxx_ci_demo/main/Dockerfile.dev` `FROM` the root image and tags it `cxxci-main-dev:latest`; `devcontainer.json` in `project_a`/`project_c`/`project_d`/`project_e` references that tag directly off the shared host Docker daemon. For this demo stand, developer and TeamCity agent sharing one daemon turned out to be enough — the "has to reach developers' machines" reasoning above assumed a developer's machine is a *different* Docker daemon than the agent's, which isn't true for this single-host demo. A real registry stays the documented option above if that assumption ever stops holding; it's not a gap in what's implemented for `main`. Not yet rolled out to `release_1`/`release_2`/`release_3`.
 
 ## Two phases of using the dev container
 
@@ -36,6 +40,8 @@ Buildable today, independently of any package-manager decision above. The develo
 To speed that up, TeamCity publishes the `debug` variant as a downloadable archive — the same idea as today's **Artifact dependency** mechanism (see `CONTEXT.md`), just carrying `debug` binaries instead of being produced as a side effect of a project's own build. The developer downloads it and unpacks it into the task directory, then builds only the repository they actually need to touch.
 
 Crucially, this keeps the flexibility that matters most for day-to-day development: the developer can still walk into any other repository in the chain, build it, and `install` it locally — picking up in-progress changes to a dependency, not just to the repo they started with.
+
+For track `main`, the dev container and the downloadable `debug` archive described above are both real now — `CMAKE_PREFIX_PATH` in each repo's `.devcontainer/devcontainer.json` already points at a directory one level above the checkout, ready for that archive to be unpacked into. The task-directory clone/switch and build scripts themselves are still not implemented (see `developer-flow.md`, `tradeoff.md` disadvantage 4) — for now, downloading and unpacking the archive is a manual step.
 
 ### Phase 2 — with a package manager
 

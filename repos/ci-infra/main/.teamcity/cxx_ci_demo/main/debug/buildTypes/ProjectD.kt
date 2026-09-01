@@ -3,14 +3,14 @@ import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 // Root of the a->c->d chain (vecutils) — no dependencies of its own beyond the template's
-// snapshot dependency on BuildCImage, same shape as Main_ProjectB.
-object Main_ProjectD : BuildType({
-    id((MainId / "ProjectD").toString())
-    templates(Main_BaseBuild)
+// snapshot dependency on BuildCImage.
+object Main_Debug_ProjectD : BuildType({
+    id((Main_DebugId / "ProjectD").toString())
+    templates(Main_Debug_BaseBuild)
     name = "project_d"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainTrackName}-${Main_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${MainTrackName}:${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {

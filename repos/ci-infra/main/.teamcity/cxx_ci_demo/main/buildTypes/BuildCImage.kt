@@ -12,6 +12,13 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // on DslContext.settingsRoot for agent-side checkout ("Checkout rules are not supported for vcs
 // root ... Unsupported rules for agent-side checkout", confirmed live) — so -f/context point at
 // the track's own subdirectory explicitly instead.
+//
+// Image repository name is track-scoped (cxxci-<track_name>, not a shared "cxxci-build" with the
+// track only in the tag) — a deliberate rename for `main` specifically, see this map's ADR
+// ticket; `release_1`/`release_2`/`release_3` keep the old `cxxci-build:release_N-*` scheme for
+// now (separate future map). The floating `:latest` tag is what Main_BuildDevImage's Dockerfile
+// (main/Dockerfile.dev) builds FROM, so it needs to always point at this build's own image, not
+// an older one from a previous chain run.
 object Main_BuildCImage : BuildType({
     id((MainId / "BuildCImage").toString())
     name = "Build C++ image"
@@ -23,23 +30,29 @@ object Main_BuildCImage : BuildType({
     steps {
         script {
             name = "docker build"
-            scriptContent = "docker build -t cxxci-build:${MainTrackName}-%build.number% -f .teamcity/cxx_ci_demo/${MainTrackName}/Dockerfile .teamcity/cxx_ci_demo/${MainTrackName}"
+            scriptContent = """
+                docker build -t cxxci-${MainTrackName}:%build.number% -f .teamcity/cxx_ci_demo/${MainTrackName}/Dockerfile .teamcity/cxx_ci_demo/${MainTrackName}
+                docker tag cxxci-${MainTrackName}:%build.number% cxxci-${MainTrackName}:latest
+            """.trimIndent()
         }
         // No registry (ADR 0002) means every image this track ever built stays in the one
         // shared docker daemon forever unless something deletes it — confirmed live: 104 stray
         // tags accumulated before this step existed. Keeps the %keep_images_count% newest
-        // cxxci-build:main-* images (by build number, not by age — a re-triggered old build
+        // cxxci-<track>:<N> images (by build number, not by age — a re-triggered old build
         // number wouldn't get pruned out from under a build that's using it), deletes the rest.
+        // `latest` is explicitly excluded from the numeric sort (it's the floating alias to
+        // whichever numbered image is newest, not itself a build number — sort -n would treat it
+        // as 0 and either mis-rank or prune it, and it must never be pruned as if it were stale).
         // Only runs if "docker build" above succeeded (TeamCity's default: a failed required
         // step stops the build), so a failed build never prunes the still-good previous image.
         script {
             name = "cleanup old images"
             scriptContent = """
-                docker images --format '{{.Tag}}' 'cxxci-build:${MainTrackName}-*' \
-                    | sed 's/^${MainTrackName}-//' \
+                docker images --format '{{.Tag}}' 'cxxci-${MainTrackName}:*' \
+                    | grep -v '^latest${'$'}' \
                     | sort -n -r \
                     | tail -n +${'$'}(( %keep_images_count% + 1 )) \
-                    | while read -r n; do docker rmi -f "cxxci-build:${MainTrackName}-${'$'}n"; done
+                    | while read -r n; do docker rmi -f "cxxci-${MainTrackName}:${'$'}n"; done
                 exit 0
             """.trimIndent()
         }

@@ -16,7 +16,7 @@ _翻译自 `docs/en/tracks.md`。原文变更时请同步更新本文件——�
 
 ## main
 
-当前的 track:展示了构建依赖树的变化——`project_a` 现在通过 `project_c` 链到 `project_d`,而不是直接依赖 `project_b`。见 [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md)。
+当前的 track:展示了构建依赖树的变化——`project_a` 现在通过 `project_c` 链到 `project_d`,而不是直接依赖 `project_b`。见 [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md)。目前也是唯一一个拥有 `debug`/`release` package variant 和 dev container 镜像的 track(见 [ADR 0013](adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md)、`roadmap.md`)。
 
 ## release_3
 

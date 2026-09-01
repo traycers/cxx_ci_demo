@@ -16,7 +16,7 @@ _Перевод `docs/en/tracks.md`. При изменении оригинал�
 
 ## main
 
-Текущий track: демонстрирует изменение дерева зависимостей сборки — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).
+Текущий track: демонстрирует изменение дерева зависимостей сборки — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md). Также единственный на данный момент track с package variant'ами `debug`/`release` и dev container образом (см. [ADR 0013](adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md), `roadmap.md`).
 
 ## release_3
 

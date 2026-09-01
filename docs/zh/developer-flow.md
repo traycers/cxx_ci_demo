@@ -27,4 +27,4 @@ _翻译自 `docs/en/developer-flow.md`。原文变更时请同步更新本文件
 1. **拉取/切换脚本**——把所需的仓库克隆(或更新)到任务目录里,并切换到所需的分支。
 2. **构建脚本**——在任务目录内构建各个项目。
 
-截至本文撰写时,这两个脚本都还不存在(见 [`docs/zh/tradeoff.md`](tradeoff.md) 的缺点 4)——这里描述的是要达成的目标工作流,而不是现状。构建脚本计划如何演进——dev container 加 debug package variant——见 [`docs/zh/roadmap.md`](roadmap.md)。
+截至本文撰写时,这两个脚本都还不存在(见 [`docs/zh/tradeoff.md`](tradeoff.md) 的缺点 4)——这里描述的是要达成的目标工作流,而不是现状。构建脚本计划如何演进——dev container 加 debug package variant——见 [`docs/zh/roadmap.md`](roadmap.md)。对 track `main` 来说,dev container 和可下载的 debug package variant 已经是真实存在的了(不只是计划)——缺的正是拉取/切换脚本和构建脚本本身。

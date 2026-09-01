@@ -16,7 +16,7 @@ object Main_ProjectB : BuildType({
     paused = true
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainTrackName}-${Main_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${MainTrackName}:${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {

@@ -10,14 +10,14 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // dependency per package in the chain, not one per hop. revisionName=sameChain on each — the
 // paired snapshot dependencies, inherited from the template plus the explicit ones below, must
 // resolve first in the same chain; no independent branch-based fallback here (Case A from ticket
-// 03's research).
-object Main_ProjectA : BuildType({
-    id((MainId / "ProjectA").toString())
-    templates(Main_BaseBuild)
+// 03's research, original teamcity-cxx-ci map).
+object Main_Release_ProjectA : BuildType({
+    id((Main_ReleaseId / "ProjectA").toString())
+    templates(Main_Release_BaseBuild)
     name = "project_a"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainTrackName}-${Main_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${MainTrackName}:${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
@@ -33,14 +33,14 @@ object Main_ProjectA : BuildType({
         }
         finishBuildTrigger {
             id = "TRIGGER_5"
-            buildType = "${Main_ProjectC.id}"
+            buildType = "${Main_Release_ProjectC.id}"
             successfulOnly = true
             branchFilter = ""
         }
     }
 
     dependencies {
-        dependency(Main_ProjectC) {
+        dependency(Main_Release_ProjectC) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -52,7 +52,7 @@ object Main_ProjectA : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Main_ProjectD) {
+        dependency(Main_Release_ProjectD) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

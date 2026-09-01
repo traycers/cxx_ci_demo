@@ -2,7 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
-// Named Main_ResultBuild, not Result — "Result" would shadow kotlin.Result from the stdlib's
+// Named Main_Release_Result, not Result — "Result" would shadow kotlin.Result from the stdlib's
 // implicit import.
 //
 // Aggregation/release-packaging build type: pulls project_a's sdk.zip (which itself already
@@ -11,9 +11,11 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // stages both, and publishes result.zip. project_b isn't part of this track's chain at all (see
 // the `paused` comment on Main_ProjectB) so it has nothing to contribute here. "files
 // checking"/"protection of executable files"/"signing files" are still placeholder steps for
-// future release-hardening logic.
-object Main_ResultBuild : BuildType({
-    id((MainId / "Result").toString())
+// future release-hardening logic. Compare Main_Debug_Result (release/buildTypes/Result.kt's
+// sibling) — same aggregation shape, but a single placeholder step and no install_dir/bin
+// filtering, since the debug variant's whole point is to hand over everything as-is.
+object Main_Release_Result : BuildType({
+    id((Main_ReleaseId / "Result").toString())
     name = "result"
     description = "Accumulates build results and triggers automatically on VCS changes."
 
@@ -55,7 +57,7 @@ object Main_ResultBuild : BuildType({
     }
 
     dependencies {
-        dependency(Main_ProjectA) {
+        dependency(Main_Release_ProjectA) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }
@@ -71,7 +73,7 @@ object Main_ResultBuild : BuildType({
                 artifactRules = "%deps_unpack_all%"
             }
         }
-        dependency(Main_ProjectE) {
+        dependency(Main_Release_ProjectE) {
             snapshot {
                 onDependencyFailure = FailureAction.FAIL_TO_START
             }

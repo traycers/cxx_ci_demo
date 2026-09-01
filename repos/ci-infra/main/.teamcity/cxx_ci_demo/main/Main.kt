@@ -3,9 +3,11 @@ import jetbrains.buildServer.configs.kotlin.*
 val MainId = CxxCiDemoId / "Main"
 
 // The track's word, doubling as: this directory's name (cxx_ci_demo/main/), the docker image
-// tag prefix (buildTypes/BuildCImage.kt, ProjectA.kt, ProjectB.kt —
-// cxxci-build:main-%build.number%, so two tracks sharing the one docker daemon per ADR 0002
-// never collide on a tag), and the base git branch name (branch_default/branch_spec below).
+// repository name (buildTypes/BuildCImage.kt — cxxci-main:%build.number%/:latest, and
+// buildTypes/BuildDevImage.kt — cxxci-main-dev:latest — so two tracks sharing the one docker
+// daemon per ADR 0002 never collide; `release_1`/`release_2`/`release_3` still use the older
+// cxxci-build:<track>-* scheme, not yet migrated to this one — see this map's ADR ticket), and
+// the base git branch name (branch_default/branch_spec below).
 val MainTrackName = "main"
 
 // One "track" / branch-family configuration — see docs/adding-a-track.md.
@@ -20,15 +22,21 @@ object Main : Project({
     vcsRoot(Main_ProjectAVcs)
     vcsRoot(Main_ProjectEVcs)
 
+    // project_a/c/d/e's actual builds live in the Debug/Release package-variant subprojects
+    // below (see debug/MainDebug.kt, release/MainRelease.kt) — duplicated per variant because
+    // artifact-dependency buildRule=sameChain() disambiguates by which BuildType object a
+    // dependency() call targets, not by a parameter, so a single parameterized build_type
+    // couldn't guarantee a debug build never links a release upstream. project_b stays here,
+    // unduplicated — it's paused (see the `paused` comment on Main_ProjectB) and outside the
+    // a->c->d->e chain this split covers.
     buildType(Main_ProjectB)
-    buildType(Main_ProjectD)
-    buildType(Main_ProjectC)
-    buildType(Main_ProjectA)
-    buildType(Main_ProjectE)
     buildType(Main_BuildCImage)
-    buildType(Main_ResultBuild)
+    buildType(Main_BuildDevImage)
 
     template(Main_BaseBuild)
+
+    subProject(Main_Debug)
+    subProject(Main_Release)
 
     params {
         password("gitlab_credentials_password", "")

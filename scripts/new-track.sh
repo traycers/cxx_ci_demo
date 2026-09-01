@@ -46,7 +46,26 @@ SRC_PROJECT_FILE="${SRC_DIR}/${SOURCE_WORD}.kt"
 
 echo "copying ${SRC_DIR#"$REPO_ROOT"/} -> ${DST_DIR#"$REPO_ROOT"/}"
 cp -r "$SRC_DIR" "$DST_DIR"
-mv "${DST_DIR}/${SOURCE_WORD}.kt" "${DST_DIR}/${NEW_WORD}.kt"
+
+# Rename every file that declares a top-level `val` (Kotlin wraps these in a synthetic class
+# named after the *file*, and nothing under .teamcity/ declares a package — see IdPath.kt — so
+# two same-named files anywhere in the tree collide at compile time). This used to be just the
+# one top-level project file (Main.kt -> Track20.kt); a track can now also nest package-variant
+# subprojects with their own top-level-val project file (e.g. debug/MainDebug.kt,
+# release/MainRelease.kt) — every one of those needs the same treatment, not just the top-level
+# one, so find them all rather than hardcoding a single mv.
+while IFS= read -r -d '' f; do
+    base="$(basename "$f")"
+    case "$base" in
+        "${SOURCE_WORD}"*.kt)
+            mv "$f" "$(dirname "$f")/${NEW_WORD}${base#"$SOURCE_WORD"}"
+            ;;
+        *)
+            echo "error: found a top-level-val file whose name doesn't start with '${SOURCE_WORD}' (${f#"$REPO_ROOT"/}) — new-track.sh doesn't know how to rename it safely, aborting" >&2
+            exit 1
+            ;;
+    esac
+done < <(grep -rlZ '^val ' "$DST_DIR" --include='*.kt')
 
 # Rename identifiers. Order matters: the *Id/*TrackName suffixed forms first (so the generic
 # "<SourceWord>_" prefix pass below doesn't also have to worry about them), longest-match first

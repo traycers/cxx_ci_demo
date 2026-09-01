@@ -43,8 +43,8 @@ _避免使用_:单独的 `release` 来指代这个概念本身——这个词现
 **config_name**:
 track 的名称，既作为其目录名(`cxx_ci_demo/<config_name>/`)，也作为 demo 项目中的基础分支名(`refs/heads/<config_name>`)。从该 track 派生出的分支命名为 `<config_name>-*`(例如 track `track_2_0` → 分支 `track_2_0`、`track_2_0-hotfix-1`)。
 
-**Package variant**(规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)):
-构建类型限定符——`release` 或 `debug`——未来将用于区分 demo 项目可复用的构建产物,无论它是作为可下载压缩包被消费(roadmap Phase 1),还是日后作为包管理器引用被消费(roadmap Phase 2)。`release` 对应 `CMAKE_BUILD_TYPE=RelWithDebInfo`(今天已经为测试/产物而构建,见 `BaseBuild.kt`——与 CMake 自身的 `CMAKE_BUILD_TYPE=Release` 取值并非同一回事,尽管名字相同),`debug` 对应 `CMAKE_BUILD_TYPE=Debug`(尚未构建)。
+**Package variant**(track `main` 已实现;`release_1`/`release_2`/`release_3` 仍在规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)、[ADR 0013](adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md)):
+构建类型限定符——`release` 或 `debug`——用于区分 demo 项目可复用的构建产物,无论它是作为可下载压缩包被消费(roadmap Phase 1),还是日后作为包管理器引用被消费(roadmap Phase 2,尚未实现)。`release` 对应 `CMAKE_BUILD_TYPE=RelWithDebInfo`(见 `BaseBuild.kt`——与 CMake 自身的 `CMAKE_BUILD_TYPE=Release` 取值并非同一回事,尽管名字相同),`debug` 对应 `CMAKE_BUILD_TYPE=Debug`。在 `main` 上,每个 variant 都是一个完整的子 TeamCity subproject(`Main_Debug`/`Main_Release`),而不是一个参数——原因见 ADR 0013。
 
-**Dev container image**(规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)):
-一个 Docker 镜像,在 TeamCity 上以根镜像构建的镜像为 `FROM` 基础构建,并推送到 registry,供 demo 项目的 `devcontainer.json` 直接引用——这样开发者就不必自己构建该镜像。这与根镜像构建的镜像不同,后者从不离开宿主机上共享的 Docker daemon(见 ADR 0002)——这是本环境中第一个计划经由 registry 分发的产物。
+**Dev container image**(track `main` 已实现;`release_1`/`release_2`/`release_3` 仍在规划中——见 [`docs/zh/roadmap.md`](docs/zh/roadmap.md)):
+一个 Docker 镜像,以根镜像构建的镜像为 `FROM` 基础构建,供 demo 项目的 `devcontainer.json` 直接引用——这样开发者就不必自己构建该镜像。在 `main` 上,由 `Main_BuildDevImage` 构建为 `cxxci-main-dev:latest`,直接取自宿主机上共享的 Docker daemon(见 ADR 0002)——这个 demo 环境不需要 registry,因为开发者和 TeamCity agent 共用同一个 daemon。真正的 registry 仍是文档中记录的未来选项(`roadmap.md`),而不是当前的缺口——只有当镜像需要抵达这个共享 daemon 之外的机器时才会用到它。

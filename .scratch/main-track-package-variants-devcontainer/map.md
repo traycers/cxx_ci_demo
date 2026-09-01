@@ -1,0 +1,57 @@
+Label: wayfinder:map
+
+## Destination
+
+Track `main` gains, for its active chain (`project_a`, `project_c`, `project_d`, `project_e` — `project_b` stays `paused`, uncovered):
+
+- **Two package variants — `debug` and `release`** — realized as two child TeamCity subprojects of `Main` (`Main_Debug`, `Main_Release`), each with its own `BaseBuild` template (`build_type` hardcoded per subproject: `Debug`/`RelWithDebInfo`) and its own `ProjectA`/`ProjectC`/`ProjectD`/`ProjectE`/`Result` build types, variant-matched dependency chains (a `Debug` project only ever artifact-depends on a `Debug` upstream, never crossing into `Release`). `Main_BuildCImage` stays a single, un-duplicated build type at the `Main` level — the root image doesn't vary by package variant.
+  - `Release`'s `Result`: unchanged shape (today's 4 placeholder steps + `deps_dir/bin/* → install_dir` copy + `install_dir => result.zip`).
+  - `Debug`'s `Result`: one placeholder step (`echo Hello`), `install_dir` aliased to the same path as `deps_dir` for this subproject, so `artifactRules = "%install_dir% => result.zip"` archives everything artifact-dependencies already unpacked there — no copy step needed.
+- **A new image-naming scheme for `main`'s root/dev images**: `cxxci-build:main-<N>` → `cxxci-main:<N>`, plus a floating `cxxci-main:latest` retagged by `Main_BuildCImage` on every successful run. A new `Main_BuildDevImage` build type (snapshot-dependency on `Main_BuildCImage`) builds `FROM cxxci-main:latest`, adds a debugger + clangd + clang-tidy + clang-format, tags it `cxxci-main-dev:latest` (single retained version, no build-number tag). The existing image-cleanup step's regex/sort needs updating for the new pattern and needs to exclude the non-numeric `latest` tag from its numeric sort.
+- **`.devcontainer` + `.vscode/launch.json`** added to `project_a`/`project_c`/`project_d`/`project_e`'s `main` branch seed content (`repos/project_*/main/`): references `cxxci-main-dev:latest`, the extension list given below, `updateRemoteUserUID: true`, container run with `--cap-add=SYS_PTRACE`, an install directory mounted one level above the repo checkout and added to `CMAKE_PREFIX_PATH` (for resolving the artifact-dependency chain the same way CI's `%deps_dir%` does — external deps like GTest stay on the existing per-project Conan/`CMakePresets.json` flow, untouched).
+
+VS Code extensions for the dev container:
+```
+mikestead.dotenv, usernamehw.errorl, earshinov.filter-lines, pkief.material-icon-theme,
+llvm-vs-code-extensions.vscode-clangd, vadimcn.vscode-lldb, ms-vscode.cmake-tools,
+akiramiyakoda.cppincludeguard, ajshort.include-autocomplete,
+danielpinto8zz6.c-cpp-compile-run, xaver.clang-format
+```
+
+The map is done when: the `main`-track Kotlin DSL compiles and matches the shape above; `scripts/new-track.sh` (whose default source is `main`) correctly clones/renames the new nested structure; `.devcontainer`/`.vscode` exist in all four repos' `main` seed content; the trilingual docs (`CONTEXT.md`, `roadmap.md`) stop describing package variants/dev container as only "planned"; an ADR records the subproject-per-variant and image-naming decisions; and the user has stood up a clean stand for a live verification pass (blocked on the user's own action, not on this map's remaining tickets).
+
+**Not this map's job**: rolling any of this out to `release_1`/`release_2`/`release_3` (separate future map — see Out of scope), a package manager for external deps (roadmap Phase 2, undecided), a real Docker registry, or the not-yet-built multi-repo clone/build scripts from `developer-flow.md`.
+
+## Notes
+
+- **Execution mode, not pure planning** — like both prior maps in this repo, tickets apply their decision directly to the repo (edit DSL, Dockerfiles, devcontainer configs, docs), not just record it.
+- **Tracker — local-markdown** (see `issue-tracker-local.md`). This map and its tickets are files under `.scratch/main-track-package-variants-devcontainer/`.
+- **Domain/glossary** — root `CONTEXT.md` (terms: Track, Package variant, Dev container image — both currently marked "planned", to be updated once real for `main`). Mirrors: `docs/ru/CONTEXT.md`, `docs/zh/CONTEXT.md` (ADR 0006).
+- **Relevant existing DSL** (current state, before this map): `repos/ci-infra/main/.teamcity/cxx_ci_demo/main/{Main.kt, templates/BaseBuild.kt, buildTypes/{BuildCImage,ProjectA,ProjectB,ProjectC,ProjectD,ProjectE,Result}.kt}`. `build_type` is hardcoded `"RelWithDebInfo"` in `BaseBuild.kt` today; `install_dir`/`deps_dir` are today's `Main`-level params (`_install`/`_deps`).
+- **Live TeamCity has an open, unrelated bug** (session memory: `dockerPull=false` doesn't actually stop `docker pull`, blocking all C++ builds on the current live stand). Not this map's problem to fix — the user will stand up a fresh stand for the live-verification ticket, where this either no longer applies or resurfaces and gets tracked separately.
+- Research tickets are resolved by a `/research` subagent, fired in parallel while charting.
+- If a ticket's resolution surfaces a new open architectural question, stop and run `/grilling` + `/domain-modeling` again rather than deciding it silently.
+- User's stated interaction preference for this project: respond in Russian in conversation, one grilling question per round — map/ticket files themselves follow this repo's existing English-file convention (both prior maps here are English).
+
+## Decisions so far
+
+- [Kotlin DSL: debug/release subprojects](issues/01-task-kotlin-dsl-debug-release-subprojects.md) — `main`'s active chain (A/C/D/E) now lives in two child subprojects `Main_Debug`/`Main_Release`, each with its own `BaseBuild` template (`build_type` hardcoded) and variant-matched dependency chains; `Main_ProjectB` and `Main_BuildCImage` stay unduplicated at the `Main` level. `Main_Debug_Result` is a single placeholder step with `install_dir` aliased to `deps_dir` at the BuildType level (not leaked into A/C/D/E). No local Kotlin compiler available to validate — did a full manual object/filename-uniqueness pass across the whole `.teamcity/` tree instead; real compile validation deferred to ticket 07.
+- [Image naming + dev image build](issues/02-task-image-naming-and-dev-image-build.md) — `main`'s root image renamed `cxxci-build:main-<N>` → `cxxci-main:<N>` + floating `cxxci-main:latest`; cleanup step updated to match and exclude `latest`. New `Main_BuildDevImage` builds `cxx_ci_demo/main/Dockerfile.dev` (`FROM cxxci-main:latest`, clangd/clang-tidy/clang-format/lldb + non-root `vscode` user) → `cxxci-main-dev:latest`, single retained version. `release_1/2/3` untouched. Caught and fixed a real Kotlin-interpolation-vs-literal-`$`-escape bug in my own first draft before resolving.
+- [CodeLLDB debugger runtime](issues/08-research-codelldb-debugger-runtime.md) — CodeLLDB bundles its own LLDB inside the platform-specific VSIX (verified via release-asset sizes), so no system `lldb`/`lldb-server` is actually required in the dev Dockerfile and no network is needed at `docker build` time, only once at container-attach/extension-install time; it debugs GCC/DWARF binaries fine (root image is GCC-only, no Clang). Concrete `launch.json` grounded on `app_a`'s build layout given, plus a container-specific ASLR/seccomp gotcha to test at ticket 04/07. Surfaced, not resolved: the local `debug` CMake preset needs Clang, which the planned `Main_Debug` package variant's dev image won't have unless addressed separately. Folded into `Dockerfile.dev` (ticket 02): dropped `lldb`, added `clang` (for the existing local `debug-asan` preset).
+- [`new-track.sh` compatibility](issues/03-task-new-track-script-compat.md) — fixed two real bugs surfaced by an actual dry run against a scratch copy: the script never renamed `MainDebug.kt`/`MainRelease.kt` at all (generalized the single-file `mv` into a loop over every top-level-`val` file); ticket 01's `MainDebugId`/`MainReleaseId` val names didn't match any existing rename pattern (renamed them to `Main_DebugId`/`Main_ReleaseId` at the source instead of teaching the script a new pattern). Dry run for a `track_2_0` clone came out fully correct — ids, objects, and the new image-tag scheme all renamed properly, no collisions.
+- [Devcontainer config](issues/04-task-devcontainer-config.md) — `.devcontainer/devcontainer.json` + `.vscode/launch.json` added to all four repos. `launch.json` uses `${command:cmake.launchTargetPath}` (CMake Tools) rather than a hardcoded binary path, working uniformly for `project_a`/`project_e`'s real executables and `project_c`/`project_d`'s test-only binaries. Install dir is a named volume at `/workspaces/_install`, wired via `containerEnv.CMAKE_PREFIX_PATH`, existing per-project preset/Conan flow untouched. Added `--security-opt seccomp=unconfined` on top of the originally-asked `--cap-add=SYS_PTRACE`, per ticket 08's research on a known CodeLLDB-in-Docker failure mode.
+- [ADR](issues/06-task-write-adr.md) — `docs/{en,ru,zh}/adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md`, one ADR covering both the per-variant-subproject-duplication decision and the `main`-scoped image-renaming decision, following ADR 0012's shape.
+- [Trilingual doc sweep](issues/05-task-trilingual-doc-sweep.md) — `CONTEXT.md`, `roadmap.md`, `tracks.md`, `developer-flow.md` (×3 languages each) updated to say package variants/dev container are implemented for `main`, not just planned; the registry paragraph in `roadmap.md` corrected (turned out unnecessary for this single-host demo stand); careful not to overclaim that the clone/build scripts exist. `tradeoff.md` and all ADRs checked and left alone.
+
+## Not yet specified
+
+- Whether the live TeamCity docker-pull bug is still present on the clean stand the user will stand up — only knowable once ticket 07 (live verification) actually runs against it; not pre-ticketed as a fix here.
+- Exact `CMAKE_PREFIX_PATH`/install-dir wiring mechanism inside the devcontainer (env var via `devcontainer.json`'s `containerEnv` vs. a new CMake preset) — leaning env var (non-invasive, existing `debug-asan`-style presets untouched) but left for ticket 04's judgment.
+- Exact debugger backend/package for the dev image (system `lldb`, CodeLLDB's bundled adapter, or `gdb` alongside it) — covered by the research ticket (08) fired alongside this map.
+
+## Out of scope
+
+- **Rolling the `cxxci-<track_name>:...` image-naming scheme out to `release_1`/`release_2`/`release_3`** — explicitly deferred to a separate future map once `main`'s version of the pattern has been exercised; they keep `cxxci-build:release_N-*` for now. No real collision risk today (tag, not just repo, already disambiguates tracks under the old scheme).
+- **Package manager selection (Conan/vcpkg/Nix) for external deps** — roadmap Phase 2, undecided at the strategy level; this map's `CMAKE_PREFIX_PATH` addition is only for the internal artifact-dependency chain, not a replacement for the existing per-project Conan flow.
+- **A real Docker registry** — demo stand relies on the shared `docker.sock` (ADR 0002's logic extended to the dev image too); registry stays a documented future option, not implemented.
+- **The multi-repo clone/switch and build scripts from `developer-flow.md`** — still not implemented (see `tradeoff.md` defect 4); this map only makes the devcontainer/CI side ready to be consumed by them once they exist.

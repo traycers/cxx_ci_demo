@@ -1,0 +1,32 @@
+FROM cxxci-main:latest
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        clang \
+        clangd \
+        clang-tidy \
+        clang-format \
+        git \
+        sudo \
+    && rm -rf /var/lib/apt/lists/*
+# No system lldb/lldb-server here — CodeLLDB (vadimcn.vscode-lldb) bundles its own inside the
+# platform-specific VS Code extension VSIX and debugs GCC/DWARF binaries fine (verified: see
+# .scratch/main-track-package-variants-devcontainer/research/codelldb-debugger-runtime.md).
+# `clang` (not just clangd/clang-tidy/clang-format) is installed alongside the base image's
+# build-essential/gcc — project_a's default local dev workflow (taskfile.yml's `debug-asan`
+# preset, cmake/presets/configure/debug.json) inherits clang.json and would fail to configure in
+# this devcontainer without an actual clang/clang++ compiler present.
+
+# Non-root user for the dev container — devcontainer.json's updateRemoteUserUID remaps this to
+# the host user's real uid/gid at container-start time, so file ownership on the bind-mounted
+# checkout matches the developer, not this build-time placeholder.
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+USER $USERNAME

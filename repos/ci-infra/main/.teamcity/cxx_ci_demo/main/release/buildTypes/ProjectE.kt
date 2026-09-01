@@ -7,13 +7,13 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // the same finishBuildTrigger off BuildCImage that B/D carry (CONTEXT.md's "Root image build"
 // entry: rebuilding the image rebuilds everything depending on it) — nothing else *chains* into
 // E, but the image rebuild still should.
-object Main_ProjectE : BuildType({
-    id((MainId / "ProjectE").toString())
-    templates(Main_BaseBuild)
+object Main_Release_ProjectE : BuildType({
+    id((Main_ReleaseId / "ProjectE").toString())
+    templates(Main_Release_BaseBuild)
     name = "project_e"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainTrackName}-${Main_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-${MainTrackName}:${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {
