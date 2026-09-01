@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // project_d is library-only (vecutils) — no standalone executable, so the target
+            // to pick via CMake Tools' status bar is its test binary (t_vecutils).
+            "name": "Debug (CMake Tools active target)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

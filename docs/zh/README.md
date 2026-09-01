@@ -13,7 +13,7 @@ _翻译自 `README.md`。原文变更时请同步更新本文件——参见 [AD
 2. 执行 `docker compose up -d`
 3. **唯一无法避免的手动步骤**：打开 `http://localhost:${TEAMCITY_HTTP_PORT:-8111}`，完整走一遍 TeamCity 首次启动向导(确认数据目录、接受 EULA、创建管理员账号)。当前镜像没有无头(headless)等效方案——参见 `.scratch/teamcity-cxx-ci/research/teamcity-headless-bootstrap.md` 第 1 节。
 4. GitLab 可通过 `http://localhost:${GITLAB_HTTP_PORT:-8929}` 访问，账号为 `root`，密码见 `.env`——不需要在 `/etc/hosts` 里加任何记录:GitLab 默认不会因为 Host 头不匹配而拒绝请求,所以直接用 `localhost` 上发布的端口就能用。(GitLab 自己 UI 里显示的 clone 链接用的是 compose 服务名 `gitlab`——因为这是相邻容器需要的;只有当你从 UI 里复制 clone 链接、而不是使用 TeamCity 自己那些已经直接指向 `gitlab` 的 VCS root 时,这一点才有意义。)
-5. `docker compose run --rm bootstrap`——创建 6 个 GitLab 仓库(`ci-infra` 以及五个 `project_*`)，把 `repos/<repo>/<branch>/` 下的种子内容推送进去，并把 TeamCity 的 versioned settings 指向 `ci-infra`。以一次性容器的形式直接连接到 `cxxci` 网络运行(见 ADR 0008)，而不是宿主机脚本，所以这里的一切都不依赖宿主机上 `curl`/`git`/`docker` 的版本。可以安全地重复运行。
+5. `docker compose run --build --rm bootstrap`——创建 6 个 GitLab 仓库(`ci-infra` 以及五个 `project_*`)，把 `repos/<repo>/<branch>/` 下的种子内容推送进去，并把 TeamCity 的 versioned settings 指向 `ci-infra`。以一次性容器的形式直接连接到 `cxxci` 网络运行(见 ADR 0008)，而不是宿主机脚本，所以这里的一切都不依赖宿主机上 `curl`/`git`/`docker` 的版本。可以安全地重复运行。**务必带上 `--build`**:`repos/` 种子内容是在镜像构建期被打包进去的(`scripts/bootstrap/Dockerfile`),不带 `--build` 的 `docker compose run` 会在镜像已存在时静默复用旧镜像——容器随后会推送过时的内容,而由于 `push_repo_content()` 会跳过 GitLab 上已存在的分支(ADR 0007),之后单纯重新运行也无法修复。如果已经发生这种情况,可以先临时取消受影响分支的保护、force-push 修正后的内容,再重新运行 bootstrap 让它重新注入凭据(DSL 重新导入会清空重建后的 VCS root 上的凭据)来恢复这套环境。
 
 ## 故障排查
 

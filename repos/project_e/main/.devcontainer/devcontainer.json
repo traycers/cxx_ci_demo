@@ -1,0 +1,49 @@
+{
+    "name": "project_e (main, debug)",
+    "image": "cxxci-main-dev:latest",
+
+    // Verified live (main-track-package-variants-devcontainer map, ticket 07): as the non-root
+    // `vscode` user, SYS_PTRACE only covers ptrace of a process's own descendants (Yama
+    // ptrace_scope=1's default allowance) — enough for launch.json's "request": "launch" below,
+    // which forks the target itself. It does NOT let `vscode` PTRACE_ATTACH to an already-running
+    // sibling process (Docker doesn't propagate --cap-add into a non-root PID1's effective/
+    // ambient capability set on this host) — not needed here, but a real limit if attach-mode
+    // debugging is ever added.
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt", "seccomp=unconfined"
+    ],
+    "updateRemoteUserUID": true,
+    "remoteUser": "vscode",
+
+    // See project_a/.devcontainer/devcontainer.json for the rationale (identical shape across
+    // project_a/c/d/e) — named volume, one level above the repo checkout, CMAKE_PREFIX_PATH for
+    // the internal artifact-dependency chain only. project_e is self-sufficient (no artifact
+    // dependency on another demo project — CONTEXT.md's "Demo project" entry), so this mount
+    // stays populated only if a future task-directory build script chains it alongside others;
+    // harmless if empty.
+    "mounts": [
+        "source=cxxci-main-debug-install,target=/workspaces/_install,type=volume"
+    ],
+    "containerEnv": {
+        "CMAKE_PREFIX_PATH": "/workspaces/_install"
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "mikestead.dotenv",
+                "usernamehw.errorl",
+                "earshinov.filter-lines",
+                "pkief.material-icon-theme",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "vadimcn.vscode-lldb",
+                "ms-vscode.cmake-tools",
+                "akiramiyakoda.cppincludeguard",
+                "ajshort.include-autocomplete",
+                "danielpinto8zz6.c-cpp-compile-run",
+                "xaver.clang-format"
+            ]
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // project_c is library-only (vecopscale) — no standalone executable, so the target
+            // to pick via CMake Tools' status bar is its test binary (t_vecopscale).
+            "name": "Debug (CMake Tools active target)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

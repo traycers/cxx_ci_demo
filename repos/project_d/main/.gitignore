@@ -2,8 +2,6 @@
 /build
 /uploads
 /test-results
-/.devcontainer
-/.vscode
 /.vs
 /temp
 .task
