@@ -1,0 +1,51 @@
+# https://taskfile.dev
+version: "3"
+
+vars:
+  preset: debug-asan
+
+
+tasks:
+  clear:
+    desc: cleaning conan data
+    cmds:
+      - rm -rf ./build
+      - rm ./CMakeUserPresets.json
+
+  install:
+    desc: install project dependencies
+    aliases: [i]
+    cmds:
+      - >
+        conan install .
+        --build=missing
+
+  configure:
+    desc: cmake configure
+    aliases: [c]
+    cmds:
+      - cmake --preset {{.preset}}
+
+  build:
+    desc: build project
+    aliases: [b]
+    cmds:
+      - >
+        cmake
+        --build
+        --preset {{.preset}}
+
+  test:
+    desc: run project tests
+    aliases: [t]
+    cmds:
+      - ctest --preset {{.preset}}
+
+  deploy:
+    desc: install project
+    cmds:
+      - >
+        cmake
+        --build
+        --preset {{.preset}}
+        --target=install

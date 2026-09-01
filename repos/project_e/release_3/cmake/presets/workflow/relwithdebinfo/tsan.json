@@ -1,0 +1,18 @@
+{
+    "version": 6,
+    "include": [
+        "../../configure/relwithdebinfo/tsan.json",
+        "../../build/relwithdebinfo/tsan.json",
+        "../../test/base/relwithdebinfo-tsan.json"
+    ],
+    "workflowPresets": [
+        {
+            "name": "relwithdebinfo-tsan",
+            "steps": [
+                {"type": "configure", "name": "relwithdebinfo-tsan"},
+                {"type": "build",     "name": "relwithdebinfo-tsan"},
+                {"type": "test",      "name": "relwithdebinfo-tsan"}
+            ]
+        }
+    ]
+}

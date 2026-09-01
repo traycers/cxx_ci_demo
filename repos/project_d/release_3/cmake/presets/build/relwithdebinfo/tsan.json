@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "include": ["../../configure/relwithdebinfo/tsan.json"],
+    "buildPresets": [
+        {
+            "name": "relwithdebinfo-tsan",
+            "configurePreset": "relwithdebinfo-tsan"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "version": 6,
+    "include": [
+        "cmake/presets/configure/base.json",
+        "cmake/presets/configure/clang.json",
+        "cmake/presets/configure/gcc.json",
+        "cmake/presets/configure/debug.json",
+        "cmake/presets/configure/debug/asan.json",
+        "cmake/presets/configure/debug/tsan.json",
+        "cmake/presets/configure/relwithdebinfo.json",
+        "cmake/presets/configure/relwithdebinfo/asan.json",
+        "cmake/presets/configure/relwithdebinfo/tsan.json",
+        "cmake/presets/build/debug.json",
+        "cmake/presets/build/relwithdebinfo.json",
+        "cmake/presets/test/base.json",
+        "cmake/presets/workflow/all.json"
+    ]
+}

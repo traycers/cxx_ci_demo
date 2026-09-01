@@ -1,0 +1,16 @@
+{
+    "version": 6,
+    "include": [
+        "../relwithdebinfo.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "relwithdebinfo-tsan",
+            "inherits": "relwithdebinfo",
+            "binaryDir": "${sourceDir}/build/RelWithDebInfo/tsan",
+            "cacheVariables": {
+                "ENABLE_TSAN": "ON"
+            }
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "version": 6,
+    "include": [
+        "../relwithdebinfo.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "relwithdebinfo-asan",
+            "inherits": "relwithdebinfo",
+            "binaryDir": "${sourceDir}/build/RelWithDebInfo/asan",
+            "cacheVariables": {
+                "ENABLE_ASAN": "ON"
+            }
+        }
+    ]
+}

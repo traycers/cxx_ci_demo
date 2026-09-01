@@ -1,0 +1,7 @@
+{
+    "version": 6,
+    "include": [
+        "relwithdebinfo/asan.json",
+        "relwithdebinfo/tsan.json"
+    ]
+}

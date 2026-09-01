@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "include": ["../../configure/debug/asan.json"],
+    "testPresets": [
+        {
+            "name": "debug-asan",
+            "configurePreset": "debug-asan",
+            "environment": {
+                "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizer/suppressions/lsan.txt:print_suppressions=0"
+            }
+        }
+    ]
+}

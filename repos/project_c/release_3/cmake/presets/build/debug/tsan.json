@@ -1,0 +1,10 @@
+{
+    "version": 6,
+    "include": ["../../configure/debug/tsan.json"],
+    "buildPresets": [
+        {
+            "name": "debug-tsan",
+            "configurePreset": "debug-tsan"
+        }
+    ]
+}

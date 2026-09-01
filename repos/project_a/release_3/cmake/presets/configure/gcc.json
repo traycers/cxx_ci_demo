@@ -1,0 +1,14 @@
+{
+    "version": 6,
+    "include": ["base.json"],
+    "configurePresets": [
+        {
+            "name": "gcc",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Werror -Wno-attributes"
+            }
+        }
+    ]
+}

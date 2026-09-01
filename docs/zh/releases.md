@@ -17,3 +17,7 @@ _翻译自 `docs/en/releases.md`。原文变更时请同步更新本文件——
 ## main
 
 当前的 release:展示了构建依赖树的变化——`project_a` 现在通过 `project_c` 链到 `project_d`,而不是直接依赖 `project_b`。见 [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md)。
+
+## release_3
+
+第三个 release:相对于 `release_2` 展示了构建依赖树的变化——`project_a` 现在通过 `project_c` 链到 `project_d`,而不是直接依赖 `project_b`。见 [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md)。

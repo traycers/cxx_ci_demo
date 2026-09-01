@@ -1,0 +1,18 @@
+{
+    "version": 6,
+    "include": [
+        "../../configure/debug/tsan.json",
+        "../../build/debug/tsan.json",
+        "../../test/base/debug-tsan.json"
+    ],
+    "workflowPresets": [
+        {
+            "name": "debug-tsan",
+            "steps": [
+                {"type": "configure", "name": "debug-tsan"},
+                {"type": "build",     "name": "debug-tsan"},
+                {"type": "test",      "name": "debug-tsan"}
+            ]
+        }
+    ]
+}

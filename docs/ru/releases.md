@@ -17,3 +17,7 @@ _Перевод `docs/en/releases.md`. При изменении оригина�
 ## main
 
 Текущий релиз: демонстрирует изменение дерева зависимостей сборки — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).
+
+## release_3
+
+Третий релиз: демонстрирует изменение дерева зависимостей сборки относительно `release_2` — `project_a` теперь тянется через `project_c` к `project_d` вместо прямой зависимости от `project_b`. См. [ADR 0009](adr/0009-flat-artifact-dependencies-for-chain.md).
