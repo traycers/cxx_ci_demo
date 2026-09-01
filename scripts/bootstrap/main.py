@@ -21,6 +21,7 @@ def main():
 
     if not teamcity_ops.provision_teamcity(token):
         log("TeamCity provisioning incomplete — see messages above.")
+        sys.exit(1)
     log("done.")
 
 

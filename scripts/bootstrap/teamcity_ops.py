@@ -88,6 +88,18 @@ def _vcs_root_payload(vcs_id, name, repo, gitlab_token):
     }
 
 
+def _poll_until(check, deadline, interval, waiting_message=None):
+    """Retry `check` (a no-arg callable returning bool) until it's true or `deadline` passes."""
+    while True:
+        if check():
+            return True
+        if time.time() >= deadline:
+            return False
+        if waiting_message:
+            log(waiting_message)
+        time.sleep(interval)
+
+
 def provision_teamcity(gitlab_token):
     token = teamcity_super_user_token()
     if not token:
@@ -98,6 +110,7 @@ def provision_teamcity(gitlab_token):
 
     tc = TeamCityClient(token)
     log("provisioning TeamCity versioned settings (git/UI owns the project tree from here)...")
+    deadline = time.time() + config.TEAMCITY_PROVISION_TIMEOUT_SECONDS
 
     # 1. The one VCS root the DSL itself cannot create: without it, versioned settings has
     #    nothing to fetch ci-infra's .teamcity/settings.kts from in the first place.
@@ -139,10 +152,15 @@ def provision_teamcity(gitlab_token):
     # 3. Wait for the DSL to actually have applied — poll the tree it's supposed to create,
     #    not the status message text (see the bash version's comment on why).
     log("  waiting for DSL import to apply...")
-    for _ in range(30):
-        if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200:
-            break
-        time.sleep(3)
+    if not _poll_until(
+        lambda: tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200,
+        deadline,
+        interval=3,
+    ):
+        log(f"ERROR: DSL import did not apply within {config.TEAMCITY_PROVISION_TIMEOUT_SECONDS}s "
+            "(CxxCiDemo_Main_ProjectA never appeared in the REST API).")
+        log("Check repos/ci-infra/main/.teamcity/settings.kts for errors, then re-run bootstrap.")
+        return False
     log(f"  {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
 
     # 4. The GitLab credential the demo VCS roots need — not carried by the DSL (see ADR 0004).
@@ -152,29 +170,56 @@ def provision_teamcity(gitlab_token):
     #    ("extend that loop... when this stops being a one-release demo") — confirmed live: with
     #    the old Main-only list, release_1/release_2's VCS roots kept an empty
     #    gitlab_credentials_password forever, no matter how many times bootstrap re-ran.
-    if tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200:
-        vcs_resp = tc.get("/app/rest/vcs-roots?fields=vcs-root(id,project(id))")
-        demo_vcs_roots = [
-            v for v in vcs_resp.json().get("vcs-root", [])
-            if v["project"]["id"] != "_Root"
+    #
+    #    A build type existing (step 3) does NOT mean the project accepts writes yet: right after
+    #    DSL import, the project can stay "read only, project settings format switched to Kotlin,
+    #    waiting for initial commit from VCS to be applied" for well over a minute — confirmed
+    #    live, every PUT/POST below got HTTP 500 with exactly that reason immediately after step 3
+    #    succeeded, ~82s before the project actually became writable. So this batch of writes gets
+    #    retried as a whole (not each call individually — read-only is a project-wide state, not a
+    #    per-VCS-root one) against the shared deadline, instead of firing once and trusting it.
+    vcs_resp = tc.get("/app/rest/vcs-roots?fields=vcs-root(id,project(id))")
+    demo_vcs_roots = [
+        v for v in vcs_resp.json().get("vcs-root", [])
+        if v["project"]["id"] != "_Root"
+    ]
+    param_payload = json.dumps(
+        {
+            "name": "gitlab_credentials_password",
+            "value": gitlab_token,
+            "type": {"rawValue": "password display='normal'"},
+        }
+    )
+    release_project_ids = {v["project"]["id"] for v in demo_vcs_roots}
+
+    def _inject_credentials():
+        statuses = [
+            tc.put(
+                f"/app/rest/vcs-roots/id:{v['id']}/properties/secure:password",
+                gitlab_token,
+                content_type="text/plain",
+            )[0]
+            for v in demo_vcs_roots
         ]
-        for v in demo_vcs_roots:
-            tc.put(f"/app/rest/vcs-roots/id:{v['id']}/properties/secure:password", gitlab_token, content_type="text/plain")
-        param_payload = json.dumps(
-            {
-                "name": "gitlab_credentials_password",
-                "value": gitlab_token,
-                "type": {"rawValue": "password display='normal'"},
-            }
-        )
-        release_project_ids = {v["project"]["id"] for v in demo_vcs_roots}
-        for project_id in release_project_ids:
-            tc.post(f"/app/rest/projects/id:{project_id}/parameters", param_payload)
-        log(f"  injected GitLab credential into {len(demo_vcs_roots)} demo VCS root(s) across "
-            f"{len(release_project_ids)} release project(s): {', '.join(sorted(release_project_ids))}")
-    else:
-        log("  demo project tree not present yet (DSL import may still be settling) —")
-        log("  re-run bootstrap once CxxCiDemo_Main_ProjectA exists to inject credentials.")
+        statuses += [
+            tc.post(f"/app/rest/projects/id:{project_id}/parameters", param_payload)[0]
+            for project_id in release_project_ids
+        ]
+        return all(200 <= status < 300 for status in statuses)
+
+    log("  injecting GitLab credential into demo VCS roots...")
+    if not _poll_until(
+        _inject_credentials,
+        deadline,
+        interval=5,
+        waiting_message="  project still read-only (settings format switching) — retrying...",
+    ):
+        log(f"ERROR: could not inject GitLab credentials within {config.TEAMCITY_PROVISION_TIMEOUT_SECONDS}s "
+            "— the project tree stayed read-only the whole time.")
+        log("Re-run bootstrap.")
+        return False
+    log(f"  injected GitLab credential into {len(demo_vcs_roots)} demo VCS root(s) across "
+        f"{len(release_project_ids)} release project(s): {', '.join(sorted(release_project_ids))}")
 
     # 5. Agent authorization: documented as a manual UI step, but has a REST escape hatch.
     # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed
@@ -185,8 +230,8 @@ def provision_teamcity(gitlab_token):
         status, body = tc.put("/app/rest/agents/id:1/authorizedInfo", json.dumps({"status": True, "text": "authorized by bootstrap"}))
         if status != 200:
             log(f"ERROR: failed to authorize agent (HTTP {status}): {body}")
-        else:
-            log("  authorized build agent")
+            return False
+        log("  authorized build agent")
 
     log("TeamCity provisioned: versioned settings import from ci-infra owns the project tree")
     log("(CxxCiDemo_Main: base_build template + BuildCImage + ProjectA/B/C/D/E + Result) — edit")

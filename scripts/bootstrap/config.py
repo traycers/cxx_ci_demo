@@ -20,6 +20,13 @@ GITLAB_URL = f"http://{GITLAB_HOST}:{GITLAB_HTTP_PORT}"
 TEAMCITY_HOST = "teamcity-server"
 TEAMCITY_URL = f"http://{TEAMCITY_HOST}:8111"
 
+# Shared deadline for provision_teamcity()'s wait for the DSL-imported project tree to become
+# usable: build types can appear in the REST API within seconds of the DSL import starting, but
+# the project can stay "read only, project settings format switched to Kotlin" for well over a
+# minute after that — confirmed live, ~10s for import vs. ~82s for the project to become
+# writable. Both waits share this one deadline rather than getting 5 minutes each.
+TEAMCITY_PROVISION_TIMEOUT_SECONDS = 300
+
 REPOS = [
     "ci-infra",
     "project_a",

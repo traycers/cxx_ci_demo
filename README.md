@@ -24,15 +24,18 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
   `docker-compose.yml` for why.
 - **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
   `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
-  can look similar at a glance. If this hits one of the `project_*` VCS roots
-  specifically, it usually means the `bootstrap` container didn't get to its credential-injection
-  step (step 4 of `provision_teamcity()` in `scripts/bootstrap/teamcity_ops.py`) — which only runs
-  once `CxxCiDemo_Main_ProjectA` exists, i.e. only after versioned settings successfully
-  imported the DSL tree. Re-run `docker compose run --rm bootstrap`; every REST call it makes
-  checks its response status and fails loudly with the actual HTTP code and response body instead
-  of silently continuing (an earlier version didn't, and a fresh-machine run showed exactly this:
-  versioned settings silently failed to enable, so the tree — and the credential injection — never
-  happened, and the confusing "Access denied" a step later was the real, but delayed, symptom).
+  can look similar at a glance. If this hits one of the `project_*` VCS roots specifically, it's
+  a known race in `provision_teamcity()` (`scripts/bootstrap/teamcity_ops.py`): a build type
+  appearing in the REST API doesn't mean the imported project accepts writes yet — right after
+  DSL import, the project can stay "read only, project settings format switched to Kotlin" for
+  well over a minute, and credential injection needs a write. Bootstrap now retries the whole
+  credential-injection batch against a shared 5-minute deadline instead of firing it once and
+  trusting the result, so this should self-heal without any manual step. If it still fails, every
+  REST call bootstrap makes checks its response status and fails loudly with the actual HTTP code
+  (and, for this specific race, `provision_teamcity()` now returns `False` and the container exits
+  non-zero instead of misreporting `"done."`) — re-run `docker compose run --rm bootstrap`; if it
+  keeps failing past the 5-minute deadline, something else is wrong (e.g. a broken
+  `settings.kts`), not just this race.
 - **`gitlab` unreachable from the `bootstrap` container** (connection refused/timeout, not an auth
   error) — check the containers are actually on the `cxxci` network (`docker compose ps`). Unlike
   the browser step above, the `bootstrap` container talks to `gitlab`/`teamcity-server` by their
