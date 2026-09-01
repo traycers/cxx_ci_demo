@@ -24,7 +24,11 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-RUN groupadd --gid $USER_GID $USERNAME \
+# ubuntu:24.04 already ships a pre-created `ubuntu` user/group at uid/gid 1000 — drop it first so
+# groupadd/useradd below don't collide with it.
+RUN if getent passwd $USER_UID > /dev/null; then userdel -r "$(getent passwd $USER_UID | cut -d: -f1)"; fi \
+    && if getent group $USER_GID > /dev/null; then groupdel "$(getent group $USER_GID | cut -d: -f1)"; fi \
+    && groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
