@@ -1,5 +1,5 @@
 Type: task
-Status: open
+Status: closed
 Blocked by: 01, 02, 03, 04
 
 ## Question
@@ -12,3 +12,21 @@ HITL: the user stands up a clean TeamCity/GitLab stand (`docker compose up` from
 - A dev container opens successfully against `cxxci-main-dev:latest` in at least one of the four repos, with the debugger able to attach (`--cap-add=SYS_PTRACE` actually working) and `clangd`/`clang-tidy`/`clang-format` functional.
 
 If the previously-seen `docker-pull` bug resurfaces on the clean stand, that's a fact to record (in session memory / a follow-up), not something this ticket is responsible for fixing — record what was and wasn't verifiable and why.
+
+## Answer
+
+The user stood up a fresh stand (`docker compose up -d`, TeamCity first-start wizard done manually). The previously-seen `dockerPull=false` bug did **not** resurface — bootstrap and every triggered build ran clean, no docker-pull-related failures observed anywhere in this pass.
+
+Verified live, all green after fixes below:
+- `Main_Debug`/`Main_Release` subprojects both exist exactly as designed (`CxxCiDemo_Main_Debug`/`CxxCiDemo_Main_Release`, each with `project_a`/`project_c`/`project_d`/`project_e`/`result`) — the Kotlin DSL compiles and imports without error, confirming ticket 01's architecture is sound.
+- Both `Result` chains built successfully end to end: `Main_Debug_Result` produced a 20-entry `result.zip` with `bin/app_a`, `bin/app_e`, headers, and `*-targets-debug.cmake` files (confirms `CMAKE_BUILD_TYPE=Debug`, confirms the single-`echo Hello`-step-then-archive design works exactly as specified); `Main_Release_Result` produced the unchanged-shape `result.zip` containing just `app_a`/`app_e`.
+- `Main_BuildCImage` produces `cxxci-main:<N>` + `cxxci-main:latest`; `Main_BuildDevImage` builds `cxxci-main-dev:latest` from it. Triggered a 4th `BuildCImage` run specifically to exercise the cleanup step (`keep_images_count=3`): it correctly pruned down to exactly 3 numbered tags and left `latest` untouched.
+- Dev image: runs as non-root `vscode` (uid/gid 1000), `sudo` works, `clangd`/`clang-tidy`/`clang-format`/`clang` all present and on PATH. `--cap-add=SYS_PTRACE` + `--security-opt seccomp=unconfined` verified via `strace`: **launch-mode debugging works** (forking and tracing a child process, `PTRACE_TRACEME` — the case `launch.json`'s `"request": "launch"` actually uses) as the non-root user; **attach-to-a-running-sibling-process does not** (`PTRACE_SEIZE` fails with `EPERM`) — Docker/runc on this host doesn't propagate `--cap-add` into a non-root PID1's effective/ambient capability set, only its bounding set, and Yama `ptrace_scope=1` blocks non-descendant attach without it. Not a blocker for the shipped config (documented as a comment in each `devcontainer.json`); would matter only if attach-mode debugging is added later.
+- `devcontainer.json`/`launch.json` content itself matches the spec exactly (all 11 extensions, `updateRemoteUserUID: true`, `remoteUser: vscode`, install-dir volume mounted one level above the checkout, `CMAKE_PREFIX_PATH` wired).
+
+**Three real bugs found and fixed during this pass** (not pre-existing knowledge — all discovered live):
+1. **`Dockerfile.dev`'s `groupadd`/`useradd` collided with `ubuntu:24.04`'s pre-created `ubuntu` user/group at uid/gid 1000.** Fixed: delete any existing user/group at the target uid/gid before creating `vscode`.
+2. **`.devcontainer`/`.vscode` were never actually reaching git.** Every `project_*`'s `.gitignore` (leftover from the original toptal-generated template) blanket-ignored `/.devcontainer` and `/.vscode`. The files existed on disk and looked correct, but `git add -A` silently skipped them on every push (including bootstrap's own), so no stand — this one included, initially — ever actually received them. Fixed by removing the two blanket lines; the template's own `.vscode/* + !launch.json` negation further down now governs `.vscode` as originally intended.
+3. **`docker compose run --rm bootstrap` without `--build` silently reused a stale image** built before this map's changes landed in `repos/`, since `repos/` is baked in at image-build time. Combined with `push_repo_content()`'s intentional per-branch idempotency (ADR 0007), a plain re-run doesn't self-heal — the stale content stays on GitLab forever until something explicitly overwrites it. Recovered by rebuilding the image and force-pushing corrected content over the affected branches (temporarily unprotecting them via the GitLab API, then re-protecting), then re-running bootstrap once more to re-inject GitLab credentials into the VCS roots the DSL reimport had recreated (credentials live outside VCS per ADR 0004, and get wiped when the DSL that defines a VCS root's shape is reapplied). Documented in the README's step 5 (`--build` now the norm, mirrored in `docs/ru`/`docs/zh`) so the next person following the docs doesn't hit the same trap.
+
+Not independently verified (out of reach from this environment): actually opening one of the four repos in VS Code's Dev Containers extension end-to-end (image pull/build, extension install, CodeLLDB attach through the real UI) — verified the pieces it depends on instead (image builds and runs correctly as the right user with the right tools; the exact debugger mode `launch.json` uses works under the container's actual capability set).
