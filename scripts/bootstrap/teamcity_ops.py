@@ -164,11 +164,11 @@ def provision_teamcity(gitlab_token):
     log(f"  {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
 
     # 4. The GitLab credential the demo VCS roots need — not carried by the DSL (see ADR 0004).
-    #    Discovered dynamically (every VCS root outside _Root, i.e. every release's demo VCS
-    #    roots) rather than a hardcoded per-release list: a hardcoded list goes stale the moment
-    #    a new release is added via scripts/new-release.sh, exactly as adding-a-release.md warns
-    #    ("extend that loop... when this stops being a one-release demo") — confirmed live: with
-    #    the old Main-only list, release_1/release_2's VCS roots kept an empty
+    #    Discovered dynamically (every VCS root outside _Root, i.e. every track's demo VCS
+    #    roots) rather than a hardcoded per-track list: a hardcoded list goes stale the moment
+    #    a new track is added via scripts/new-track.sh, exactly as adding-a-track.md warns
+    #    ("extend that loop... when this stops being a one-track demo") — confirmed live: with
+    #    the old Main-only list, track_1/track_2's VCS roots kept an empty
     #    gitlab_credentials_password forever, no matter how many times bootstrap re-ran.
     #
     #    A build type existing (step 3) does NOT mean the project accepts writes yet: right after
@@ -190,7 +190,7 @@ def provision_teamcity(gitlab_token):
             "type": {"rawValue": "password display='normal'"},
         }
     )
-    release_project_ids = {v["project"]["id"] for v in demo_vcs_roots}
+    track_project_ids = {v["project"]["id"] for v in demo_vcs_roots}
 
     def _inject_credentials():
         statuses = [
@@ -203,7 +203,7 @@ def provision_teamcity(gitlab_token):
         ]
         statuses += [
             tc.post(f"/app/rest/projects/id:{project_id}/parameters", param_payload)[0]
-            for project_id in release_project_ids
+            for project_id in track_project_ids
         ]
         return all(200 <= status < 300 for status in statuses)
 
@@ -219,7 +219,7 @@ def provision_teamcity(gitlab_token):
         log("Re-run bootstrap.")
         return False
     log(f"  injected GitLab credential into {len(demo_vcs_roots)} demo VCS root(s) across "
-        f"{len(release_project_ids)} release project(s): {', '.join(sorted(release_project_ids))}")
+        f"{len(track_project_ids)} track project(s): {', '.join(sorted(track_project_ids))}")
 
     # 5. Agent authorization: documented as a manual UI step, but has a REST escape hatch.
     # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed

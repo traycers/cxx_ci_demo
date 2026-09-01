@@ -12,7 +12,7 @@ object Main_ProjectC : BuildType({
     name = "project_c"
 
     params {
-        param("build_image_cxx", "cxxci-build:${MainConfigName}-${Main_BuildCImage.depParamRefs.buildNumber}")
+        param("build_image_cxx", "cxxci-build:${MainTrackName}-${Main_BuildCImage.depParamRefs.buildNumber}")
     }
 
     vcs {

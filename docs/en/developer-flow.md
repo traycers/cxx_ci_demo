@@ -6,7 +6,7 @@ Whenever a change is needed (a new feature or a bug fix), the developer creates 
 
 ## Why not a shared directory
 
-Keeping all repos in one shared directory makes developing new features harder: every repo's branch has to be switched at once, and build output from other branches has to be cleaned up by hand — otherwise the build after switching back is both slower (it rebuilds from scratch) and sometimes wrong. For example: a binary references a library the release wouldn't actually ship, but it still runs for the developer, because that library is still sitting on disk from a build of another, or older, branch.
+Keeping all repos in one shared directory makes developing new features harder: every repo's branch has to be switched at once, and build output from other branches has to be cleaned up by hand — otherwise the build after switching back is both slower (it rebuilds from scratch) and sometimes wrong. For example: a binary references a library the track wouldn't actually ship, but it still runs for the developer, because that library is still sitting on disk from a build of another, or older, branch.
 
 ## The fix: one directory per task
 

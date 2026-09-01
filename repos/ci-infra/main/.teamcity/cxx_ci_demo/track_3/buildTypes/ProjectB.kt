@@ -1,0 +1,40 @@
+import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.triggers.finishBuildTrigger
+import jetbrains.buildServer.configs.kotlin.triggers.vcs
+
+object Track3_ProjectB : BuildType({
+    id((Track3Id / "ProjectB").toString())
+    templates(Track3_BaseBuild)
+    name = "project_b"
+
+    // track_3's chain is a -> c -> d (see ADR 0009); nothing in this track depends on project_b's
+    // artifacts, unlike track_1/track_2 where project_a still depends on it directly. Paused
+    // rather than removed so the build type — VCS root, triggers, everything — stays intact and
+    // ready: unpause (paused = false) is the entire re-enable step if a consumer shows up again.
+    // Paused only stops the triggers below from firing automatically; a snapshot dependency added
+    // later would still be able to trigger this build without unpausing it first.
+    paused = true
+
+    params {
+        param("build_image_cxx", "cxxci-build:${Track3TrackName}-${Track3_BuildCImage.depParamRefs.buildNumber}")
+    }
+
+    vcs {
+        root(Track3_ProjectBVcs, "%vcs_rules%")
+
+        cleanCheckout = true
+    }
+
+    triggers {
+        vcs {
+            id = "TRIGGER_2"
+            enableQueueOptimization = false
+        }
+        finishBuildTrigger {
+            id = "TRIGGER_4"
+            buildType = "${Track3_BuildCImage.id}"
+            successfulOnly = true
+            branchFilter = ""
+        }
+    }
+})

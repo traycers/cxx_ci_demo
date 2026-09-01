@@ -36,16 +36,15 @@ _Избегать_: build trigger dependency
 **Artifact-зависимость**:
 Механизм TeamCity, передающий собранные бинарники/заголовки одного C++ проекта в другой для линковки, без пересборки с нуля.
 
-**Релиз** (branch family):
-Один поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — своя TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории (от `project_a` до `project_e`). Релизы различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/ru/adding-a-release.md`.
-_Избегать_: конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри релиза)
+**Track** (branch family):
+Одно поддерево `cxx_ci_demo/<config_name>/` в `ci-infra` — свой TeamCity-подпроект, свои VCS root'ы, свой набор build configuration'ов, но общие GitLab-репозитории (от `project_a` до `project_e`). Track'и различаются исключительно тем, на какую ветку смотрит каждый VCS root (`branch_default`/`branch_spec`). См. `docs/ru/adding-a-track.md`.
+_Избегать_: release (теперь термин для package variant — см. ниже); конфигурация сборки (слишком расплывчато — путается с build configuration отдельного проекта внутри track'а)
 
 **config_name**:
-Имя релиза, используемое и как имя его директории (`cxx_ci_demo/<config_name>/`), и как базовое имя ветки в demo-проектах (`refs/heads/<config_name>`). Ветки-производные этого релиза именуются `<config_name>-*` (например, релиз `release_2_0` → ветки `release_2_0`, `release_2_0-hotfix-1`).
+Имя track'а, используемое и как имя его директории (`cxx_ci_demo/<config_name>/`), и как базовое имя ветки в demo-проектах (`refs/heads/<config_name>`). Ветки-производные этого track'а именуются `<config_name>-*` (например, track `track_2_0` → ветки `track_2_0`, `track_2_0-hotfix-1`).
 
 **Package variant** (планируется — см. [`docs/ru/roadmap.md`](docs/ru/roadmap.md)):
-Квалификатор build-type — `optimized` или `debug` — который в будущем будет различать переиспользуемые build-артефакты demo-проекта, независимо от того, потребляются они как скачиваемый архив (roadmap Phase 1) или, позже, как ссылка пакетного менеджера (roadmap Phase 2). `optimized` соответствует `CMAKE_BUILD_TYPE=RelWithDebInfo` (уже собирается сегодня для тестов/артефактов, см. `BaseBuild.kt`), `debug` — `CMAKE_BUILD_TYPE=Debug` (пока не собирается). Намеренно не называется "release", чтобы не сталкиваться с существующим термином **Релиз** (branch family) выше.
-_Избегать_: release (как имя варианта — зарезервировано за branch family)
+Квалификатор build-type — `release` или `debug` — который в будущем будет различать переиспользуемые build-артефакты demo-проекта, независимо от того, потребляются они как скачиваемый архив (roadmap Phase 1) или, позже, как ссылка пакетного менеджера (roadmap Phase 2). `release` соответствует `CMAKE_BUILD_TYPE=RelWithDebInfo` (уже собирается сегодня для тестов/артефактов, см. `BaseBuild.kt` — это не то же самое, что собственное значение CMake `CMAKE_BUILD_TYPE=Release`, несмотря на совпадающее имя), `debug` — `CMAKE_BUILD_TYPE=Debug` (пока не собирается).
 
 **Dev container image** (планируется — см. [`docs/ru/roadmap.md`](docs/ru/roadmap.md)):
 Docker-образ, собираемый `FROM` образа корневой сборки образа и заливаемый в registry, предназначенный для прямого указания в `devcontainer.json` demo-проекта — чтобы разработчикам не приходилось собирать его самим. Отличается от образа корневой сборки образа, который никогда не покидает общий Docker daemon хоста (см. ADR 0002) — это первый артефакт в стенде, для которого вообще планируется registry.

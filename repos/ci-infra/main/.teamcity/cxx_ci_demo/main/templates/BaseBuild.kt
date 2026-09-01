@@ -4,7 +4,7 @@ import jetbrains.buildServer.configs.kotlin.buildFeatures.xmlReport
 import jetbrains.buildServer.configs.kotlin.buildSteps.ScriptBuildStep
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 
-// The build script is the single source of truth for how every C++ project in this release
+// The build script is the single source of truth for how every C++ project in this track
 // builds/tests/installs — edit it here, not in a separate shell script (see ADR 0004: the old
 // docs/build.sh was removed once this became the only place it actually lived).
 object Main_BaseBuild : Template({

@@ -10,18 +10,18 @@ Today's dependency setup relies on the system package manager inside the build i
 
 Three candidates are on the table to replace or supplement that: **Conan**, **vcpkg**, and **Nix**. None is chosen. Nix is the current personal favorite, but that's a leaning, not a decision — a proper evaluation could still change the picture. Only after that research happens does this become an ADR.
 
-## Package variants — `optimized` and `debug`
+## Package variants — `release` and `debug`
 
-Today's CI already builds every demo project with `CMAKE_BUILD_TYPE=RelWithDebInfo` (see `BaseBuild.kt` in every release template) — but only to run tests, not as a reusable output. The plan is to turn that into a real, reusable **package variant**, and add a second one alongside it:
+Today's CI already builds every demo project with `CMAKE_BUILD_TYPE=RelWithDebInfo` (see `BaseBuild.kt` in every track template) — but only to run tests, not as a reusable output. The plan is to turn that into a real, reusable **package variant**, and add a second one alongside it:
 
-- **`optimized`** — today's `RelWithDebInfo`, kept for backward compatibility with the current build/test flow. Retains the last **5** builds.
+- **`release`** — today's `RelWithDebInfo`, kept for backward compatibility with the current build/test flow. Retains the last **5** builds.
 - **`debug`** — a new `CMAKE_BUILD_TYPE=Debug` configuration, built specifically to be consumed by developers. Retains only the **last** build — developers who need an older debug build rebuild it themselves rather than CI storing a deep history nobody but the newest consumer needs.
 
-Deliberately not called `release`, to avoid colliding with the existing **Release** (branch family) term (see `CONTEXT.md`) — `project_a/release` would be ambiguous between "the `optimized` variant" and "the `release_1`/`release_2` branch family."
+Called `release` — not `optimized` — now that the branch-family concept is `Track` rather than `Release` (see `CONTEXT.md`); the old `project_a/release` ambiguity between "the package variant" and "the `track_1`/`track_2` branch family" no longer applies.
 
 ## Dev container image
 
-A Docker image, built on TeamCity `FROM` the root image build's image (see `CONTEXT.md` — this keeps any change made to the release image from being lost rather than re-derived from scratch), pushed to a Docker registry, and referenced directly in each demo project's `devcontainer.json`. Colleagues get a working dev container without ever building the image themselves — they just point `devcontainer.json` at it.
+A Docker image, built on TeamCity `FROM` the root image build's image (see `CONTEXT.md` — this keeps any change made to the track's root image from being lost rather than re-derived from scratch), pushed to a Docker registry, and referenced directly in each demo project's `devcontainer.json`. Colleagues get a working dev container without ever building the image themselves — they just point `devcontainer.json` at it.
 
 Which registry (GitLab's built-in Container Registry, since GitLab is already part of the stand, vs. a plain `registry:2` image from Docker Hub) is left open — that's an implementation-time decision, not a vision-level one.
 

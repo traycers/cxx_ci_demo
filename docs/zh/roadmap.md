@@ -12,18 +12,18 @@ _翻译自 `docs/en/roadmap.md`。原文变更时请同步更新本文件——�
 
 目前有三个候选者可以替代或补充这一点:**Conan**、**vcpkg** 和 **Nix**。三者都还没有被选定。Nix 目前是个人偏好,但这只是一种倾向,不是决定——真正的评估之后画面还可能改变。只有在完成这样的 research 之后,这才会成为一份 ADR。
 
-## Package variant——`optimized` 与 `debug`
+## Package variant——`release` 与 `debug`
 
-今天 CI 已经用 `CMAKE_BUILD_TYPE=RelWithDebInfo` 构建每一个 demo project(见每个 release 模板里的 `BaseBuild.kt`)——但只是为了跑测试,并不是作为可复用的产物。计划是把它变成真正可复用的 **package variant**,并在旁边加上第二个:
+今天 CI 已经用 `CMAKE_BUILD_TYPE=RelWithDebInfo` 构建每一个 demo project(见每个 track 模板里的 `BaseBuild.kt`)——但只是为了跑测试,并不是作为可复用的产物。计划是把它变成真正可复用的 **package variant**,并在旁边加上第二个:
 
-- **`optimized`**——即今天的 `RelWithDebInfo`,保留下来是为了与当前的构建/测试流程保持向后兼容。保留最近 **5** 次构建。
+- **`release`**——即今天的 `RelWithDebInfo`,保留下来是为了与当前的构建/测试流程保持向后兼容。保留最近 **5** 次构建。
 - **`debug`**——新的 `CMAKE_BUILD_TYPE=Debug` 配置,专门为供开发者消费而构建。只保留**最近一次**构建——需要更早 debug 构建的人得自己重新构建,而不是让 CI 保存一份除了最新消费者之外没人需要的深层历史。
 
-刻意不叫 `release`,以避免与已有的 **Release**(分支族)术语(见 `CONTEXT.md`)冲突——`project_a/release` 会在"`optimized` 变体"和"`release_1`/`release_2` 分支族"之间产生歧义。
+叫 `release` 而不是 `optimized`,是因为分支族的术语现在是 `Track` 而不是 `Release`(见 `CONTEXT.md`)——旧的 `project_a/release`("`optimized` 变体"与"`release_1`/`release_2` 分支族"之间)的歧义已经不存在了。
 
 ## Dev container image
 
-一个 Docker 镜像,在 TeamCity 上以根镜像构建的镜像为 `FROM` 基础构建(见 `CONTEXT.md`——这样对 release 镜像所做的改动就不会丢失,而不需要从头重新推导),推送到 Docker registry,并被每个 demo project 的 `devcontainer.json` 直接引用。同事无需自己构建镜像就能拿到可用的 dev container——只要在 `devcontainer.json` 里指向它即可。
+一个 Docker 镜像,在 TeamCity 上以根镜像构建的镜像为 `FROM` 基础构建(见 `CONTEXT.md`——这样对 track 的根镜像所做的改动就不会丢失,而不需要从头重新推导),推送到 Docker registry,并被每个 demo project 的 `devcontainer.json` 直接引用。同事无需自己构建镜像就能拿到可用的 dev container——只要在 `devcontainer.json` 里指向它即可。
 
 具体用哪个 registry(GitLab 内置的 Container Registry,因为 GitLab 本来就是该环境的一部分,还是来自 Docker Hub 的普通 `registry:2` 镜像)暂时留白——这是实现层面的决定,不是愿景层面的决定。
 
