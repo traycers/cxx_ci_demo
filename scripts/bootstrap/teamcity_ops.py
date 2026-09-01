@@ -225,13 +225,38 @@ def provision_teamcity(gitlab_token):
     # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed
     # (this REST call was apparently never actually exercised before; same-host agents do NOT
     # auto-authorize here despite the docs suggesting they might).
-    agent_resp = tc.get("/app/rest/agents/id:1?fields=authorized")
-    if '"authorized":true' not in agent_resp.text:
-        status, body = tc.put("/app/rest/agents/id:1/authorizedInfo", json.dumps({"status": True, "text": "authorized by bootstrap"}))
+    #
+    # Found by connection state, not a hardcoded id: TeamCity assigns a fresh id (and a
+    # disambiguated name, e.g. "...-1") to every new agent registration, while an old,
+    # disconnected registration from a previous stand keeps its own id — and stays authorized.
+    # Confirmed live after a container-only restart with the TeamCity data volume kept: the old
+    # id stayed authorized-but-disconnected, the reconnecting agent came up under a new,
+    # unauthorized id, and hardcoding id:1 authorized the wrong one, leaving the real agent stuck
+    # in the queue with no visible error.
+    def _connected_agents():
+        resp = tc.get("/app/rest/agents?locator=connected:true,authorized:any&fields=agent(id,name,authorized)")
+        return resp.json().get("agent", [])
+
+    if not _poll_until(
+        lambda: bool(_connected_agents()),
+        deadline,
+        interval=5,
+        waiting_message="  waiting for a build agent to connect...",
+    ):
+        log(f"ERROR: no build agent connected within {config.TEAMCITY_PROVISION_TIMEOUT_SECONDS}s.")
+        return False
+
+    for agent in _connected_agents():
+        if agent["authorized"]:
+            continue
+        status, body = tc.put(
+            f"/app/rest/agents/id:{agent['id']}/authorizedInfo",
+            json.dumps({"status": True, "text": "authorized by bootstrap"}),
+        )
         if status != 200:
-            log(f"ERROR: failed to authorize agent (HTTP {status}): {body}")
+            log(f"ERROR: failed to authorize agent {agent['id']} (HTTP {status}): {body}")
             return False
-        log("  authorized build agent")
+        log(f"  authorized build agent (id {agent['id']}, {agent['name']})")
 
     log("TeamCity provisioned: versioned settings import from ci-infra owns the project tree")
     log("(CxxCiDemo_Main: base_build template + BuildCImage + ProjectA/B/C/D/E + Result) — edit")
