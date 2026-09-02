@@ -18,6 +18,26 @@ Every task (feature or bug fix) gets its own directory, with its own checkout of
 - **Few branches per directory.** Doing every task inside one shared checkout lets its branch list grow without bound and demands discipline to prune it; a directory per task naturally keeps that count small.
 - **Trivial cleanup.** Once the task is done, the developer just deletes the whole directory.
 
+## Getting started
+
+A developer can either go through the steps by hand, or use the prepared scripts.
+
+##### Fetch sources step
+
+Create the task directory and clone the repos it needs.
+
+##### Build dependencies step
+
+In each repo, inside its dev container, the project is built and then installed into `./_deps/{Debug,RelWithDebInfo}`, where `.` is the task's working directory.
+
+##### Fetch dependencies step
+
+Instead of building the dependencies, an archive is downloaded from **TeamCity**'s `<track name>/debug/result` and unpacked into `./_deps/{Debug,RelWithDebInfo}`.
+
+##### Build target project step
+
+Then the target project is built; its dependencies were already installed by the previous step.
+
 ## Tooling
 
 The process rests on two scripts:
