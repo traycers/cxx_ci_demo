@@ -91,17 +91,19 @@ services:
       # to bind mounts. Host-side paths must stay identical if more agents are ever added on
       # this host. See research §3 (ticket 01).
       #
-      # Host-side base path is BUILDAGENT_DATA_DIR (.env, default /opt/buildagent) — the
-      # container-side path stays /opt/buildagent regardless (that's what the agent software
-      # itself expects). /opt/buildagent requires the docker daemon to own/create paths under
-      # /opt, which a rootless Docker install or a non-root host account can't do — confirmed on
-      # a second machine ("no permissions on /opt/buildagent"). Point BUILDAGENT_DATA_DIR at a
-      # directory you actually own if that happens.
-      - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/work:/opt/buildagent/work
-      - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/temp:/opt/buildagent/temp
-      - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/tools:/opt/buildagent/tools
-      - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/plugins:/opt/buildagent/plugins
-      - ${BUILDAGENT_DATA_DIR:-/opt/buildagent}/system:/opt/buildagent/system
+      # Host-side base path is BUILDAGENT_DATA_DIR (.env, default ./agents_dir — gitignored and
+      # dockerignored) — the container-side path stays /opt/buildagent regardless (that's what
+      # the agent software itself expects). Defaulting the host side to a path under the repo
+      # checkout, rather than e.g. /opt/buildagent, means the docker daemon never needs to
+      # own/create directories outside something you already own — /opt specifically requires
+      # that, which a rootless Docker install or a non-root host account can't do (confirmed on a
+      # second machine: "no permissions on /opt/buildagent"). Point BUILDAGENT_DATA_DIR at a
+      # directory you actually own if you override it and hit that.
+      - ${BUILDAGENT_DATA_DIR:-./agents_dir}/work:/opt/buildagent/work
+      - ${BUILDAGENT_DATA_DIR:-./agents_dir}/temp:/opt/buildagent/temp
+      - ${BUILDAGENT_DATA_DIR:-./agents_dir}/tools:/opt/buildagent/tools
+      - ${BUILDAGENT_DATA_DIR:-./agents_dir}/plugins:/opt/buildagent/plugins
+      - ${BUILDAGENT_DATA_DIR:-./agents_dir}/system:/opt/buildagent/system
     depends_on:
       - teamcity-server
 

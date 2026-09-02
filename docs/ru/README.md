@@ -17,12 +17,15 @@ _Перевод `README.md`. При изменении оригинала обн
 
 ## Диагностика проблем
 
-- **`docker compose up` падает при монтировании `/opt/buildagent/*`** (permission denied): этот путь
-  требует, чтобы демон докера мог создавать/владеть директориями внутри `/opt` — верно для
-  обычной rootful-установки Docker, но не для rootless Docker или учётной записи хоста без root.
-  Задайте `BUILDAGENT_DATA_DIR` в `.env` на директорию, которой вы реально владеете (например,
-  `BUILDAGENT_DATA_DIR=${HOME}/.local/share/cxxci-buildagent`) и перезапустите. Эти пути обязаны
-  быть именно host bind mount'ами, а не именованными volume — почему, см. комментарий у
+- **`docker compose up` падает при монтировании `BUILDAGENT_DATA_DIR/*`** (permission denied):
+  демону докера нужно уметь создавать/владеть этой директорией — по умолчанию `.env.example`
+  указывает `./agents_dir` (в `.gitignore`/`.dockerignore`) именно затем, чтобы это всегда была
+  директория внутри уже принадлежащего вам checkout'а, но если вы указали что-то другое (например,
+  вернули `/opt/buildagent`), демону снова нужны права создавать/владеть директориями там — верно
+  для обычной rootful-установки Docker, но не для rootless Docker или учётной записи хоста без
+  root. Задайте `BUILDAGENT_DATA_DIR` в `.env` на директорию, которой вы реально владеете, и
+  перезапустите. Эти пути обязаны быть именно host bind mount'ами, а не именованными volume —
+  почему, см. комментарий у
   `teamcity-agent` в `docker-compose.yml`.
 - **"Test connection"/сборка VCS root падает с `HTTP Basic: Access denied` или
   `Authentication failed`**: это проблема учётных данных, а не сети/DNS, хотя на первый взгляд

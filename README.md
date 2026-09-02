@@ -15,13 +15,14 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 
 ## Troubleshooting
 
-- **`docker compose up` fails mounting `/opt/buildagent/*`** (permission denied): that path
-  requires the docker daemon to be able to create/own directories under `/opt` — true for a
-  normal rootful Docker install, not for rootless Docker or a host account without root. Set
-  `BUILDAGENT_DATA_DIR` in `.env` to a directory you actually own (e.g.
-  `BUILDAGENT_DATA_DIR=${HOME}/.local/share/cxxci-buildagent`) and re-run. These specifically
-  have to be host bind mounts, not named volumes — see the comment on `teamcity-agent` in
-  `docker-compose.yml` for why.
+- **`docker compose up` fails mounting `BUILDAGENT_DATA_DIR/*`** (permission denied): the docker
+  daemon needs to be able to create/own that directory — `.env.example` defaults it to
+  `./agents_dir` (gitignored/dockerignored) precisely so it's always inside a directory you
+  already own, but if you've pointed it somewhere else (e.g. back at `/opt/buildagent`) that
+  requires the daemon to create/own directories there too — true for a normal rootful Docker
+  install, not for rootless Docker or a host account without root. Set `BUILDAGENT_DATA_DIR` in
+  `.env` to a directory you actually own and re-run. These specifically have to be host bind
+  mounts, not named volumes — see the comment on `teamcity-agent` in `docker-compose.yml` for why.
 - **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
   `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
   can look similar at a glance. If this hits one of the `project_*` VCS roots specifically, it's
