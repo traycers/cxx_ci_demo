@@ -8,7 +8,9 @@
             "inherits": "gcc",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/RelWithDebInfo/generators/conan_toolchain.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "$env{CMAKE_TOOLCHAIN_FILE_RELWITHDEBINFO}",
+                "CMAKE_INSTALL_PREFIX": "${sourceParentDir}/_deps/RelWithDebInfo",
+                "CMAKE_PREFIX_PATH": "${sourceParentDir}/_deps/RelWithDebInfo"
             }
         }
     ]

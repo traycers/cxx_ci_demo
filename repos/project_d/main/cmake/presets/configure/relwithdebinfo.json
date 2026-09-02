@@ -9,8 +9,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
                 "CMAKE_TOOLCHAIN_FILE": "$env{CMAKE_TOOLCHAIN_FILE_RELWITHDEBINFO}",
-                "CMAKE_INSTALL_PREFIX": "$env{CMAKE_INSTALL_PREFIX_RELWITHDEBINFO}",
-                "CMAKE_PREFIX_PATH": "$env{CMAKE_PREFIX_PATH_RELWITHDEBINFO}"
+                "CMAKE_INSTALL_PREFIX": "${sourceParentDir}/_deps/RelWithDebInfo",
+                "CMAKE_PREFIX_PATH": "${sourceParentDir}/_deps/RelWithDebInfo"
             }
         }
     ]

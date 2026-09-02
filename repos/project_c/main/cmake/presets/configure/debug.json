@@ -9,8 +9,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_TOOLCHAIN_FILE": "$env{CMAKE_TOOLCHAIN_FILE_DEBUG}",
-                "CMAKE_INSTALL_PREFIX": "$env{CMAKE_INSTALL_PREFIX_DEBUG}",
-                "CMAKE_PREFIX_PATH": "$env{CMAKE_PREFIX_PATH_DEBUG}"
+                "CMAKE_INSTALL_PREFIX": "${sourceParentDir}/_deps/Debug",
+                "CMAKE_PREFIX_PATH": "${sourceParentDir}/_deps/Debug"
             }
         }
     ]

@@ -16,20 +16,16 @@
     "updateRemoteUserUID": true,
     "remoteUser": "vscode",
 
-    // See project_a/.devcontainer/devcontainer.json for the rationale (identical shape across
-    // project_a/c/d/e) — named volume, one level above the repo checkout, CMAKE_PREFIX_PATH for
-    // the internal artifact-dependency chain only.
-    "mounts": [
-        "source=cxxci-main-debug-install,target=/workspaces/_deps/Debug,type=volume"
-    ],
     // See project_a/.devcontainer/devcontainer.json for the full rationale: debug.json/
-    // relwithdebinfo.json read these straight from *_DEBUG / *_RELWITHDEBINFO env vars, so the
-    // presets stay devcontainer- and package-manager-agnostic. CMAKE_TOOLCHAIN_FILE_DEBUG is
-    // deliberately left unset here (no Conan/vcpkg in this devcontainer).
-    "containerEnv": {
-        "CMAKE_PREFIX_PATH_DEBUG": "/workspaces/_deps/Debug",
-        "CMAKE_INSTALL_PREFIX_DEBUG": "/workspaces/_deps/Debug"
-    },
+    // relwithdebinfo.json compute CMAKE_INSTALL_PREFIX/CMAKE_PREFIX_PATH themselves as
+    // "${sourceParentDir}/_deps/<BuildType>" — no env var needed. Mounting the volume at the
+    // /workspaces/_deps parent (not just .../Debug) is what makes both build types land in the
+    // same shared volume, required for the artifact chain across sibling devcontainers.
+    // CMAKE_TOOLCHAIN_FILE_DEBUG/_RELWITHDEBINFO are deliberately left unset here (no Conan/vcpkg
+    // in this devcontainer).
+    "mounts": [
+        "source=cxxci-main-debug-install,target=/workspaces/_deps,type=volume"
+    ],
 
     "customizations": {
         "vscode": {
