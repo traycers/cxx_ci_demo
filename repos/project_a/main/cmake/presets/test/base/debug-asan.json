@@ -8,13 +8,6 @@
             "environment": {
                 "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizer/suppressions/lsan.txt:print_suppressions=0"
             }
-        },
-        {
-            "name": "debug-asan-devcontainer",
-            "configurePreset": "debug-asan-devcontainer",
-            "environment": {
-                "LSAN_OPTIONS": "suppressions=${sourceDir}/sanitizer/suppressions/lsan.txt:print_suppressions=0"
-            }
         }
     ]
 }

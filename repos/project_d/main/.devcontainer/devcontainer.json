@@ -20,20 +20,15 @@
     // project_a/c/d/e) — named volume, one level above the repo checkout, CMAKE_PREFIX_PATH for
     // the internal artifact-dependency chain only.
     "mounts": [
-        "source=cxxci-main-debug-install,target=/workspaces/_install,type=volume"
+        "source=cxxci-main-debug-install,target=/workspaces/_deps/Debug,type=volume"
     ],
-    // CMAKE_PREFIX_PATH: where upstream artifact-dependencies (already unpacked into the volume
-    // above) get found by find_package(). CMAKE_INSTALL_PREFIX: where *this* repo's own
-    // `cmake --build --target install` writes to — same directory, so installing this repo
-    // locally makes it immediately visible to a sibling repo's CMAKE_PREFIX_PATH lookup in
-    // another devcontainer sharing the volume. Plain CMake only reads CMAKE_PREFIX_PATH from the
-    // environment automatically; CMAKE_INSTALL_PREFIX doesn't have that behavior, so it's wired
-    // through cmake/presets/configure/debug/asan.json's "debug-asan-devcontainer" preset instead
-    // (a devcontainer-only preset, inherits "debug-asan" unchanged for every other build) rather
-    // than a plain env var alone actually taking effect.
+    // See project_a/.devcontainer/devcontainer.json for the full rationale: debug.json/
+    // relwithdebinfo.json read these straight from *_DEBUG / *_RELWITHDEBINFO env vars, so the
+    // presets stay devcontainer- and package-manager-agnostic. CMAKE_TOOLCHAIN_FILE_DEBUG is
+    // deliberately left unset here (no Conan/vcpkg in this devcontainer).
     "containerEnv": {
-        "CMAKE_PREFIX_PATH": "/workspaces/_install",
-        "CMAKE_INSTALL_PREFIX": "/workspaces/_install"
+        "CMAKE_PREFIX_PATH_DEBUG": "/workspaces/_deps/Debug",
+        "CMAKE_INSTALL_PREFIX_DEBUG": "/workspaces/_deps/Debug"
     },
 
     "customizations": {

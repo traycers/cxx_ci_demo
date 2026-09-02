@@ -8,7 +8,9 @@
             "inherits": "clang",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "$env{CMAKE_TOOLCHAIN_FILE_DEBUG}",
+                "CMAKE_INSTALL_PREFIX": "$env{CMAKE_INSTALL_PREFIX_DEBUG}",
+                "CMAKE_PREFIX_PATH": "$env{CMAKE_PREFIX_PATH_DEBUG}"
             }
         }
     ]

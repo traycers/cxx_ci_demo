@@ -11,18 +11,6 @@
             "cacheVariables": {
                 "ENABLE_ASAN": "ON"
             }
-        },
-        {
-            "name": "debug-asan-devcontainer",
-            "inherits": "debug-asan",
-            "condition": {
-                "type": "notEquals",
-                "lhs": "$env{CMAKE_INSTALL_PREFIX}",
-                "rhs": ""
-            },
-            "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "$env{CMAKE_INSTALL_PREFIX}"
-            }
         }
     ]
 }
