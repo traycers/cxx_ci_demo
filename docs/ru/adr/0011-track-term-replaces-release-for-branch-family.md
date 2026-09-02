@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0011-track-term-replaces-release-for-branch-family.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0011-track-term-replaces-release-for-branch-family.md)
 
-_Перевод `docs/en/adr/0011-track-term-replaces-release-for-branch-family.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Термин branch family переименован с `Release` на `Track`, слово `release` освобождено под package variant
 
 `CONTEXT.md` определял **Release** (branch family) — одно поддерево `cxx_ci_demo/<config_name>/` со своим TeamCity-подпроектом и VCS root'ами — а отдельно `docs/en/roadmap.md` планировал **package variant** под именем `optimized` (сегодняшний `CMAKE_BUILD_TYPE=RelWithDebInfo`), намеренно не называя его `release`, чтобы `project_a/release` не был неоднозначным между этими двумя понятиями. Это избегало коллизии, но навсегда лишало package variant единственного имени, которое на самом деле его и описывает, а термин branch family при этом оставался привязан к слову, которое тоже никогда не подходило идеально: это не обязательно публичные релизы продукта — это независимые, потенциально долгоживущие ветки конфигурации (`release_1` = примитивная структура проекта, `release_2` = улучшенная, `release_3` = изменение дерева зависимостей), которые могут сосуществовать бессрочно.

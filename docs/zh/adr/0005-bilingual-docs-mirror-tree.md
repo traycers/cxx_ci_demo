@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0005-bilingual-docs-mirror-tree.md) · [🇷🇺 Русский](../../ru/adr/0005-bilingual-docs-mirror-tree.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0005-bilingual-docs-mirror-tree.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 **已被 [ADR 0006](0006-trilingual-docs-mirror-tree.md) 取代**：文档语言从两种扩展为三种(新增中文)；保留本文档用于记录历史。
 
 # 双语文档——`docs/en/` + `docs/ru/`，根目录的 `README.md`/`CONTEXT.md` 保持不动

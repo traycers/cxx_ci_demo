@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/developer-flow.md) · [🇷🇺 Русский](../ru/developer-flow.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/developer-flow.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # Developer flow:一个任务一个目录
 
 每当需要改动(新功能或修 bug)时,开发者会为这个任务建一个单独的工作目录,而不是在同一份仓库检出里来回切分支。

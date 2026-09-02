@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/track.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/track.md)
 
-_Перевод `docs/en/track.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
-
 # Track
 
 Track — группа нескольких проектов, необходимых для выпуска track'а.

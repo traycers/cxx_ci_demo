@@ -4,7 +4,9 @@
 
 # Trilingual documentation — `docs/zh/` joins `docs/en/` + `docs/ru/`
 
-We added Simplified Chinese (`zh-Hans`) as a third documentation language, for the same reason Russian was added in ADR 0005: readers who aren't comfortable in English need this repo's docs. `docs/zh/` follows exactly the same shape ADR 0005 set up for `docs/ru/` — a full mirror of everything under `docs/`, with `README.md`/`CONTEXT.md` staying canonical-English at the repo root and their Chinese translations living at `docs/zh/README.md`/`docs/zh/CONTEXT.md`. The language-switcher header on every file now lists all three in the order they were introduced (`🇬🇧 English · 🇷🇺 Русский · 🇨🇳 中文`), and the translation note under the switcher on a translated file still names its source and still points readers to the governing ADR — now 0006 instead of 0005.
+We added Simplified Chinese (`zh-Hans`) as a third documentation language, for the same reason Russian was added in ADR 0005: readers who aren't comfortable in English need this repo's docs. `docs/zh/` follows exactly the same shape ADR 0005 set up for `docs/ru/` — a full mirror of everything under `docs/`, with `README.md`/`CONTEXT.md` staying canonical-English at the repo root and their Chinese translations living at `docs/zh/README.md`/`docs/zh/CONTEXT.md`. The language-switcher header on every file now lists all three in the order they were introduced (`🇬🇧 English · 🇷🇺 Русский · 🇨🇳 中文`).
+
+**Amendment**: translated files originally also carried a per-file italic note under the switcher ("Translated from `X`. Update this version too when the original changes — see ADR 0006"), repeated on all 42 files. That note was dropped — the same rule now lives once, in [CONTRIBUTING.md](../../../CONTRIBUTING.md), instead of being restated on every translated page.
 
 We backfilled all pre-existing docs into `docs/zh/` in the same change that introduced it, rather than letting `zh` sit partially populated: ADR 0005's own premise is that the mirror only stays trustworthy if nothing is ever added on just one side, and a repo with `zh` half-covered for an unbounded stretch is exactly the drift that rule exists to prevent.
 

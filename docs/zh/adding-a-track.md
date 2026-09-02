@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/adding-a-track.md) · [🇷🇺 Русский](../ru/adding-a-track.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adding-a-track.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # 添加新的 track
 
 **Track**(见 `CONTEXT.md`)是 `ci-infra` 中的一个 `cxx_ci_demo/<track_name>/` 目录——拥有自己的 TeamCity 子项目、自己的 VCS root、自己的一套 build configuration、自己的 `Dockerfile`，但使用与其他每个 track *相同* 的 GitLab 仓库(从 `project_a` 到 `project_e`)。各 track 的区别在于每个 VCS root 监视哪个分支，以及它自己的 docker 镜像标签前缀(见下文)——GitLab 一侧不会复制或 fork 任何东西。现在实际存在哪些 track,见 `tracks.md`。

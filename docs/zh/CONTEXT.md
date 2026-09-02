@@ -1,7 +1,5 @@
 [🇬🇧 English](../../CONTEXT.md) · [🇷🇺 Русский](../ru/CONTEXT.md) · 🇨🇳 中文
 
-_翻译自 `CONTEXT.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # CI CXX
 
 基于 docker-compose 的 CI 演示环境：GitLab(VCS)+ TeamCity(构建服务器，单 agent)在 Docker 容器内构建 C++ 项目，整个构建树以一次根 Docker 镜像构建作为基础依赖。

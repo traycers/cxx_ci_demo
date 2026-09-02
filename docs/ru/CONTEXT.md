@@ -1,7 +1,5 @@
 [🇬🇧 English](../../CONTEXT.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/CONTEXT.md)
 
-_Перевод `CONTEXT.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
-
 # CI CXX
 
 Демо-стенд CI на docker-compose: GitLab (VCS) + TeamCity (build server, один агент) собирают C++ проекты внутри Docker-контейнеров, с корневой сборкой Docker-образа как базовой зависимостью для всего дерева сборок.

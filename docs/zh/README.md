@@ -2,8 +2,6 @@
 
 [🇬🇧 English](../../README.md) · [🇷🇺 Русский](../ru/README.md) · 🇨🇳 中文
 
-_翻译自 `README.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 
 基于 docker-compose 的 CI 演示环境：GitLab + TeamCity 在容器中构建 C++ 项目。术语表见 `CONTEXT.md`，架构决策见 `docs/zh/adr/`。完整计划保存在 wayfinder 地图 `.scratch/teamcity-cxx-ci/map.md` 中。文档同时维护英语、俄语和中文版本(`docs/ru/`、`docs/zh/`)——约定说明见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。
 

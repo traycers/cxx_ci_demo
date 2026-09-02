@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0011-track-term-replaces-release-for-branch-family.md) · [🇷🇺 Русский](../../ru/adr/0011-track-term-replaces-release-for-branch-family.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0011-track-term-replaces-release-for-branch-family.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # 分支族术语从 `Release` 改名为 `Track`,把 `release` 让给 package variant
 
 `CONTEXT.md` 把 **Release**(分支族)定义为 `ci-infra` 中的一个 `cxx_ci_demo/<config_name>/` 子树——拥有自己的 TeamCity 子项目和 VCS root;而另一边,`docs/en/roadmap.md` 计划中的 **package variant** 叫 `optimized`(即今天的 `CMAKE_BUILD_TYPE=RelWithDebInfo`),之所以刻意不叫 `release`,是为了避免 `project_a/release` 在这两者之间产生歧义。这确实避开了冲突,但也让 package variant 永远无法使用那个真正能描述它自身的名字,同时分支族这边用的词其实也一直不太贴切:这些并不一定是面向公众的产品发布,而是相互独立、可能长期存在的配置分支(`release_1` = 原始的项目结构,`release_2` = 改进后的结构,`release_3` = 依赖树的变化),它们可以无限期共存。

@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/tradeoff.md) · [🇷🇺 Русский](../ru/tradeoff.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/tradeoff.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # 权衡
 
 当前 C++ 项目的构建方式具有以下特点。

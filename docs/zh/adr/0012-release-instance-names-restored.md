@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0012-release-instance-names-restored.md) · [🇷🇺 Русский](../../ru/adr/0012-release-instance-names-restored.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0012-release-instance-names-restored.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # 三个具体 track 改回命名为 `Release1`/`Release2`/`Release3`(`release_1`/`release_2`/`release_3`),`Track` 仍是概念本身的术语
 
 [ADR 0011](0011-track-term-replaces-release-for-branch-family.md) 把分支族这个*概念*从 `Release` 改名为 `Track`,并在同一次提交里把三个已有的实例也一并改了名(`release_1`/`release_2`/`release_3` → `track_1`/`track_2`/`track_3`),理由是:要避免 `project_a/release` 与计划中的 package variant 术语冲突,不仅要改概念这个词,连实例也得一起改。

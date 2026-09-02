@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0008-python-bootstrap-container.md) · [🇷🇺 Русский](../../ru/adr/0008-python-bootstrap-container.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0008-python-bootstrap-container.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # 把 bootstrap 重写为接入 `cxxci` 的 Python 容器——`bootstrap/` 改名为 `repos/`
 
 `bootstrap.sh` 被替换成了 `scripts/bootstrap/`——一个打包成镜像、通过 `docker compose run --rm bootstrap` 运行的 Python provisioning 工具——它是 `docker-compose.yml` 里 `profiles: ["tools"]` 下的一次性服务，因此普通的 `docker compose up` 永远不会把它启动起来。这么做的原因不是宿主机环境的可移植性(那是另一个已经单独修复过的 bug——见 `tc_post` 改成 stdin 的那次重写)，而是为了简化：容器直接接入 `cxxci` 网络，于是每一次对 GitLab/TeamCity 的 REST 调用都变成了按 compose 服务名(`gitlab`/`teamcity-server`)发出的普通请求，取代了旧脚本里每次调用都要起一个「邻居」容器(`docker run --rm --network cxxci curlimages/curl ...`)的做法。顺带也彻底去掉了只在宿主机上有意义的 `gitlab.local` 主机名、绕过环境代理的 `NO_PROXY` 变通，以及和已发布宿主机端口上 squid 代理的冲突——这些东西在网络内部根本就够不着，也就无从谈起。

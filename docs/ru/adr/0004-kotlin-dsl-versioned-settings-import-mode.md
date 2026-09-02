@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0004-kotlin-dsl-versioned-settings-import-mode.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0004-kotlin-dsl-versioned-settings-import-mode.md)
 
-_Перевод `docs/en/adr/0004-kotlin-dsl-versioned-settings-import-mode.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Kotlin DSL versioned settings, режим import — источник истины git/UI
 
 ADR 0003 заключил, что Kotlin DSL здесь навсегда невозможен, потому что у `teamcity-server` нет

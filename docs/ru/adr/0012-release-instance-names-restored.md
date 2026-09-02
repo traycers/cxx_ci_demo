@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0012-release-instance-names-restored.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0012-release-instance-names-restored.md)
 
-_Перевод `docs/en/adr/0012-release-instance-names-restored.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Три конкретных track'а переименованы обратно в `Release1`/`Release2`/`Release3` (`release_1`/`release_2`/`release_3`), `Track` остаётся термином для самого понятия
 
 [ADR 0011](0011-track-term-replaces-release-for-branch-family.md) переименовал *понятие* branch family с `Release` на `Track` и тем же коммитом переименовал вместе с ним три существующих экземпляра (`release_1`/`release_2`/`release_3` → `track_1`/`track_2`/`track_3`), обосновывая это тем, что избежать коллизии `project_a/release` с планируемым термином package variant можно только перенеся и экземпляры, а не только слово-понятие.

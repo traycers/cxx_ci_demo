@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0002-no-registry-shared-docker-daemon.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0002-no-registry-shared-docker-daemon.md)
 
-_Перевод `docs/en/adr/0002-no-registry-shared-docker-daemon.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Без Docker registry — корневая сборка образа остаётся в общем хостовом Docker-демоне
 
 Есть ровно один build-агент TeamCity, и он делит `docker.sock` хоста для каждого запускаемого

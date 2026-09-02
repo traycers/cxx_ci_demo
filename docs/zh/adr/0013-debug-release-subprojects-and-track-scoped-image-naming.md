@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md) · [🇷🇺 Русский](../../ru/adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0013-debug-release-subprojects-and-track-scoped-image-naming.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # Package variant 采用按变体复制的 subproject,而不是单个参数化的 build type;`main` 的镜像改用 track 专属的仓库名
 
 `main` 现在为其活跃链路(`project_a`/`project_c`/`project_d`/`project_e`)构建两个 package variant(`debug`/`release`——参见 `CONTEXT.md` 中"Package variant"条目、`roadmap.md`)。看似显然的做法——用一个 `ProjectA` build type,配一个在 `Debug`/`RelWithDebInfo` 之间切换的 `build_type` 参数——是行不通的:TeamCity 的 artifact 依赖 `buildRule = sameChain()` 是靠 `dependency(...)` 调用指向哪一个具体的 `BuildType` *对象*来判定该从哪个上游构建拉取产物的,而不是靠参数值。单一的参数化 `ProjectA` 无法保证它的 `dependency(ProjectC)` 解析到的是同一个 variant 的 `ProjectC` 构建——debug 构建可能悄无声息地链接到 release variant 上游的产物,反之亦然,不会有任何报错。因此改为:每个 variant 都是 `Main` 下一个完整的子 TeamCity subproject(`Main_Debug`/`Main_Release`),各自拥有自己的 `BaseBuild` 模板(`build_type` 写死,不做参数化)以及各自的 `ProjectA`/`ProjectC`/`ProjectD`/`ProjectE`/`Result` build type,这样 subproject 内部的任何依赖在物理上就只能指向同一个 subproject 里的"兄弟"对象。`Main_BuildCImage`(根 C++ 镜像)不做复制——镜像本身并不因 package variant 而不同,只有 `cmake configure` 的那个 flag 会变。这与本仓库对 track 本身早已有的先例(`adding-a-track.md`)如出一辙:当 TeamCity 的依赖模型无法用参数表达"挑出匹配的那个"时,复制 build type 树是可行的替代方案,代价是要维护同步的对象更多(缓解方式也和 track 一样——`scripts/new-track.sh` 的机械式复制加改名,现已扩展以处理这层新的嵌套)。

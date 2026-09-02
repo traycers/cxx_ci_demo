@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0007-per-branch-bootstrap-content.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0007-per-branch-bootstrap-content.md)
 
-_Перевод `docs/en/adr/0007-per-branch-bootstrap-content.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 **Переименован [ADR 0008](0008-python-bootstrap-container.md)**: директория `bootstrap/`, которую описывает этот ADR, теперь называется `repos/` — всё остальное (раскладка по веткам, orphan-коммиты, порядок пуша с `main` первой, per-branch идемпотентность) не изменилось и остаётся текущей политикой. Читайте `bootstrap/<repo>/<branch>/` ниже как `repos/<repo>/<branch>/`.
 
 # Контент bootstrap по веткам — `bootstrap/<repo>/<branch>/`

@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0005-bilingual-docs-mirror-tree.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0005-bilingual-docs-mirror-tree.md)
 
-_Перевод `docs/en/adr/0005-bilingual-docs-mirror-tree.md`. При изменении оригинала обновите и эту версию._
-
 **Заменён [ADR 0006](0006-trilingual-docs-mirror-tree.md)**: документация перешла с двух языков на три (добавлен китайский); оставлен здесь как исторический протокол того, почему зеркало устроено именно так.
 
 # Двуязычная документация — `docs/en/` + `docs/ru/`, корневые `README.md`/`CONTEXT.md` остаются на месте

@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0001-centralized-ci-config-repo.md) · [🇷🇺 Русский](../../ru/adr/0001-centralized-ci-config-repo.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0001-centralized-ci-config-repo.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # 集中式 CI 配置仓库(ci-infra)，而非每个项目各自的 .teamcity
 
 TeamCity 的惯用模式是「每个项目自己的 versioned settings」(项目自己仓库内的 `.teamcity` 文件夹)。我们没有这样做，而是把全部 Kotlin DSL——根镜像构建、每个 C++ 项目的 build configuration，以及它们之间 snapshot/artifact 依赖的连线——都放进 GitLab 中一个集中的 `ci-infra` 仓库，与各个 C++ 项目仓库分开。

@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0008-python-bootstrap-container.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0008-python-bootstrap-container.md)
 
-_Перевод `docs/en/adr/0008-python-bootstrap-container.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Bootstrap переписан как Python-контейнер, подключённый к `cxxci` — `bootstrap/` переименован в `repos/`
 
 `bootstrap.sh` заменён на `scripts/bootstrap/` — Python-инструмент provisioning'а, собранный в образ и запускаемый через `docker compose run --rm bootstrap` — одноразовый сервис в `docker-compose.yml` под `profiles: ["tools"]`, чтобы он никогда не поднимался вместе с обычным `docker compose up`. Причина не в портируемости под окружение хоста (это отдельный, уже исправленный баг — см. переписывание `tc_post` на stdin), а в упрощении: контейнер подключается прямо к сети `cxxci`, поэтому каждый REST-вызов к GitLab/TeamCity — это обычный запрос к `gitlab`/`teamcity-server` по имени compose-сервиса, вместо прежних «соседних» контейнеров `docker run --rm --network cxxci curlimages/curl ...` на каждый вызов. Заодно полностью уходят хостовый hostname `gitlab.local`, обход ambient-прокси через `NO_PROXY` и коллизия с squid-прокси на опубликованном хостовом порту — всё это просто недостижимо изнутри сети.

@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/tracks.md) · [🇷🇺 Русский](../ru/tracks.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/tracks.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # Track 列表
 
 本仓库目前实际存在的 track(track 一般是什么见 `CONTEXT.md`,如何创建新 track 见 `adding-a-track.md`)。

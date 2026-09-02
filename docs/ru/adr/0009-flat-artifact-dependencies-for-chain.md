@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0009-flat-artifact-dependencies-for-chain.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0009-flat-artifact-dependencies-for-chain.md)
 
-_Перевод `docs/en/adr/0009-flat-artifact-dependencies-for-chain.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Плоские artifact-зависимости на всей цепочке a→c→d
 
 `project_a` теперь тянется через `project_c` (`vecopscale`) к `project_d` (`vecutils`) — `app_a_core` в `a` линкует `c` PUBLIC, а `c` линкует `d` PUBLIC, поэтому тип `Vector2` из `d` напрямую виден в публичном заголовке `c`. Несмотря на эту транзитивную C++-зависимость, build type `a` в TeamCity объявляет явную artifact-зависимость **сразу на `c` и на `d`**, а не только на `c` — точно такую же форму, какую имеет зависимость самого `c` на `d`. На первый взгляд это выглядит избыточным ("зачем `a` нужен `d` напрямую, если `a` и так зависит от `c`, а `c` зависит от `d`?") — стоит зафиксировать, почему это так.

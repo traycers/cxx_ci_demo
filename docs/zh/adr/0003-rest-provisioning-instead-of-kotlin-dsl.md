@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md) · [🇷🇺 Русский](../../ru/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0003-rest-provisioning-instead-of-kotlin-dsl.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 **已被 [ADR 0004](0004-kotlin-dsl-versioned-settings-import-mode.md) 取代**：下文「永久不可行」的结论是错误的——后来针对真实的树重新测试时发现，Kotlin DSL 可以通过服务器自己本地的 `dsl-plugins-repository` 完全离线编译通过。保留本文档用于记录历史；本 ADR 描述的机制已不再是 `bootstrap.sh` 实际采用的方式。
 
 # TeamCity 项目树通过 REST 而非 Kotlin DSL versioned settings 来部署

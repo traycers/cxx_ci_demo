@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/adding-a-track.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/adding-a-track.md)
 
-_Перевод `docs/en/adding-a-track.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
-
 # Добавление нового track'а
 
 **Track** (см. `CONTEXT.md`) — это одна директория `cxx_ci_demo/<track_name>/` в `ci-infra` — со своим TeamCity-подпроектом, своими VCS root'ами, своим набором build configuration'ов, своим `Dockerfile`, но *теми же* GitLab-репозиториями, что и у любого другого track'а (от `project_a` до `project_e`).

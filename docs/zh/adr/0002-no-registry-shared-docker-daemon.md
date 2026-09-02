@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0002-no-registry-shared-docker-daemon.md) · [🇷🇺 Русский](../../ru/adr/0002-no-registry-shared-docker-daemon.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/adr/0002-no-registry-shared-docker-daemon.md`。原文变更时请同步更新本文件——参见 [ADR 0006](0006-trilingual-docs-mirror-tree.md)。_
-
 # 不使用 Docker registry——根镜像构建停留在共享的宿主机 Docker 守护进程中
 
 只有一个 TeamCity build agent，它为运行的每一个容器共享宿主机的 `docker.sock`。正常的 CI 配置会把根构建产生的镜像推送到某个 registry，以便其他 agent/主机拉取。

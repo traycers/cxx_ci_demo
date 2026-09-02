@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/tracks.md) · 🇷🇺 Русский · [🇨🇳 中文](../zh/tracks.md)
 
-_Перевод `docs/en/tracks.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)._
-
 # Список track'ов
 
 Конкретные track'и, которые сейчас существуют в этом репозитории (что такое track вообще — см. `CONTEXT.md`, как создать новый — см. `adding-a-track.md`).

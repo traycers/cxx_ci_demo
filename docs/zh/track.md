@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/track.md) · [🇷🇺 Русский](../ru/track.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/track.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # Track
 
 **Track** 是发布一个版本所需要的若干个项目的集合。

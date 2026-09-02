@@ -1,7 +1,5 @@
 [🇬🇧 English](../../en/adr/0010-project-naming-consistency.md) · 🇷🇺 Русский · [🇨🇳 中文](../../zh/adr/0010-project-naming-consistency.md)
 
-_Перевод `docs/en/adr/0010-project-naming-consistency.md`. При изменении оригинала обновите и эту версию — см. [ADR 0006](0006-trilingual-docs-mirror-tree.md)._
-
 # Переименование `demo-project-*` в `project_*` везде — ради согласованности имён между инструментами
 
 `CMakeLists.txt` каждого C++ проекта всегда задавал `PACKAGE_NAME` как `project_a`, `project_b` и т.д. — именно это имя зашито в каждый экспортируемый cmake-таргет (`cxx::ci::demo::project_c::vecopscale`) и в каждый вызов `find_package()`/`find_dependency()`. А вот GitLab-репозиторий и TeamCity DSL называли тот же проект `demo-project-a`, и Kotlin-идентификаторы TeamCity писали его же ещё и третьим способом (`Main_DemoProjectA`, id-путь `"DemoProjectA"`). Три инструмента — три разных имени одного и того же проекта, без единого правила именования, которое бы их связывало — новый читатель никак не мог догадаться, что GitLab-репозиторий `demo-project-c`, TeamCity id `CxxCiDemo_Main_DemoProjectC` и cmake-пакет `project_c` — это одно и то же.

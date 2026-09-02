@@ -1,7 +1,5 @@
 [🇬🇧 English](../en/roadmap.md) · [🇷🇺 Русский](../ru/roadmap.md) · 🇨🇳 中文
 
-_翻译自 `docs/en/roadmap.md`。原文变更时请同步更新本文件——参见 [ADR 0006](adr/0006-trilingual-docs-mirror-tree.md)。_
-
 # Roadmap
 
 本页描述的是 CI 未来可能的发展方向,尚不是已确定的架构。这里的任何内容都不应被视为已敲定;一旦其中某一点真正做出带有实际取舍的决定,就会为它单独写一份 ADR,本页也会更新指向那份 ADR。
