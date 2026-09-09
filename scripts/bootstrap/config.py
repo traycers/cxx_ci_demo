@@ -17,6 +17,15 @@ GITLAB_HTTP_PORT = os.environ.get("GITLAB_HTTP_PORT", "8929")
 GITLAB_HOST = "gitlab"
 GITLAB_URL = f"http://{GITLAB_HOST}:{GITLAB_HTTP_PORT}"
 
+# Same value docker-compose seeded GitLab's root account with (gitlab_rails['initial_root_password']
+# in docker-compose.yml) — TeamCity's demo VCS roots authenticate as root:this instead of a minted PAT.
+# Checked for emptiness, not just presence: `GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD}` in
+# docker-compose.yml substitutes an empty string (not a missing key) when .env doesn't set it, so a
+# plain os.environ[...] lookup wouldn't have caught that case — it'd silently inject a blank password.
+GITLAB_ROOT_PASSWORD = os.environ.get("GITLAB_ROOT_PASSWORD", "")
+if not GITLAB_ROOT_PASSWORD:
+    raise RuntimeError("GITLAB_ROOT_PASSWORD is not set — check .env (see .env.example).")
+
 TEAMCITY_HOST = "teamcity-server"
 TEAMCITY_URL = f"http://{TEAMCITY_HOST}:8111"
 

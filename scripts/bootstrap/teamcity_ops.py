@@ -65,7 +65,7 @@ def teamcity_super_user_token():
     return token
 
 
-def _vcs_root_payload(vcs_id, name, repo, gitlab_token):
+def _vcs_root_payload(vcs_id, name, repo):
     # NOTE on "teamcity:branchSpec": a VCS root created via REST with a plain "branchSpec"
     # property is silently ignored for branch matching (confirmed against a UI-created VCS root,
     # which TeamCity itself writes as "teamcity:branchSpec") — this was the real cause behind
@@ -82,7 +82,7 @@ def _vcs_root_payload(vcs_id, name, repo, gitlab_token):
                 {"name": "teamcity:branchSpec", "value": "+:refs/heads/*"},
                 {"name": "authMethod", "value": "PASSWORD"},
                 {"name": "username", "value": "root"},
-                {"name": "secure:password", "value": gitlab_token},
+                {"name": "secure:password", "value": config.GITLAB_ROOT_PASSWORD},
             ]
         },
     }
@@ -100,7 +100,7 @@ def _poll_until(check, deadline, interval, waiting_message=None):
         time.sleep(interval)
 
 
-def provision_teamcity(gitlab_token):
+def provision_teamcity():
     token = teamcity_super_user_token()
     if not token:
         log("Could not find a TeamCity Super User token in the logs yet.")
@@ -117,7 +117,7 @@ def provision_teamcity(gitlab_token):
     if tc.get_status("/app/rest/vcs-roots/id:CiInfraVersionedSettingsVcs") != 200:
         status, body = tc.post(
             "/app/rest/vcs-roots",
-            json.dumps(_vcs_root_payload("CiInfraVersionedSettingsVcs", "ci-infra (versioned settings)", "ci-infra", gitlab_token)),
+            json.dumps(_vcs_root_payload("CiInfraVersionedSettingsVcs", "ci-infra (versioned settings)", "ci-infra")),
         )
         if status != 200:
             log(f"ERROR: failed to create VCS root CiInfraVersionedSettingsVcs (HTTP {status}).")
@@ -126,6 +126,18 @@ def provision_teamcity(gitlab_token):
             log("readiness passed, or a transient network issue. Re-run bootstrap.")
             return False
         log("  created VCS root CiInfraVersionedSettingsVcs")
+    else:
+        # Already exists from a previous run — re-sync its credential too, otherwise a stack
+        # provisioned before the switch to GITLAB_ROOT_PASSWORD keeps its old minted PAT forever
+        # (this VCS root sits outside the project(id != "_Root") loop step 4 re-syncs below).
+        status, _ = tc.put(
+            "/app/rest/vcs-roots/id:CiInfraVersionedSettingsVcs/properties/secure:password",
+            config.GITLAB_ROOT_PASSWORD,
+            content_type="text/plain",
+        )
+        if status != 200:
+            log(f"ERROR: failed to update VCS root CiInfraVersionedSettingsVcs credential (HTTP {status}).")
+            return False
 
     # 2. Point _Root's versioned settings at it: format=kotlin, buildSettingsMode=useFromVCS.
     vs_config = {
@@ -186,7 +198,7 @@ def provision_teamcity(gitlab_token):
     param_payload = json.dumps(
         {
             "name": "gitlab_credentials_password",
-            "value": gitlab_token,
+            "value": config.GITLAB_ROOT_PASSWORD,
             "type": {"rawValue": "password display='normal'"},
         }
     )
@@ -196,7 +208,7 @@ def provision_teamcity(gitlab_token):
         statuses = [
             tc.put(
                 f"/app/rest/vcs-roots/id:{v['id']}/properties/secure:password",
-                gitlab_token,
+                config.GITLAB_ROOT_PASSWORD,
                 content_type="text/plain",
             )[0]
             for v in demo_vcs_roots

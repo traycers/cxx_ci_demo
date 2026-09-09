@@ -121,6 +121,7 @@ services:
       - cxxci
     environment:
       GITLAB_HTTP_PORT: ${GITLAB_HTTP_PORT:-8929}
+      GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD}
     volumes:
       # Docker-outside-of-Docker, same pattern as teamcity-agent above: needed to exec into the
       # gitlab container (minting the root PAT) and read teamcity-server's logs (super user

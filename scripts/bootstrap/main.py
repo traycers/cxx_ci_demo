@@ -5,7 +5,12 @@ instead of a host script, and ADR 0007 for the repos/<repo>/<branch>/ seed-conte
 
 import sys
 
-import config
+try:
+    import config
+except Exception as exc:  # noqa: BLE001 - config validates required env vars at import time
+    print(f"[bootstrap] ERROR: {exc}", flush=True)
+    sys.exit(1)
+
 import gitlab_ops
 import teamcity_ops
 
@@ -19,7 +24,7 @@ def main():
         gitlab_ops.create_gitlab_repo(repo, token)
         gitlab_ops.push_repo_content(repo, token)
 
-    if not teamcity_ops.provision_teamcity(token):
+    if not teamcity_ops.provision_teamcity():
         log("TeamCity provisioning incomplete — see messages above.")
         sys.exit(1)
     log("done.")
