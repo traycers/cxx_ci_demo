@@ -61,6 +61,28 @@ def create_gitlab_token():
     return token
 
 
+def enable_git_password_auth(token):
+    """Force-enable "Password authentication enabled for Git over HTTP(S)".
+
+    TeamCity's VCS roots authenticate to GitLab as root/GITLAB_ROOT_PASSWORD (see
+    teamcity_ops.py), which only works while this GitLab sign-in restriction is on. It's usually
+    the self-managed default, but isn't guaranteed on every fresh instance — confirmed live on a
+    second machine, where it was off and every git-over-HTTP auth (`ls-remote`, fetch) failed with
+    a 401 that looks identical to a wrong password ("HTTP Basic: Access denied ... you're required
+    to use a token instead of a password"), regardless of the password's actual correctness.
+    """
+    resp = requests.put(
+        f"{config.GITLAB_URL}/api/v4/application/settings",
+        headers={"PRIVATE-TOKEN": token},
+        data={"password_authentication_enabled_for_git": "true"},
+    )
+    if not resp.ok:
+        raise RuntimeError(
+            f"failed to enable GitLab password auth for git (HTTP {resp.status_code}): {resp.text}"
+        )
+    log("  GitLab password authentication for Git over HTTP(S) is enabled.")
+
+
 def create_gitlab_repo(name, token):
     log(f"creating GitLab project '{name}'...")
     resp = requests.post(

@@ -20,6 +20,7 @@ log = config.log
 def main():
     gitlab_ops.wait_for_gitlab()
     token = gitlab_ops.create_gitlab_token()
+    gitlab_ops.enable_git_password_auth(token)
     for repo in config.REPOS:
         gitlab_ops.create_gitlab_repo(repo, token)
         gitlab_ops.push_repo_content(repo, token)
