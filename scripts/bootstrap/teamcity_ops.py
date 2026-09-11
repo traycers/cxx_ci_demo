@@ -233,6 +233,29 @@ def provision_teamcity():
     log(f"  injected GitLab credential into {len(demo_vcs_roots)} demo VCS root(s) across "
         f"{len(track_project_ids)} track project(s): {', '.join(sorted(track_project_ids))}")
 
+    # 4b. Force TeamCity to re-resolve each VCS root's password field against the credential
+    #     just injected above. The DSL import (step 3) created every demo VCS root while
+    #     "gitlab_credentials_password" still held its DSL default of "" (the injection above
+    #     runs strictly after import), and a portable-DSL-managed VCS root does not live-refresh
+    #     a "%param%" reference in a secure field just because the underlying project parameter
+    #     changed via REST — TeamCity only re-resolves it when the VCS root's settings are
+    #     reloaded (matches the well-known "re-save the VCS root after changing its password"
+    #     behavior reported against TeamCity generally, not specific to this setup). POSTing
+    #     loadSettings on "_Root" — the only project versioned settings is actually configured
+    #     on (step 2 above) — is the REST equivalent of that manual reload/save, and reloading
+    #     there re-resolves every descendant project's VCS roots in one call.
+    status, body = tc.post(
+        "/app/rest/projects/id:_Root/versionedSettings/loadSettings",
+        json.dumps({**vs_config, "importDecision": "importFromVCS"}),
+    )
+    if status != 200:
+        log(f"ERROR: failed to reload versioned settings after credential injection (HTTP {status}).")
+        log(f"Response: {body}")
+        log("Demo VCS roots may still be using the stale (empty) password — try opening")
+        log("each one in the UI and clicking Save, or re-run bootstrap.")
+        return False
+    log("  reloaded versioned settings so VCS roots pick up the injected credential")
+
     # 5. Agent authorization: documented as a manual UI step, but has a REST escape hatch.
     # PUT, not POST — confirmed live: POST to this endpoint returns 405 Method Not Allowed
     # (this REST call was apparently never actually exercised before; same-host agents do NOT
