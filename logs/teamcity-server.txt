@@ -1,0 +1,90 @@
+teamcity-server-1  | /run-services.sh
+teamcity-server-1  | /services/check-server-volumes.sh
+teamcity-server-1  | 
+teamcity-server-1  | /run-server.sh
+teamcity-server-1  | TeamCity server.xml parameter: -config conf/server.xml
+teamcity-server-1  | Java executable is found: '/opt/java/openjdk/bin/java'
+teamcity-server-1  | 2026-09-11 15:38:18 UTC: Starting TeamCity server
+teamcity-server-1  | 2026-09-11 15:38:18 UTC: TeamCity process PID is 151
+teamcity-server-1  | NOTE: Picked up JDK_JAVA_OPTIONS:  --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions -Djava.security.manager=allow --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.424 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.120
+teamcity-server-1  | 11-Sep-2026 15:38:19.431 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Jul 3 2026 07:49:53 UTC
+teamcity-server-1  | 11-Sep-2026 15:38:19.431 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.120.0
+teamcity-server-1  | 11-Sep-2026 15:38:19.431 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Linux
+teamcity-server-1  | 11-Sep-2026 15:38:19.431 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            7.0.0-31-generic
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /opt/java/openjdk
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           21.0.10+7-LTS
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Amazon.com Inc.
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /opt/teamcity
+teamcity-server-1  | 11-Sep-2026 15:38:19.432 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /opt/teamcity
+teamcity-server-1  | 11-Sep-2026 15:38:19.447 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.447 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -XX:+IgnoreUnrecognizedVMOptions
+teamcity-server-1  | 11-Sep-2026 15:38:19.447 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.security.manager=allow
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.448 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/opt/teamcity/conf/logging.properties
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+teamcity-server-1  | 11-Sep-2026 15:38:19.449 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dorg.apache.catalina.security.SecurityListener.UMASK=0027
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Xmx2g
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -XX:ReservedCodeCacheSize=640m
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dteamcity.configuration.path=../conf/teamcity-startup.properties
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dlog4j2.configurationFile=file:/opt/teamcity/bin/../conf/teamcity-server-log4j.xml
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dteamcity_logs=/opt/teamcity/bin/../logs
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.awt.headless=true
+teamcity-server-1  | 11-Sep-2026 15:38:19.450 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+teamcity-server-1  | 11-Sep-2026 15:38:19.451 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/opt/teamcity
+teamcity-server-1  | 11-Sep-2026 15:38:19.451 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/opt/teamcity
+teamcity-server-1  | 11-Sep-2026 15:38:19.451 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/opt/teamcity/temp
+teamcity-server-1  | 11-Sep-2026 15:38:19.453 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib]
+teamcity-server-1  | 11-Sep-2026 15:38:19.901 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8111"]
+teamcity-server-1  | 11-Sep-2026 15:38:19.934 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [769] milliseconds
+teamcity-server-1  | 11-Sep-2026 15:38:19.992 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+teamcity-server-1  | 11-Sep-2026 15:38:19.993 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.120]
+teamcity-server-1  | 11-Sep-2026 15:38:20.001 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/opt/teamcity/webapps/ROOT]
+teamcity-server-1  | 2026-09-11T15:38:28.871527554Z main INFO Starting configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z]...
+teamcity-server-1  | 2026-09-11T15:38:28.875720577Z main INFO Configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z] started.
+teamcity-server-1  | 2026-09-11T15:38:28.878019909Z main INFO Stopping configuration org.apache.logging.log4j.core.config.DefaultConfiguration@1397ace9...
+teamcity-server-1  | 2026-09-11T15:38:28.878702473Z main INFO Configuration org.apache.logging.log4j.core.config.DefaultConfiguration@1397ace9 stopped.
+teamcity-server-1  | Using logs directory "/opt/teamcity/logs"
+teamcity-server-1  | 2026-09-11T15:38:29.323588573Z main INFO Starting configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z]...
+teamcity-server-1  | 2026-09-11T15:38:29.324298934Z main INFO Configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z] started.
+teamcity-server-1  | 2026-09-11T15:38:29.324991765Z main INFO Stopping configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z]...
+teamcity-server-1  | 2026-09-11T15:38:29.326723423Z main INFO Configuration XmlConfiguration[location=/opt/teamcity/conf/teamcity-server-log4j.xml, lastModified=2026-07-20T10:43:08Z] stopped.
+teamcity-server-1  | Log4J configuration file /opt/teamcity/bin/../conf/teamcity-server-log4j.xml will be monitored with interval 10 seconds.
+teamcity-server-1  | 11-Sep-2026 15:38:29.363 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/opt/teamcity/webapps/ROOT] has finished in [9,362] ms
+teamcity-server-1  | 11-Sep-2026 15:38:29.369 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8111"]
+teamcity-server-1  | 11-Sep-2026 15:38:29.386 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [9450] milliseconds
+teamcity-server-1  | TeamCity version: 2026.1.3 (build 222742), data format version 1039
+teamcity-server-1  | OS: Linux, version 7.0.0-31-generic, amd64, Current user: tcuser, Time zone: UTC
+teamcity-server-1  | Java: 21.0.10, OpenJDK 64-Bit Server VM (21.0.10+7-LTS, mixed mode, sharing), OpenJDK Runtime Environment (21.0.10+7-LTS), Amazon.com Inc.; JVM parameters: --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions -Djava.security.manager=allow --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED -Djava.util.logging.config.file=/opt/teamcity/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dsun.io.useCanonCaches=false -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Xmx2g -XX:ReservedCodeCacheSize=640m -Dteamcity.configuration.path=../conf/teamcity-startup.properties -Dlog4j2.configurationFile=file:/opt/teamcity/bin/../conf/teamcity-server-log4j.xml -Dteamcity_logs=/opt/teamcity/bin/../logs -Djava.awt.headless=true -Dignore.endorsed.dirs= -Dcatalina.base=/opt/teamcity -Dcatalina.home=/opt/teamcity -Djava.io.tmpdir=/opt/teamcity/temp
+teamcity-server-1  | WARNING: A terminally deprecated method in java.lang.System has been called
+teamcity-server-1  | WARNING: System::setSecurityManager has been called by jetbrains.buildServer.serverSide.impl.SecondaryNodeSecurityManager (file:/opt/teamcity/webapps/ROOT/WEB-INF/lib/ro-server-util.jar)
+teamcity-server-1  | WARNING: Please consider reporting this to the maintainers of jetbrains.buildServer.serverSide.impl.SecondaryNodeSecurityManager
+teamcity-server-1  | WARNING: System::setSecurityManager will be removed in a future release
+teamcity-server-1  | Startup confirmation is required. Open TeamCity web page in the browser. Server is running at http://localhost:8111
+teamcity-server-1  | [2026-09-11 15:38:44,030]   WARN [:29.101), node id: MAIN_SERVER] -  jetbrains.buildServer.STARTUP - JDBC driver metadata was not found on the remote server (HTTP 451 Unknown)
+teamcity-server-1  | [2026-09-11 15:45:07,352]   WARN [:29.101), node id: MAIN_SERVER] -   jetbrains.buildServer.UPDATE - Auto update is disabled: distribution is 'docker-ubuntu', but auto update supports only '.tar.gz' and '.exe' distributions
+teamcity-server-1  | [2026-09-11 15:45:20,317]   WARN [:29.101), node id: MAIN_SERVER] - plugins.PluginsLookupCollector - The following plugins will not be loaded:
+teamcity-server-1  | starteam[version: 222742, path: /opt/teamcity/webapps/ROOT/WEB-INF/plugins/starteam] - Plugin is disabled on this node, reason: this plugin is deprecated and will be removed in the future teamcity versions
+teamcity-server-1  | =======================================================================
+teamcity-server-1  | TeamCity initialized, server UUID: 27972b29-c87e-4812-b3a0-176f3a99344d, URL: http://localhost:8111
+teamcity-server-1  | TeamCity is running in professional mode
+teamcity-server-1  | [TeamCity] Super user authentication token: 8871684919247335045 (use empty username with the token as the password to access the server)
+teamcity-server-1  | [2026-09-11 15:45:55,597]   WARN [@61bfeae4'; Normal executor 10] -    jetbrains.buildServer.AGENT - Agent "cxx_ci_demo-teamcity-agent-1" {id=1} is unauthorized on registration
+teamcity-server-1  | [2026-09-11 15:45:56,107]   WARN [@1b7b0951'; Normal executor 11] -    jetbrains.buildServer.AGENT - Agent "cxx_ci_demo-teamcity-agent-1" {id=1} is unauthorized on registration
+teamcity-server-1  | [2026-09-11 15:46:51,445]   WARN [@53efd85a'; Normal executor 10] -    jetbrains.buildServer.AGENT - Agent "cxx_ci_demo-teamcity-agent-1" {id=1} is unauthorized on registration
+teamcity-server-1  | [2026-09-11 15:48:50,877]   WARN [56'; Bundled tools installer 1] - ols.IntelliJServerToolProvider - Failed to download IntelliJ IDEA 2022.1.3: jetbrains.buildServer.tools.utils.URLDownloader$DownloadException: Failed to download https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIU/2022.1.3/ideaIU-2022.1.3.zip: Read timed out (enable debug to see stacktrace)
+teamcity-server-1  | [2026-09-11 15:48:50,929]   WARN [56'; Bundled tools installer 1] - ndled.BundledToolInstallerImpl - Failed to download and install bundled tool with 'idea' id on 1 attempt (2 attempts left). The tool can be installed manually on 'Administration | Tools' page.
+teamcity-server-1  | [2026-09-11 15:55:51,629]   WARN [cc'; Bundled tools installer 1] - ols.IntelliJServerToolProvider - Failed to download IntelliJ IDEA 2022.1.3: jetbrains.buildServer.tools.utils.URLDownloader$DownloadException: Failed to download https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIU/2022.1.3/ideaIU-2022.1.3.zip: Read timed out (enable debug to see stacktrace)
+teamcity-server-1  | [2026-09-11 15:55:51,632]   WARN [cc'; Bundled tools installer 1] - ndled.BundledToolInstallerImpl - Failed to download and install bundled tool with 'idea' id on 2 attempt (1 attempt left). The tool can be installed manually on 'Administration | Tools' page.
+teamcity-server-1  | [2026-09-11 16:02:52,544]   WARN [b9'; Bundled tools installer 1] - ols.IntelliJServerToolProvider - Failed to download IntelliJ IDEA 2022.1.3: jetbrains.buildServer.tools.utils.URLDownloader$DownloadException: Failed to download https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIU/2022.1.3/ideaIU-2022.1.3.zip: Read timed out (enable debug to see stacktrace)
+teamcity-server-1  | [2026-09-11 16:02:52,558]   WARN [b9'; Bundled tools installer 1] - ndled.BundledToolInstallerImpl - Failed to download and install bundled tool with 'idea' id on 3 attempt (0 attempts left). The tool can be installed manually on 'Administration | Tools' page.

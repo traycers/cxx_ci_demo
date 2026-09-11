@@ -1,0 +1,232 @@
+teamcity-agent-1  | /run-services.sh
+teamcity-agent-1  | /services/run-docker.sh
+teamcity-agent-1  | /run-agent.sh
+teamcity-agent-1  | Will create new buildAgent.properties using distributive
+teamcity-agent-1  | TeamCity URL is provided: http://teamcity-server:8111
+teamcity-agent-1  | Will prepare agent config
+teamcity-agent-1  | run agent.sh configure --server-url http://teamcity-server:8111
+teamcity-agent-1  | Java executable is found: '/opt/java/openjdk/bin/java'
+teamcity-agent-1  | Configuring TeamCity build agent...
+teamcity-agent-1  | File buildAgent.properties was updated
+teamcity-agent-1  | File buildAgent.properties was created and updated
+teamcity-agent-1  | Starting TeamCity build agent...
+teamcity-agent-1  | Java executable is found: '/opt/java/openjdk/bin/java'
+teamcity-agent-1  | Starting TeamCity Build Agent Launcher...
+teamcity-agent-1  | Agent home directory is /opt/buildagent
+teamcity-agent-1  | Agent Launcher Java runtime version is 21 
+teamcity-agent-1  | Lock file: /opt/buildagent/logs/buildAgent.properties.lock 
+teamcity-agent-1  | Using no lock 
+teamcity-agent-1  | Done [699], see log at /opt/buildagent/logs/teamcity-agent.log
+teamcity-agent-1  | ......
+teamcity-agent-1  | 
+teamcity-agent-1  | 
+teamcity-agent-1  | 
+teamcity-agent-1  | [2026-09-11 16:38:27,323]   INFO - s.buildServer.agent.AgentMain2 - ===========================================================
+teamcity-agent-1  | [2026-09-11 16:38:27,341]   INFO - s.buildServer.agent.AgentMain2 - TeamCity Build Agent 2026.1.3 (build 222742)
+teamcity-agent-1  | [2026-09-11 16:38:27,406]   INFO - s.buildServer.agent.AgentMain2 - OS: Linux, version 7.0.0-31-generic, amd64, Current user: root, Time zone: BST (UTC+01:00)
+teamcity-agent-1  | [2026-09-11 16:38:27,409]   INFO - s.buildServer.agent.AgentMain2 - Java: 21.0.10, OpenJDK 64-Bit Server VM (21.0.10+7-LTS, mixed mode, sharing), OpenJDK Runtime Environment (21.0.10+7-LTS), Amazon.com Inc.; JVM parameters: -ea -XX:+DisableAttachMechanism --enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow -XX:+UseCompactObjectHeaders --add-opens=java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions -Xmx384m -Dteamcity_logs=../logs/ -Dlog4j2.configurationFile=file:../conf/teamcity-agent-log4j2.xml -Djava.io.tmpdir=/opt/buildagent/temp/globalTmp
+teamcity-agent-1  | [2026-09-11 16:38:27,410]   INFO - s.buildServer.agent.AgentMain2 - Agent home is "/opt/buildagent"
+teamcity-agent-1  | [2026-09-11 16:38:27,410]   INFO - s.buildServer.agent.AgentMain2 - Starting...
+teamcity-agent-1  | [2026-09-11 16:38:29,505]   INFO -    jetbrains.buildServer.AGENT - Calculating CPU benchmark index...
+teamcity-agent-1  | [2026-09-11 16:38:29,740]   INFO - dAgentConfigurationInitializer - Loading build agent configuration from /data/teamcity_agent/conf/buildAgent.properties
+teamcity-agent-1  | [2026-09-11 16:38:29,773]   INFO - ains.buildServer.util.FileUtil - Unable to remove directory /opt/buildagent/temp on unix platform, try to fix permissions and repeat delete operation
+teamcity-agent-1  | [2026-09-11 16:38:29,821]   WARN - ains.buildServer.util.FileUtil - Unable to remove directory /opt/buildagent/temp using command line: rm -Rf /opt/buildagent/temp
+teamcity-agent-1  | execution code: 1
+teamcity-agent-1  | std out: 
+teamcity-agent-1  | std err: rm: cannot remove '/opt/buildagent/temp': Device or resource busy
+teamcity-agent-1  | 
+teamcity-agent-1  | [2026-09-11 16:38:29,831]   INFO - s.buildServer.agent.AgentMain2 - Working dir: /opt/buildagent/work
+teamcity-agent-1  | [2026-09-11 16:38:29,831]   INFO - s.buildServer.agent.AgentMain2 - Temp dir: /opt/buildagent/temp
+teamcity-agent-1  | [2026-09-11 16:38:29,838]   INFO - rver.plugins.PluginManagerImpl - ===========================================================
+teamcity-agent-1  | [2026-09-11 16:38:29,838]   INFO - rver.plugins.PluginManagerImpl - Plugins initialization started...
+teamcity-agent-1  | [2026-09-11 16:38:29,838]   INFO - rver.plugins.PluginManagerImpl - Scanning plugins folders
+teamcity-agent-1  | [2026-09-11 16:38:29,840]   INFO - .plugins.files.JarSearcherBase - Scanning plugin folder: /opt/buildagent/plugins
+teamcity-agent-1  | [2026-09-11 16:38:30,006]   INFO - .plugins.files.JarSearcherBase - Scanning plugin folder: /opt/buildagent/tools
+teamcity-agent-1  | [2026-09-11 16:38:30,027]   INFO - rver.plugins.PluginManagerImpl - Found 55 non bundled plugins: [agentSystemInfo, amazonEC2, ant, ant-net-tasks, antPlugin, aws-core-agent, cloud-vmware-agent, commandLineRunner, coveragePlugin, crashDetector, deploy-runner-agent, docker-support, dotnet, duplicatePlugin, environment-fetcher, file-content-replacer, file-to-build-log-streaming-plugin-agent, fxcop, gant, gantPlugin, golang-agent, gradle-runner, hashicorp-vault-plugin, idea-runner, inspectionPlugin, java-dowser, jetbrains.git, jps, junitPlugin, jvm-update, kotlin-script-runner-agent, mavenPlugin, mercurial, nodejs-agent-222742, nuget-agent, perfmon-agent, perforce-agent, plugin-agent, python-agent-222742, qodana, rake-runner, remoteAccess, s3-artifact-storage-agent, sbt-runner-agent, ssh-manager, stacktracesPlugin, svnAgent, swabra, teamcity-agent-terminal-plugin-agent, teamcity-kubernetes-plugin-agent, teamcity-parallel-tests-agent, testNGPlugin, tfs-agent, xcode-runner, xml-report-plugin]
+teamcity-agent-1  | [2026-09-11 16:38:30,027]   INFO - rver.plugins.PluginManagerImpl - Found 0 bundled plugins: []
+teamcity-agent-1  | [2026-09-11 16:38:30,033]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/ant
+teamcity-agent-1  | [2026-09-11 16:38:30,033]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/antRun
+teamcity-agent-1  | [2026-09-11 16:38:30,033]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/ant.bat
+teamcity-agent-1  | [2026-09-11 16:38:30,033]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/ant.cmd
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/antenv.cmd
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/envset.cmd
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/lcp.bat
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/runrc.cmd
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/antRun.pl
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/complete-ant-cmd.pl
+teamcity-agent-1  | [2026-09-11 16:38:30,034]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/runant.pl
+teamcity-agent-1  | [2026-09-11 16:38:30,035]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/plugins/ant/bin/runant.py
+teamcity-agent-1  | [2026-09-11 16:38:30,036]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/tools/gant/bin/gant
+teamcity-agent-1  | [2026-09-11 16:38:30,036]   INFO - les.ExecutableAttributesSetter - Setting executable bit for: /opt/buildagent/tools/gant/bin/startGroovy
+teamcity-agent-1  | [2026-09-11 16:38:30,038]   INFO - rver.plugins.PluginsCollection - Load shared classloader for 14 plugins [ant, commandLineRunner, crashDetector, environment-fetcher, file-content-replacer, fxcop, gradle-runner, java-dowser, jetbrains.git, mercurial, remoteAccess, ssh-manager, stacktracesPlugin, xml-report-plugin]
+teamcity-agent-1  | [2026-09-11 16:38:30,079]   INFO - rver.plugins.PluginsCollection - Load standalone classloaders for 38 plugins [agentSystemInfo, amazonEC2, antPlugin, aws-core-agent, cloud-vmware-agent, coveragePlugin, deploy-runner-agent, docker-support, dotnet, duplicatePlugin, file-to-build-log-streaming-plugin-agent, gantPlugin, golang-agent, hashicorp-vault-plugin, idea-runner, inspectionPlugin, junitPlugin, jvm-update, kotlin-script-runner-agent, mavenPlugin, nodejs-agent-222742, nuget-agent, perfmon-agent, perforce-agent, plugin-agent, python-agent-222742, qodana, rake-runner, s3-artifact-storage-agent, sbt-runner-agent, svnAgent, swabra, teamcity-agent-terminal-plugin-agent, teamcity-kubernetes-plugin-agent, teamcity-parallel-tests-agent, testNGPlugin, tfs-agent, xcode-runner]
+teamcity-agent-1  | [2026-09-11 16:38:30,181]   INFO - KubeAgentConfigurationProvider - Initializing Kube Provider...
+teamcity-agent-1  | [2026-09-11 16:38:30,251]   INFO - .vmware.VMWarePropertiesReader - VSphere plugin initializing...
+teamcity-agent-1  | [2026-09-11 16:38:30,254]   INFO - .vmware.VMWarePropertiesReader - Unable to locate vmware-rpctool. Looks like not a VMWare VM or VWWare tools are not installed
+teamcity-agent-1  | [2026-09-11 16:38:30,779]   INFO - t.golang.BuildMessagesListener - Init the Golang plugin
+teamcity-agent-1  | [2026-09-11 16:38:31,336]   INFO - .vault.agent.VaultBuildFeature - HashiCorp Vault integration enabled
+teamcity-agent-1  | [2026-09-11 16:38:33,418]   INFO -    jetbrains.buildServer.AGENT - CPU benchmark index is set to 893
+teamcity-agent-1  | [2026-09-11 16:38:33,606]   INFO - rver.plugins.PluginManagerImpl - Plugins initialization completed (55 plugins loaded): [agentSystemInfo, amazonEC2, ant, ant-net-tasks, antPlugin, aws-core-agent, cloud-vmware-agent, commandLineRunner, coveragePlugin, crashDetector, deploy-runner-agent, docker-support, dotnet, duplicatePlugin, environment-fetcher, file-content-replacer, file-to-build-log-streaming-plugin-agent, fxcop, gant, gantPlugin, golang-agent, gradle-runner, hashicorp-vault-plugin, idea-runner, inspectionPlugin, java-dowser, jetbrains.git, jps, junitPlugin, jvm-update, kotlin-script-runner-agent, mavenPlugin, mercurial, nodejs-agent-222742, nuget-agent, perfmon-agent, perforce-agent, plugin-agent, python-agent-222742, qodana, rake-runner, remoteAccess, s3-artifact-storage-agent, sbt-runner-agent, ssh-manager, stacktracesPlugin, svnAgent, swabra, teamcity-agent-terminal-plugin-agent, teamcity-kubernetes-plugin-agent, teamcity-parallel-tests-agent, testNGPlugin, tfs-agent, xcode-runner, xml-report-plugin]
+teamcity-agent-1  | [2026-09-11 16:38:33,607]   INFO - rver.plugins.PluginManagerImpl - ===========================================================
+teamcity-agent-1  | [2026-09-11 16:38:33,640]   INFO -    jetbrains.buildServer.AGENT - Build Agent version: 222742, plugins signature: 222742-md5-5096c31cc83158197f3088494ac4f493
+teamcity-agent-1  | [2026-09-11 16:38:33,897]   INFO - ggers.vcs.mercurial.HgDetector - Detect installed mercurial at path hg, provide it as a property teamcity.hg.agent.path
+teamcity-agent-1  | [2026-09-11 16:38:33,898]   INFO - dAgentConfigurationInitializer - Loading build agent configuration from /data/teamcity_agent/conf/buildAgent.properties
+teamcity-agent-1  | [2026-09-11 16:38:33,910]   INFO - KubeAgentConfigurationProvider - TeamCity Server URL was not provided. The instance wasn't started using TeamCity Kube integration.
+teamcity-agent-1  | [2026-09-11 16:38:36,966]   INFO - n.AmazonInstanceMetadataReader - Amazon is not available. Amazon EC2 integration is not active: Failed to connect to http://169.254.169.254/latest/api/token. The host did not accept the connection within timeout of 3000 ms
+teamcity-agent-1  | [2026-09-11 16:38:39,971]   INFO - n.AmazonInstanceMetadataReader - Amazon is not available. Amazon EC2 integration is not active: Failed to connect to http://169.254.169.254/latest/2016-04-19. The host did not accept the connection within timeout of 3000 ms
+teamcity-agent-1  | [2026-09-11 16:38:40,002]   INFO -    jetbrains.buildServer.AGENT - Start build agent
+teamcity-agent-1  | [2026-09-11 16:38:40,012]   INFO -    jetbrains.buildServer.AGENT - Agent Web server started on port 9090
+teamcity-agent-1  | [2026-09-11 16:38:40,013]   INFO -    jetbrains.buildServer.AGENT - Start probing plugins for the configuration parameters to store
+teamcity-agent-1  | [2026-09-11 16:38:40,017]   INFO - t.resolver.AgentPythonResolver - Python 3.x executable found at /usr/bin/python3
+teamcity-agent-1  | [2026-09-11 16:38:40,018]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider4.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/net46/CredentialProvider.TeamCity.exe
+teamcity-agent-1  | [2026-09-11 16:38:40,020]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider1.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/netcoreapp1.0/CredentialProvider.TeamCity.dll
+teamcity-agent-1  | [2026-09-11 16:38:40,020]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider2.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/netcoreapp2.0/CredentialProvider.TeamCity.dll
+teamcity-agent-1  | [2026-09-11 16:38:40,020]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider3.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/netcoreapp3.0/CredentialProvider.TeamCity.dll
+teamcity-agent-1  | [2026-09-11 16:38:40,021]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider5.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/net5.0/CredentialProvider.TeamCity.dll
+teamcity-agent-1  | [2026-09-11 16:38:40,021]   INFO - ialProviderPropertiesExtension - Found .NET credential provider DotNetCredentialProvider6.0.0_Path at /opt/buildagent/plugins/nuget-agent/bin/credential-plugin/net6.0/CredentialProvider.TeamCity.dll
+teamcity-agent-1  | [2026-09-11 16:38:40,063]   INFO - .agent.AgentStartupGitDetector - Detected git at /usr/bin/git
+teamcity-agent-1  | [2026-09-11 16:38:40,162]   INFO - rver.agent.PropertiesExtension - Start: Fetched agent properties
+teamcity-agent-1  | [2026-09-11 16:38:40,218]   INFO - ileBasedDotnetWorkloadProvider - .NET workloads are not found in directory "/usr/share/dotnet/metadata/workloads". The directory does not exist
+teamcity-agent-1  | [2026-09-11 16:38:40,218]   INFO - rver.agent.PropertiesExtension - DotNetCLI_Path="/usr/share/dotnet/dotnet".
+teamcity-agent-1  | [2026-09-11 16:38:40,222]   INFO - rver.agent.PropertiesExtension - DotNetCoreRuntime10.0_Path="/usr/share/dotnet/shared/Microsoft.NETCore.App/10.0.6".
+teamcity-agent-1  | [2026-09-11 16:38:40,222]   INFO - rver.agent.PropertiesExtension - DotNetCoreRuntime10.0.6_Path="/usr/share/dotnet/shared/Microsoft.NETCore.App/10.0.6".
+teamcity-agent-1  | [2026-09-11 16:38:40,453]   INFO - .agent.CommandLineExecutorImpl - <--- "/usr/share/dotnet/dotnet --version" exits with code: 0
+teamcity-agent-1  | [2026-09-11 16:38:40,453]   INFO - rver.agent.PropertiesExtension - DotNetCLI="10.0.202".
+teamcity-agent-1  | [2026-09-11 16:38:40,454]   INFO - rver.agent.PropertiesExtension - DotNetCoreSDK10.0_Path="/usr/share/dotnet/sdk/10.0.202".
+teamcity-agent-1  | [2026-09-11 16:38:40,454]   INFO - rver.agent.PropertiesExtension - DotNetCoreSDK10.0.202_Path="/usr/share/dotnet/sdk/10.0.202".
+teamcity-agent-1  | [2026-09-11 16:38:40,455]   INFO - rver.agent.PropertiesExtension - Finish: Fetched agent properties (293 ms)
+teamcity-agent-1  | [2026-09-11 16:38:40,456]   INFO - t.resolver.AgentPythonResolver - Python 2.x executable is not found in default directories. Searching for other paths.
+teamcity-agent-1  | [2026-09-11 16:38:40,536]   INFO - t.resolver.AgentPythonResolver - Python 2.x is not found
+teamcity-agent-1  | [2026-09-11 16:38:40,563]   INFO - .agent.impl.OsArchBitsDetector - Detecting via "getconf LONG_BIT", exit code: 0, output: 64
+teamcity-agent-1  | [2026-09-11 16:38:40,563]   INFO - .agent.impl.OsArchBitsDetector - "teamcity.agent.os.arch.bits" detected as "64"
+teamcity-agent-1  | [2026-09-11 16:38:40,572]   INFO - r.mono.MonoPropertiesExtension - Mono not found
+teamcity-agent-1  | [2026-09-11 16:38:40,572]   INFO - Server.powershell.agent.DETECT - Detecting PowerShell using CommandLinePowerShellDetector
+teamcity-agent-1  | [2026-09-11 16:38:40,575]   INFO - Server.powershell.agent.DETECT - No PowerShell detected. If it is installed in non-standard location, please provide install locations in teamcity.powershell.detector.search.paths agent property (with ';' as a separator)
+teamcity-agent-1  | [2026-09-11 16:38:40,659]   INFO - ent.javaDowser.JavaDowserAgent - JavaDowser: Found 1 java installations:
+teamcity-agent-1  | 	21/64/amd64 (21.0.10) at /opt/java/openjdk (JDK) [200]
+teamcity-agent-1  | [2026-09-11 16:38:41,059]   INFO - rains.buildServer.AGENT.DOCKER - Docker client is available: 29.4.0
+teamcity-agent-1  | [2026-09-11 16:38:41,060]   INFO - rains.buildServer.AGENT.DOCKER - Docker server is available: 29.6.1
+teamcity-agent-1  | [2026-09-11 16:38:41,060]   INFO - rains.buildServer.AGENT.DOCKER - Docker-compose is available: 5.3.1
+teamcity-agent-1  | [2026-09-11 16:38:41,060]   INFO - rains.buildServer.AGENT.DOCKER - Failed to locate a running Podman container engine.
+teamcity-agent-1  | [2026-09-11 16:38:41,069]   INFO -    jetbrains.buildServer.AGENT - Stop probing plugins for the configuration parameters to store
+teamcity-agent-1  | [2026-09-11 16:38:41,073]   INFO - agent.impl.AgentPortFileWriter - Writing agent runtime file to /opt/buildagent/logs/buildAgent.xmlRpcPort
+teamcity-agent-1  | [2026-09-11 16:38:41,076]   INFO - agent.impl.AgentPortFileWriter - Launcher version is 2026.1-222742
+teamcity-agent-1  | [2026-09-11 16:38:41,077]   INFO - agent.impl.AgentPortFileWriter - Writing agent runtime file to /opt/buildagent/logs/buildAgent.xmlRpcPort :DONE!
+teamcity-agent-1  | [2026-09-11 16:38:41,077]   INFO - Server.powershell.agent.DETECT - Agent has been initialized from cache, registering powershells from configuration
+teamcity-agent-1  | [2026-09-11 16:38:41,081]   INFO - nstall.PackagesInstallerRunner - NuGet requires .NET Framework (x86) 4.0 and higher or Mono 3.2 and higher to be installed.
+teamcity-agent-1  | [2026-09-11 16:38:41,082]   INFO - t.agent.runner.pack.PackRunner - NuGet requires .NET Framework (x86) 4.0 and higher or Mono 3.2 and higher to be installed.
+teamcity-agent-1  | [2026-09-11 16:38:41,082]   INFO - .publish.PackagesPublishRunner - NuGet requires .NET Framework (x86) 4.0 and higher or Mono 3.2 and higher to be installed.
+teamcity-agent-1  | [2026-09-11 16:38:41,095]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:38:41,120]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:38:41,121]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:38:41,188]   INFO -    jetbrains.buildServer.AGENT - Build agent started
+teamcity-agent-1  | [2026-09-11 16:38:41,574]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 16:38:41,576]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 16:38:41,601]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 16:38:41,601]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 16:38:41,646]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 16:39:41,263]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:39:41,269]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:39:41,271]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:40:41,390]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:40:41,396]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:40:41,397]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:41:41,497]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:41:41,502]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:41:41,503]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:42:41,606]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:42:41,611]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:42:41,612]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:43:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 16:43:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 16:43:41,596]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 16:43:41,596]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 16:43:41,625]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 16:43:41,718]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:43:41,723]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:43:41,725]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:44:41,836]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:44:41,841]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:44:41,842]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:45:41,959]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='', AgentId=null, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-5096c31cc83158197f3088494ac4f493', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:45:41,964]   WARN - buildServer.AGENT.registration - Failed to obtain server supported protocols via URL http://teamcity-server:8111/app/agents/protocols: TeamCity Server is starting. Will try later.
+teamcity-agent-1  | [2026-09-11 16:45:41,965]   WARN - buildServer.AGENT.registration - Error registering on the server via URL http://teamcity-server:8111. Will continue repeating connection attempts.
+teamcity-agent-1  | [2026-09-11 16:45:55,020]   INFO - ldServer.AGENT.PollingProtocol - Start polling server for commands
+teamcity-agent-1  | [2026-09-11 16:45:55,020]   INFO - buildServer.AGENT.registration - Connection to TeamCity Server has been restored using the 'polling' protocol
+teamcity-agent-1  | [2026-09-11 16:45:55,022]   INFO -    jetbrains.buildServer.AGENT - Agent name was '', but server returned new name 'cxx_ci_demo-teamcity-agent-1'. Agent name will be updated.
+teamcity-agent-1  | [2026-09-11 16:45:55,043]   INFO - ldServer.AGENT.PollingProtocol - New command is received from server "upgrade" {id = 12}
+teamcity-agent-1  | [2026-09-11 16:45:55,046]   INFO -    jetbrains.buildServer.AGENT - Upgrade call received from the server
+teamcity-agent-1  | [2026-09-11 16:45:55,047]   INFO -    jetbrains.buildServer.AGENT - Will upgrade when become idle
+teamcity-agent-1  | [2026-09-11 16:45:55,047]   INFO - ldServer.AGENT.PollingProtocol - Posting result for command: "upgrade" {id = 12} result: true
+teamcity-agent-1  | [2026-09-11 16:45:55,047]   INFO -    jetbrains.buildServer.AGENT - Wait for build agent registration to finish
+teamcity-agent-1  | [2026-09-11 16:45:55,048]   INFO -    jetbrains.buildServer.AGENT - Wait for registration to finish, currently in progress: false
+teamcity-agent-1  | [2026-09-11 16:45:55,056]   INFO - ldServer.AGENT.PollingProtocol - Finished posting result for command: "upgrade" {id = 12}
+teamcity-agent-1  | [2026-09-11 16:45:55,554]   INFO -    jetbrains.buildServer.AGENT - Done waiting for registration to finish
+teamcity-agent-1  | [2026-09-11 16:45:55,555]   INFO -    jetbrains.buildServer.AGENT - Registration of build agent is finished.
+teamcity-agent-1  | [2026-09-11 16:45:55,560]   INFO -    jetbrains.buildServer.AGENT - Downloading http://teamcity-server:8111/update/teamcity-agent.xml ==> /opt/buildagent/temp/TYP77gpXu5jfYx9JxsIJjtaV1Z2CE90a
+teamcity-agent-1  | [2026-09-11 16:45:55,569]   INFO - ldServer.AGENT.PollingProtocol - New command is received from server "testLocal" {id = 11}
+teamcity-agent-1  | [2026-09-11 16:45:55,571]   INFO -    jetbrains.buildServer.AGENT - No agent restart is necessary for this upgrade; will attempt to upgrade without restarting the agent
+teamcity-agent-1  | [2026-09-11 16:45:55,572]   INFO -    jetbrains.buildServer.AGENT - Upgrade mode: jetbrains.buildServer.agent.impl.upgrade.modes.PluginsOnlyUpgradeMode
+teamcity-agent-1  | [2026-09-11 16:45:55,572]   INFO - ldServer.AGENT.PollingProtocol - Posting result for command: "testLocal" {id = 11} result: 
+teamcity-agent-1  | [2026-09-11 16:45:55,581]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='cxx_ci_demo-teamcity-agent-1', AgentId=1, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-957751b5d4e7f1f2a25bc6c4d8ae9391', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='d45782108dc98765c9e43d21455af11d', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:45:55,587]   INFO - ldServer.AGENT.PollingProtocol - Finished posting result for command: "testLocal" {id = 11}
+teamcity-agent-1  | [2026-09-11 16:45:55,588]   INFO - buildServer.AGENT.registration - Server supports the following communication protocols: [polling]
+teamcity-agent-1  | [2026-09-11 16:45:55,588]   INFO - buildServer.AGENT.registration - Trying to register on server using 'polling' protocol.
+teamcity-agent-1  | [2026-09-11 16:45:55,719]   INFO - buildServer.AGENT.registration - Registered on server with id 1 and authorization token 'd45782108dc98765c9e43d21455af11d'
+teamcity-agent-1  | [2026-09-11 16:45:55,719]   INFO - buildServer.AGENT.registration - If this is the first time this agent registered on the server make sure it is authorized by administrator in the server web UI.
+teamcity-agent-1  | [2026-09-11 16:45:55,720]   INFO -    jetbrains.buildServer.AGENT - The upgrade is complete; the agent will not restart
+teamcity-agent-1  | [2026-09-11 16:45:56,097]   INFO - ldServer.AGENT.PollingProtocol - New command is received from server "testLocal" {id = 13}
+teamcity-agent-1  | [2026-09-11 16:45:56,098]   INFO - ldServer.AGENT.PollingProtocol - Posting result for command: "testLocal" {id = 13} result: 
+teamcity-agent-1  | [2026-09-11 16:45:56,108]   INFO - ldServer.AGENT.PollingProtocol - Finished posting result for command: "testLocal" {id = 13}
+teamcity-agent-1  | [2026-09-11 16:46:50,347]   INFO - ldServer.AGENT.PollingProtocol - New command is received from server "upgrade" {id = 64}
+teamcity-agent-1  | [2026-09-11 16:46:50,348]   INFO -    jetbrains.buildServer.AGENT - Upgrade call received from the server
+teamcity-agent-1  | [2026-09-11 16:46:50,348]   INFO - ldServer.AGENT.PollingProtocol - Posting result for command: "upgrade" {id = 64} result: true
+teamcity-agent-1  | [2026-09-11 16:46:50,348]   INFO -    jetbrains.buildServer.AGENT - Will upgrade when become idle
+teamcity-agent-1  | [2026-09-11 16:46:50,349]   INFO -    jetbrains.buildServer.AGENT - Wait for build agent registration to finish
+teamcity-agent-1  | [2026-09-11 16:46:50,349]   INFO -    jetbrains.buildServer.AGENT - Wait for registration to finish, currently in progress: false
+teamcity-agent-1  | [2026-09-11 16:46:50,358]   INFO - ldServer.AGENT.PollingProtocol - Finished posting result for command: "upgrade" {id = 64}
+teamcity-agent-1  | [2026-09-11 16:46:50,854]   INFO -    jetbrains.buildServer.AGENT - Done waiting for registration to finish
+teamcity-agent-1  | [2026-09-11 16:46:50,855]   INFO -    jetbrains.buildServer.AGENT - Registration of build agent is finished.
+teamcity-agent-1  | [2026-09-11 16:46:50,858]   INFO -    jetbrains.buildServer.AGENT - Downloading http://teamcity-server:8111/update/teamcity-agent.xml ==> /opt/buildagent/temp/6OALAaqN5IPLa1rQgHB2d0gZq22DRvPx
+teamcity-agent-1  | [2026-09-11 16:46:50,866]   INFO -    jetbrains.buildServer.AGENT - No agent restart is necessary for this upgrade; will attempt to upgrade without restarting the agent
+teamcity-agent-1  | [2026-09-11 16:46:50,866]   INFO -    jetbrains.buildServer.AGENT - Upgrade mode: jetbrains.buildServer.agent.impl.upgrade.modes.PluginsOnlyUpgradeMode
+teamcity-agent-1  | [2026-09-11 16:46:50,872]   INFO - buildServer.AGENT.registration - Registering on server via URL "http://teamcity-server:8111": AgentDetails{Name='cxx_ci_demo-teamcity-agent-1', AgentId=1, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-c0b08cd7b2b50522c3b9c0b4742a6afd', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='d45782108dc98765c9e43d21455af11d', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 16:46:50,878]   INFO - buildServer.AGENT.registration - Server supports the following communication protocols: [polling]
+teamcity-agent-1  | [2026-09-11 16:46:50,879]   INFO - buildServer.AGENT.registration - Trying to register on server using 'polling' protocol.
+teamcity-agent-1  | [2026-09-11 16:46:50,933]   INFO - buildServer.AGENT.registration - Registered on server with id 1 and authorization token 'd45782108dc98765c9e43d21455af11d'
+teamcity-agent-1  | [2026-09-11 16:46:50,933]   INFO - buildServer.AGENT.registration - If this is the first time this agent registered on the server make sure it is authorized by administrator in the server web UI.
+teamcity-agent-1  | [2026-09-11 16:46:50,933]   INFO -    jetbrains.buildServer.AGENT - The upgrade is complete; the agent will not restart
+teamcity-agent-1  | [2026-09-11 16:46:51,430]   INFO - ldServer.AGENT.PollingProtocol - New command is received from server "testLocal" {id = 65}
+teamcity-agent-1  | [2026-09-11 16:46:51,432]   INFO - ldServer.AGENT.PollingProtocol - Posting result for command: "testLocal" {id = 65} result: 
+teamcity-agent-1  | [2026-09-11 16:46:51,445]   INFO - ldServer.AGENT.PollingProtocol - Finished posting result for command: "testLocal" {id = 65}
+teamcity-agent-1  | [2026-09-11 16:48:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 16:48:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 16:48:41,603]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 16:48:41,604]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 16:48:41,636]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 16:53:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 16:53:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 16:53:41,591]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 16:53:41,591]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 16:53:41,616]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 16:58:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 16:58:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 16:58:41,593]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 16:58:41,593]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 16:58:41,616]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 17:03:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 17:03:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 17:03:41,595]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 17:03:41,595]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 17:03:41,620]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 17:08:35,641]   INFO -    jetbrains.buildServer.AGENT - Updating agent parameters on the server: AgentDetails{Name='cxx_ci_demo-teamcity-agent-1', AgentId=1, BuildId=null, AgentOwnAddress='null', AlternativeAddresses=[], Port=9090, Version='222742', PluginsVersion='222742-md5-c0b08cd7b2b50522c3b9c0b4742a6afd', AvailableRunners=[Ant, cargo-deploy-runner, csharpScript, DockerCommand, DockerCompose, dotcover, dotnet, dotnet-tools-dupfinder, dotnet-tools-inspectcode, Duplicator, ftp-deploy-runner, gradle-runner, Inspection, jetbrains_powershell, JPS, kotlinScript, Maven2, nodejs-runner, nunit-console, python-runner, Qodana, rake-runner, SBT, simpleRunner, smb-deploy-runner, ssh-deploy-runner, ssh-exec-runner], AvailableVcs=[tfs, jetbrains.git, mercurial, svn, perforce], AuthorizationToken='d45782108dc98765c9e43d21455af11d', PingCode='0PpOWM58gVvY3JfWcNw3AM6W0L4TXRFQ'}
+teamcity-agent-1  | [2026-09-11 17:08:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 17:08:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 17:08:41,592]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 17:08:41,593]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 17:08:41,616]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
+teamcity-agent-1  | [2026-09-11 17:13:41,572]   INFO - r.artifacts.impl.HttpDiskCache - Cleaning up items with life time in cache greater than 172800 seconds
+teamcity-agent-1  | [2026-09-11 17:13:41,573]   INFO - r.artifacts.impl.HttpDiskCache - Finished cleaning up expired items, 0 items removed
+teamcity-agent-1  | [2026-09-11 17:13:41,594]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/temp/.old
+teamcity-agent-1  | [2026-09-11 17:13:41,595]   INFO - dDirectoryBasedCleanupRegistry - Removing files from /opt/buildagent/work/.old
+teamcity-agent-1  | [2026-09-11 17:13:41,612]   INFO - l.directories.DirectoryMapImpl - Cleaning up old checkout directories. Default lifetime = 192 hour(s)
