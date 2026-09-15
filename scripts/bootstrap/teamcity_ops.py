@@ -162,15 +162,19 @@ def provision_teamcity():
     log("  versioned settings pointed at ci-infra (Kotlin, import mode)")
 
     # 3. Wait for the DSL to actually have applied — poll the tree it's supposed to create,
-    #    not the status message text (see the bash version's comment on why).
+    #    not the status message text (see the bash version's comment on why). Polls the
+    #    top-level CxxCiDemo project rather than a leaf build type: leaf ids move around as
+    #    the DSL is restructured (e.g. the debug/release package-variant split), the root
+    #    project id doesn't.
     log("  waiting for DSL import to apply...")
     if not _poll_until(
-        lambda: tc.get_status("/app/rest/buildTypes/id:CxxCiDemo_Main_ProjectA") == 200,
+        lambda: tc.get_status("/app/rest/projects/id:CxxCiDemo") == 200,
         deadline,
         interval=3,
     ):
         log(f"ERROR: DSL import did not apply within {config.TEAMCITY_PROVISION_TIMEOUT_SECONDS}s "
-            "(CxxCiDemo_Main_ProjectA never appeared in the REST API).")
+            "(CxxCiDemo never appeared in the REST API).")
+        log(f"  versioned settings status: {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
         log("Check repos/ci-infra/main/.teamcity/settings.kts for errors, then re-run bootstrap.")
         return False
     log(f"  {tc.get('/app/rest/projects/id:_Root/versionedSettings/status').text}")
