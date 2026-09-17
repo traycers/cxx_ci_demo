@@ -15,14 +15,16 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 
 ## Troubleshooting
 
-- **`docker compose up` fails mounting `BUILDAGENT_DATA_DIR/*`** (permission denied): the docker
-  daemon needs to be able to create/own that directory — `.env.example` defaults it to
-  `./agents_dir` (gitignored/dockerignored) precisely so it's always inside a directory you
-  already own, but if you've pointed it somewhere else (e.g. back at `/opt/buildagent`) that
-  requires the daemon to create/own directories there too — true for a normal rootful Docker
-  install, not for rootless Docker or a host account without root. Set `BUILDAGENT_DATA_DIR` in
-  `.env` to a directory you actually own and re-run. These specifically have to be host bind
-  mounts, not named volumes — see the comment on `teamcity-agent` in `docker-compose.yml` for why.
+- **`docker compose up` fails mounting `/opt/buildagent/*`** (permission denied): the docker
+  daemon needs to be able to create/own `/opt/buildagent` on the host. This path is not
+  configurable — it's baked into the `jetbrains/teamcity-agent` image itself, so the host side
+  has to be this exact path too (see the comment on `teamcity-agent` in `docker-compose.yml` for
+  why). Creating/owning a directory under `/opt` requires root, which a rootless Docker install
+  or a host account without root doesn't have. If you hit that, do this once, manually, as a
+  human with `sudo` on the host (not as part of `docker compose up`/`bootstrap`):
+  `sudo mkdir -p /opt && sudo ln -s /path/you/own /opt/buildagent` — then re-run
+  `docker compose up`. From then on the real data lives under the directory you own; Docker and
+  the agent still see it at `/opt/buildagent` via the symlink.
 - **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
   `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
   can look similar at a glance. If this hits one of the `project_*` VCS roots specifically, it's
