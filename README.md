@@ -15,18 +15,5 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
 
 ## Troubleshooting
 
-- **`docker compose up` fails mounting `/opt/buildagent/*`** (permission denied): the docker
-  daemon needs to be able to create/own `/opt/buildagent` on the host. This path is not
-  configurable — it's baked into the `jetbrains/teamcity-agent` image itself, so the host side
-  has to be this exact path too (see the comment on `teamcity-agent` in `docker-compose.yml` for
-  why). Creating/owning a directory under `/opt` requires root, which a rootless Docker install
-  or a host account without root doesn't have. If you hit that, do this once, manually, as a
-  human with `sudo` on the host (not as part of `docker compose up`/`bootstrap`):
-  `sudo mkdir -p /opt && sudo ln -s /path/you/own /opt/buildagent` — then re-run
-  `docker compose up`. From then on the real data lives under the directory you own; Docker and
-  the agent still see it at `/opt/buildagent` via the symlink.
-- **Docker installed via `snap` is not supported.** Symptom: the `teamcity-agent` container fails
-  to write under `/opt/buildagent` even though the host user owns that path (including the symlink
-  workaround above) — snap's confinement mounts the filesystem read-only for the `docker` snap in a
-  way that breaks this bind mount. Fix: uninstall the snap package and install Docker from the
-  official APT/YUM repository instead, then re-run `docker compose up`.
+- **`docker compose up` fails mounting `/opt/buildagent/*`** (permission denied): the docker daemon needs to be able to create/own `/opt/buildagent` on the host. This path is not configurable — it's baked into the `jetbrains/teamcity-agent` image itself, so the host side has to be this exact path too (see the comment on `teamcity-agent` in `docker-compose.yml` for why). Creating/owning a directory under `/opt` requires root, which a rootless Docker install or a host account without root doesn't have. If you hit that, do this once, manually, as a human with `sudo` on the host (not as part of `docker compose up`/`bootstrap`): `sudo mkdir -p /opt && sudo ln -s /path/you/own /opt/buildagent` — then re-run `docker compose up`. From then on the real data lives under the directory you own; Docker and the agent still see it at `/opt/buildagent` via the symlink.
+- **Docker installed via `snap` is not supported.** Symptom: the `teamcity-agent` container fails to write under `/opt/buildagent` even though the host user owns that path (including the symlink workaround above) — snap's confinement mounts the filesystem read-only for the `docker` snap in a way that breaks this bind mount. Fix: uninstall the snap package and install Docker from the official APT/YUM repository instead, then re-run `docker compose up`.

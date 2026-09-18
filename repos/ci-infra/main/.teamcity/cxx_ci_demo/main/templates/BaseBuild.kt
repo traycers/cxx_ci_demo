@@ -8,10 +8,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 // builds/tests/installs — edit it here, not in a separate shell script (see ADR 0004: the old
 // docs/build.sh was removed once this became the only place it actually lived).
 //
-// Shared by Main_ProjectB and, via debug/MainDebug.kt and release/MainRelease.kt, by every
-// package-variant build type too — %cxx_build_type% is a project-level parameter, overridden to
-// "Debug"/"RelWithDebInfo" per subproject, not a hardcoded value baked into a per-variant copy of
-// this template.
+// Shared by Main_ProjectB and, via debug/MainDebug.kt and release/MainRelease.kt, by every package-variant build type too — %cxx_build_type% is a project-level parameter, overridden to "Debug"/"RelWithDebInfo" per subproject, not a hardcoded value baked into a per-variant copy of this template.
 object Main_BaseBuild : Template({
     id((MainId / "BaseBuild").toString())
     name = "base_build"

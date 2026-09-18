@@ -55,11 +55,9 @@ object Main : Project({
         param("branch_default", "refs/heads/main")
         param("cxx_standard", "20")
         param("keep_images_count", "3")
-        // Consumed by Main_BaseBuild's build script as CMAKE_BUILD_TYPE. Left empty at this level
-        // on purpose — Main_ProjectB (the only build type that uses Main_BaseBuild without going
-        // through a package-variant subproject) is paused, so nothing ever runs the template with
-        // this default unresolved. debug/MainDebug.kt and release/MainRelease.kt override it to
-        // "Debug"/"RelWithDebInfo" for their subprojects.
+        // Consumed by Main_BaseBuild's build script as CMAKE_BUILD_TYPE.
+        // Left empty at this level on purpose — Main_ProjectB (the only build type that uses Main_BaseBuild without going through a package-variant subproject) is paused, so nothing ever runs the template with this default unresolved.
+        // debug/MainDebug.kt and release/MainRelease.kt override it to "Debug"/"RelWithDebInfo" for their subprojects.
         param("cxx_build_type", "")
     }
 })
