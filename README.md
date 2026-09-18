@@ -25,24 +25,8 @@ Docker-compose demo CI stand: GitLab + TeamCity building C++ projects in contain
   `sudo mkdir -p /opt && sudo ln -s /path/you/own /opt/buildagent` — then re-run
   `docker compose up`. From then on the real data lives under the directory you own; Docker and
   the agent still see it at `/opt/buildagent` via the symlink.
-- **A VCS root "test connection"/build fails with `HTTP Basic: Access denied` or
-  `Authentication failed`**: this is a credential problem, not a network/DNS one, even though it
-  can look similar at a glance. If this hits one of the `project_*` VCS roots specifically, it's
-  a known race in `provision_teamcity()` (`scripts/bootstrap/teamcity_ops.py`): a build type
-  appearing in the REST API doesn't mean the imported project accepts writes yet — right after
-  DSL import, the project can stay "read only, project settings format switched to Kotlin" for
-  well over a minute, and credential injection needs a write. Bootstrap now retries the whole
-  credential-injection batch against a shared 5-minute deadline instead of firing it once and
-  trusting the result, so this should self-heal without any manual step. If it still fails, every
-  REST call bootstrap makes checks its response status and fails loudly with the actual HTTP code
-  (and, for this specific race, `provision_teamcity()` now returns `False` and the container exits
-  non-zero instead of misreporting `"done."`) — re-run `docker compose run --rm bootstrap`; if it
-  keeps failing past the 5-minute deadline, something else is wrong (e.g. a broken
-  `settings.kts`), not just this race.
-- **`gitlab` unreachable from the `bootstrap` container** (connection refused/timeout, not an auth
-  error) — check the containers are actually on the `cxxci` network (`docker compose ps`). Unlike
-  the browser step above, the `bootstrap` container talks to `gitlab`/`teamcity-server` by their
-  plain compose service names over the `cxxci` network directly — it never goes through a
-  published host port or a host-side proxy, so host-level network quirks (hairpin NAT, a local
-  proxy intercepting `localhost`) that affect the browser/host `git` don't apply to it. See ADR
-  0008.
+- **Docker installed via `snap` is not supported.** Symptom: the `teamcity-agent` container fails
+  to write under `/opt/buildagent` even though the host user owns that path (including the symlink
+  workaround above) — snap's confinement mounts the filesystem read-only for the `docker` snap in a
+  way that breaks this bind mount. Fix: uninstall the snap package and install Docker from the
+  official APT/YUM repository instead, then re-run `docker compose up`.
