@@ -9,7 +9,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // E, but the image rebuild still should.
 object Main_Release_ProjectE : BuildType({
     id((Main_ReleaseId / "ProjectE").toString())
-    templates(Main_Release_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_e"
 
     params {

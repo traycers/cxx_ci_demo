@@ -8,7 +8,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // entire reason this build type is duplicated per variant instead of parameterized.
 object Main_Debug_ProjectC : BuildType({
     id((Main_DebugId / "ProjectC").toString())
-    templates(Main_Debug_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_c"
 
     params {

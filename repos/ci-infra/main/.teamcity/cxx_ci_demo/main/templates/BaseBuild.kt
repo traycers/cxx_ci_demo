@@ -7,6 +7,11 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.script
 // The build script is the single source of truth for how every C++ project in this track
 // builds/tests/installs — edit it here, not in a separate shell script (see ADR 0004: the old
 // docs/build.sh was removed once this became the only place it actually lived).
+//
+// Shared by Main_ProjectB and, via debug/MainDebug.kt and release/MainRelease.kt, by every
+// package-variant build type too — %cxx_build_type% is a project-level parameter, overridden to
+// "Debug"/"RelWithDebInfo" per subproject, not a hardcoded value baked into a per-variant copy of
+// this template.
 object Main_BaseBuild : Template({
     id((MainId / "BaseBuild").toString())
     name = "base_build"
@@ -23,7 +28,7 @@ object Main_BaseBuild : Template({
 
 
                 work_dir="/work_dir"
-                build_type="RelWithDebInfo"
+                build_type="%cxx_build_type%"
                 install_dir="/host_dir/%install_dir%"
                 deps_dir="/host_dir/%deps_dir%"
                 build_dir="/shadow_build"

@@ -10,7 +10,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // parameterized (see map.md's decision).
 object Main_Debug_ProjectA : BuildType({
     id((Main_DebugId / "ProjectA").toString())
-    templates(Main_Debug_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_a"
 
     params {

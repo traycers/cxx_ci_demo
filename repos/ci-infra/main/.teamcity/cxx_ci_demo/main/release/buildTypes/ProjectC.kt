@@ -8,7 +8,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // dependency on D, inherited from the template, must resolve first in the same chain.
 object Main_Release_ProjectC : BuildType({
     id((Main_ReleaseId / "ProjectC").toString())
-    templates(Main_Release_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_c"
 
     params {

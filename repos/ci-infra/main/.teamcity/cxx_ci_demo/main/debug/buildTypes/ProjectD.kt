@@ -6,7 +6,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // snapshot dependency on BuildCImage.
 object Main_Debug_ProjectD : BuildType({
     id((Main_DebugId / "ProjectD").toString())
-    templates(Main_Debug_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_d"
 
     params {

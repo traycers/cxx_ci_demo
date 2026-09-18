@@ -13,7 +13,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // 03's research, original teamcity-cxx-ci map).
 object Main_Release_ProjectA : BuildType({
     id((Main_ReleaseId / "ProjectA").toString())
-    templates(Main_Release_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_a"
 
     params {

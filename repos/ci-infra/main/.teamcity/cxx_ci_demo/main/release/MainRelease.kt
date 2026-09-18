@@ -4,8 +4,11 @@ val Main_ReleaseId = MainId / "Release"
 
 // Package-variant subproject: today's `release` build_type (CMAKE_BUILD_TYPE=RelWithDebInfo) —
 // see CONTEXT.md's "Package variant" entry. Sibling of Main_Debug (MainDebug.kt); both share
-// Main's VCS roots, BuildCImage and track-wide params (branch_spec/branch_default/cxx_standard/
-// etc.) — only install_dir/deps_dir and the build_type baked into base_build differ per variant.
+// Main's VCS roots, BuildCImage, track-wide params (branch_spec/branch_default/cxx_standard/
+// etc.), and now the same Main_BaseBuild template (templates/BaseBuild.kt) too — only
+// install_dir/deps_dir and the cxx_build_type param overridden below differ per variant. The
+// override here matches Main's own default (see Main.kt) — kept explicit rather than relied-on so
+// this subproject's build_type doesn't silently change if Main's default ever does.
 object Main_Release : Project({
     id(Main_ReleaseId.toString())
     name = "release"
@@ -16,5 +19,7 @@ object Main_Release : Project({
     buildType(Main_Release_ProjectE)
     buildType(Main_Release_Result)
 
-    template(Main_Release_BaseBuild)
+    params {
+        param("cxx_build_type", "RelWithDebInfo")
+    }
 })

@@ -8,7 +8,7 @@ import jetbrains.buildServer.configs.kotlin.triggers.vcs
 // entry: rebuilding the image rebuilds everything depending on it).
 object Main_Debug_ProjectE : BuildType({
     id((Main_DebugId / "ProjectE").toString())
-    templates(Main_Debug_BaseBuild)
+    templates(Main_BaseBuild)
     name = "project_e"
 
     params {
